@@ -1,0 +1,187 @@
+{
+  "documentVersion": "1.0",
+  "layout": {
+    "pageSize": "LETTER",
+    "margins": {
+      "top": 72,
+      "right": 72,
+      "bottom": 72,
+      "left": 72
+    },
+    "fontFamily": "Arimo",
+    "fontSize": 12,
+    "lineHeight": 1.2,
+    "showPageNumbers": false
+  },
+  "fonts": {
+    "regular": "Arimo"
+  },
+  "styles": {
+    "p": {
+      "marginBottom": 12,
+      "allowLineSplit": true,
+      "orphans": 2,
+      "widows": 2
+    },
+    "h1": {
+      "fontSize": 24,
+      "fontWeight": "bold",
+      "marginBottom": 18,
+      "keepWithNext": true
+    },
+    "h2": {
+      "fontSize": 18,
+      "fontWeight": "bold",
+      "marginTop": 12,
+      "marginBottom": 10,
+      "keepWithNext": true
+    },
+    "blockquote": {
+      "paddingLeft": 16,
+      "paddingRight": 8,
+      "borderLeftWidth": 2,
+      "borderLeftColor": "#1a73e8",
+      "marginTop": 10,
+      "marginBottom": 10
+    }
+  },
+  "elements": [
+    {
+      "type": "h1",
+      "content": "The Typographer's Proof"
+    },
+    {
+      "type": "p",
+      "content": "Good typography is invisible. Readers should never notice the grid, the rhythm, or the measure — they should only feel the ease with which meaning reaches them. This document exercises the fundamentals of that craft: paragraph flow, inline styling, alignment, borders, and clean pagination."
+    },
+    {
+      "type": "h2",
+      "content": "Inline Markup"
+    },
+    {
+      "type": "p",
+      "content": "",
+      "children": [
+        {
+          "type": "text",
+          "content": "A sentence may carry "
+        },
+        {
+          "type": "text",
+          "content": "weight",
+          "properties": {
+            "style": {
+              "fontWeight": "bold"
+            }
+          }
+        },
+        {
+          "type": "text",
+          "content": " through emphasis, "
+        },
+        {
+          "type": "text",
+          "content": "colour",
+          "properties": {
+            "style": {
+              "color": "#0b57d0"
+            }
+          }
+        },
+        {
+          "type": "text",
+          "content": " through contrast, and rhythm through repetition — all within a single flowing line."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "content": "Line Wrapping & Measure"
+    },
+    {
+      "type": "p",
+      "content": "The measure — the width of a text column — is among the oldest constraints in type setting. Twelve to fifteen words per line is a longstanding ideal: narrow enough that the eye returns to the left margin without effort, wide enough that each line carries a full thought. This paragraph is held at the standard LETTER margin to demonstrate stable wrap positions and consistent baseline spacing."
+    },
+    {
+      "type": "h2",
+      "content": "Alignment"
+    },
+    {
+      "type": "p",
+      "content": "Left-aligned — the default for most running text.",
+      "properties": {
+        "style": {
+          "textAlign": "left"
+        }
+      }
+    },
+    {
+      "type": "p",
+      "content": "Centred — used for titles, captions, and display lines.",
+      "properties": {
+        "style": {
+          "textAlign": "center"
+        }
+      }
+    },
+    {
+      "type": "p",
+      "content": "Right-aligned — folios, credits, and pulled-out data.",
+      "properties": {
+        "style": {
+          "textAlign": "right"
+        }
+      }
+    },
+    {
+      "type": "h2",
+      "content": "Borders & Insets"
+    },
+    {
+      "type": "blockquote",
+      "content": "The border-left treatment derives from manuscript annotation practice: marginalia drawn with a vertical rule to distinguish commentary from the main text. All four borders are active here, padding is asymmetric, and the rule widths differ — a deliberate test of boundary geometry.",
+      "properties": {
+        "style": {
+          "paddingLeft": 18,
+          "paddingRight": 6,
+          "paddingTop": 6,
+          "paddingBottom": 6,
+          "borderLeftWidth": 3,
+          "borderLeftColor": "#1a73e8",
+          "borderRightWidth": 1,
+          "borderRightColor": "#8a8a8a",
+          "borderTopWidth": 1,
+          "borderTopColor": "#999999",
+          "borderBottomWidth": 1,
+          "borderBottomColor": "#999999"
+        }
+      }
+    },
+    {
+      "type": "h2",
+      "content": "Multi-Page Flow"
+    },
+    {
+      "type": "p",
+      "content": "Long-form documents span many pages. The content that follows begins on a fresh page to confirm that break-before behaviour is handled cleanly — margins reset, baselines re-anchor, and flow continues as if the first page never ended.",
+      "properties": {
+        "style": {
+          "marginBottom": 10
+        }
+      }
+    },
+    {
+      "type": "p",
+      "content": "Page two. Paragraph flow, alignment, and line-height remain identical to page one. There are no special cases here — pagination is transparent to the typographic engine.",
+      "properties": {
+        "style": {
+          "pageBreakBefore": true
+        }
+      }
+    },
+    {
+      "type": "p",
+      "content": "A closing line confirms that content after the break renders in the correct position and with no residual state from the previous page."
+    }
+  ]
+}

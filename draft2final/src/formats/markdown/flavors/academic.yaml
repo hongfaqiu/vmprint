@@ -1,0 +1,321 @@
+typography:
+  fontFamily: Caladea
+  fontSize: 10.8
+  lineHeight: 1.5
+  color: "#121212"
+
+layout:
+  pageSize: LETTER
+  margins:
+    top: 72
+    right: 72
+    bottom: 72
+    left: 72
+  hyphenation: auto
+  justifyEngine: advanced
+  justifyStrategy: auto
+  showPageNumbers: true
+  pageNumberFormat: "{n}"
+  pageNumberPosition: bottom
+  pageNumberAlignment: center
+  pageNumberOffset: 32
+  pageNumberStartPage: 1
+  pageNumberFontSize: 9
+  pageNumberColor: "#4f4f4f"
+  pageNumberFont: Caladea
+
+list:
+  textIndentPerLevel: 16
+  markerGap: 5
+  itemSpacingAfter: 3.2
+  tightItemSpacingAfter: 0.9
+  continuationIndentLevels: 0
+  unorderedMarkers:
+    - "\u2022"
+    - "\u25E6"
+    - "\u25AA"
+  orderedMarkers:
+    - decimal
+    - lower-alpha
+    - lower-roman
+    - upper-alpha
+  taskMarkers:
+    checked: "[x]"
+    unchecked: "[ ]"
+
+links:
+  mode: citation
+  dedupe: true
+  citationStyle: bracket
+
+references:
+  enabled: true
+  heading: References
+  numberingStyle: decimal
+  includeLinkTitle: true
+
+blockquote:
+  attribution:
+    enabled: true
+    markerPattern: '^[-\u2014\u2013]{1,2}\s+'
+
+images:
+  blockStyle:
+    marginTop: 8
+    marginBottom: 8
+    borderWidth: 0.6
+    borderColor: "#6f6f6f"
+    borderRadius: 0
+    paddingTop: 0
+    paddingBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+
+captions:
+  pattern: '^(Figure|Fig\\.|Table|Plate|Source)\\s+([0-9]+|[IVXLC]+)\\b'
+  style:
+    textAlign: left
+    hyphenation: off
+    fontStyle: normal
+    fontSize: 10
+    lineHeight: 1.3
+    color: "#242424"
+    marginTop: 2
+    marginBottom: 11
+
+tables:
+  zebra: false
+  headerColor: "#f3f4f6"
+
+codeBlocks:
+  defaultMode: listing
+  languageModes:
+    text: listing
+    pseudocode: listing
+    theorem: theorem
+    lemma: lemma
+    proposition: proposition
+    corollary: corollary
+    proof: proof
+    remark: remark
+    example: example
+  modes:
+    listing:
+      style:
+        fontFamily: Cousine
+        fontSize: 9.6
+        lineHeight: 1.28
+        backgroundColor: "#ffffff"
+        borderWidth: 0
+        borderColor: "#9a9a9a"
+        borderRadius: 0
+        paddingTop: 5
+        paddingBottom: 5
+        paddingLeft: 7
+        paddingRight: 7
+        marginTop: 7
+        marginBottom: 8
+    theorem:
+      style:
+        fontFamily: Caladea
+        fontStyle: italic
+        fontSize: 10.8
+        lineHeight: 1.44
+        textAlign: left
+        color: "#1f1f1f"
+        backgroundColor: "#ffffff"
+        borderWidth: 0
+        borderLeftWidth: 0
+        borderLeftColor: "#6f6f6f"
+        paddingTop: 6
+        paddingBottom: 6
+        paddingLeft: 12
+        paddingRight: 6
+        marginTop: 8
+        marginBottom: 8
+    lemma:
+      style:
+        fontFamily: Caladea
+        fontStyle: italic
+        fontSize: 10.8
+        lineHeight: 1.44
+        textAlign: left
+        color: "#1f1f1f"
+        backgroundColor: "#ffffff"
+        borderWidth: 0
+        borderLeftWidth: 0
+        borderLeftColor: "#7b7b7b"
+        paddingTop: 6
+        paddingBottom: 6
+        paddingLeft: 12
+        paddingRight: 6
+        marginTop: 8
+        marginBottom: 8
+    proposition:
+      style:
+        fontFamily: Caladea
+        fontStyle: italic
+        fontSize: 10.8
+        lineHeight: 1.44
+        textAlign: left
+        color: "#1f1f1f"
+        backgroundColor: "#ffffff"
+        borderWidth: 0
+        borderLeftWidth: 0
+        borderLeftColor: "#555555"
+        paddingTop: 6
+        paddingBottom: 6
+        paddingLeft: 12
+        paddingRight: 6
+        marginTop: 8
+        marginBottom: 8
+    corollary:
+      style:
+        fontFamily: Caladea
+        fontStyle: italic
+        fontSize: 10.8
+        lineHeight: 1.44
+        textAlign: left
+        color: "#1f1f1f"
+        backgroundColor: "#ffffff"
+        borderWidth: 0
+        borderLeftWidth: 0
+        borderLeftColor: "#8a8a8a"
+        paddingTop: 6
+        paddingBottom: 6
+        paddingLeft: 12
+        paddingRight: 6
+        marginTop: 8
+        marginBottom: 8
+    proof:
+      style:
+        fontFamily: Caladea
+        fontStyle: normal
+        fontSize: 10.7
+        lineHeight: 1.45
+        textAlign: left
+        color: "#1d1d1d"
+        backgroundColor: "#ffffff"
+        borderWidth: 0
+        borderLeftWidth: 0
+        borderLeftColor: "#8b8b8b"
+        paddingTop: 6
+        paddingBottom: 6
+        paddingLeft: 10
+        paddingRight: 6
+        marginTop: 8
+        marginBottom: 8
+    remark:
+      style:
+        fontFamily: Caladea
+        fontStyle: normal
+        fontSize: 10.6
+        lineHeight: 1.44
+        textAlign: left
+        color: "#222222"
+        backgroundColor: "#ffffff"
+        borderWidth: 0
+        borderLeftWidth: 0
+        borderLeftColor: "#9a9a9a"
+        paddingTop: 6
+        paddingBottom: 6
+        paddingLeft: 10
+        paddingRight: 6
+        marginTop: 8
+        marginBottom: 8
+    example:
+      style:
+        fontFamily: Caladea
+        fontStyle: normal
+        fontSize: 10.7
+        lineHeight: 1.45
+        textAlign: left
+        color: "#1f1f1f"
+        backgroundColor: "#ffffff"
+        borderWidth: 0
+        borderLeftWidth: 0
+        borderLeftColor: "#8b857a"
+        paddingTop: 6
+        paddingBottom: 6
+        paddingLeft: 10
+        paddingRight: 6
+        marginTop: 8
+        marginBottom: 8
+
+styles:
+  d2f_heading_1:
+    fontSize: 20
+    hyphenation: off
+    textAlign: left
+  d2f_heading_2:
+    fontSize: 17
+    hyphenation: off
+    textAlign: left
+  d2f_heading_3:
+    fontSize: 14.8
+    hyphenation: off
+    textAlign: left
+  d2f_code_block:
+    fontFamily: Cousine
+    fontSize: 9.6
+    lineHeight: 1.28
+    backgroundColor: "#ffffff"
+    borderWidth: 0
+    borderColor: "#9a9a9a"
+    borderRadius: 0
+    paddingTop: 5
+    paddingBottom: 5
+    paddingLeft: 7
+    paddingRight: 7
+    marginTop: 7
+    marginBottom: 8
+  d2f_inline_code:
+    fontFamily: Cousine
+    fontSize: 9.6
+    backgroundColor: "#ffffff"
+  d2f_blockquote:
+    textAlign: left
+    fontStyle: normal
+    fontSize: 10.6
+    lineHeight: 1.45
+    color: "#202020"
+    paddingLeft: 18
+    paddingRight: 18
+    borderLeftWidth: 0
+    marginTop: 8
+    marginBottom: 9
+  d2f_blockquote_attribution:
+    textAlign: right
+    fontStyle: italic
+    fontSize: 10.2
+    color: "#3f3f3f"
+    marginTop: 2
+    marginBottom: 7
+  d2f_references_heading:
+    hyphenation: off
+    textAlign: left
+    fontSize: 13.6
+    marginTop: 16
+    marginBottom: 5.8
+  d2f_references_item:
+    textAlign: left
+    hyphenation: off
+    fontSize: 10.4
+    lineHeight: 1.4
+    marginBottom: 3.4
+  d2f_definition_term:
+    fontWeight: 700
+    marginTop: 5.5
+    marginBottom: 1.2
+  d2f_definition_desc:
+    paddingLeft: 12
+    marginTop: 0
+    marginBottom: 5.5
+  table-cell:
+    paddingTop: 4
+    paddingBottom: 4
+    paddingLeft: 5
+    paddingRight: 5
+    borderWidth: 0.6
+    borderColor: "#111111"
+

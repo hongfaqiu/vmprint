@@ -1,0 +1,410 @@
+{
+  "documentVersion": "1.0",
+  "layout": {
+    "pageSize": {
+      "width": 420,
+      "height": 360
+    },
+    "margins": {
+      "top": 28,
+      "right": 28,
+      "bottom": 28,
+      "left": 28
+    },
+    "fontFamily": "Arimo",
+    "fontSize": 11,
+    "lineHeight": 1.25,
+    "showPageNumbers": false
+  },
+  "fonts": {
+    "regular": "Arimo"
+  },
+  "styles": {
+    "h1": {
+      "fontSize": 18,
+      "fontWeight": "bold",
+      "marginBottom": 10
+    },
+    "h2": {
+      "fontSize": 14,
+      "fontWeight": "bold",
+      "marginTop": 10,
+      "marginBottom": 6
+    },
+    "p": {
+      "marginBottom": 8,
+      "allowLineSplit": true,
+      "orphans": 2,
+      "widows": 2
+    },
+    "note": {
+      "fontSize": 9,
+      "fontStyle": "italic",
+      "color": "#444444",
+      "marginTop": 4,
+      "marginBottom": 6
+    },
+    "split-marker": {
+      "fontSize": 9,
+      "fontStyle": "italic",
+      "fontWeight": "bold",
+      "color": "#8a4b2a",
+      "borderTopWidth": 1,
+      "borderTopColor": "#8a4b2a",
+      "paddingTop": 4,
+      "marginTop": 6,
+      "marginBottom": 6
+    },
+    "table": {
+      "marginTop": 4,
+      "marginBottom": 8,
+      "padding": 0,
+      "borderWidth": 0
+    },
+    "table-cell": {
+      "fontSize": 9,
+      "lineHeight": 1.2,
+      "paddingTop": 3,
+      "paddingBottom": 3,
+      "paddingLeft": 4,
+      "paddingRight": 4,
+      "borderWidth": 0.6,
+      "borderColor": "#2c2c2c"
+    }
+  },
+  "elements": [
+    {
+      "type": "h1",
+      "content": "Packager Split Scenarios"
+    },
+    {
+      "type": "p",
+      "content": "The Packager is the layer between semantic elements and the page. It decides when a unit must split, where the split falls, and what state carries forward. Three scenarios exercise the main split strategies on a short 420 × 360 pt page."
+    },
+    {
+      "type": "p",
+      "content": "A short lead paragraph fills some vertical space so the first scenario's split happens mid-page rather than at the very top."
+    },
+    {
+      "type": "h2",
+      "content": "§1 — Keep-With-Next Forces a Split",
+      "properties": {
+        "style": {
+          "pageBreakBefore": true,
+          "keepWithNext": false
+        }
+      }
+    },
+    {
+      "type": "note",
+      "content": "Expected: the lead line and the first fragment of the long paragraph appear together on the same page; the continuation opens on the next page.",
+      "properties": {
+        "style": {
+          "fontWeight": "bold",
+          "color": "#5a3b1e"
+        }
+      }
+    },
+    {
+      "type": "p",
+      "content": "Setup: narrow column absorbs vertical space so the keep-with-next split falls mid-page.",
+      "properties": {
+        "style": {
+          "width": 300,
+          "fontWeight": "bold",
+          "color": "#2d2d2d"
+        }
+      }
+    },
+    {
+      "type": "p",
+      "content": "Lead line: this sentence is kept with the paragraph below it — the Packager must not strand it alone at the foot of a page.",
+      "properties": {
+        "sourceId": "keep-lead",
+        "style": {
+          "keepWithNext": true,
+          "fontWeight": "bold",
+          "color": "#0f4c81"
+        }
+      }
+    },
+    {
+      "type": "p",
+      "content": "Bridge: still part of the keep-with-next chain, holding the lead to the long paragraph.",
+      "properties": {
+        "style": {
+          "fontWeight": "bold",
+          "color": "#0f4c81",
+          "keepWithNext": true
+        }
+      }
+    },
+    {
+      "type": "p",
+      "content": "Before movable type each book was a unique artefact, produced by a copyist who introduced small variations with every stroke. After Gutenberg, every copy of a work became identical to every other copy. The implications for knowledge transmission, for authority, and for error were profound. Before movable type each book was a unique artefact, produced by a copyist who introduced small variations with every stroke. After Gutenberg, every copy of a work became identical to every other copy. The implications for knowledge transmission, for authority, and for error were profound. Before movable type each book was a unique artefact, produced by a copyist who introduced small variations with every stroke. After Gutenberg, every copy of a work became identical to every other copy. The implications for knowledge transmission, for authority, and for error were profound. Before movable type each book was a unique artefact. After Gutenberg, every copy became identical. Before movable type each book was a unique artefact.",
+      "properties": {
+        "sourceId": "keep-split",
+        "style": {
+          "width": 260
+        },
+        "paginationContinuation": {
+          "enabled": true,
+          "markerAfterSplit": {
+            "type": "split-marker",
+            "content": "Split boundary — continues on next page"
+          },
+          "markerBeforeContinuation": {
+            "type": "split-marker",
+            "content": "Split boundary — continued from previous page"
+          }
+        }
+      }
+    },
+    {
+      "type": "p",
+      "content": "Flow resumes normally after the keep-with-next chain."
+    },
+    {
+      "type": "h2",
+      "content": "§2 — Table Splits Mid-Page",
+      "properties": {
+        "style": {
+          "pageBreakBefore": true
+        }
+      }
+    },
+    {
+      "type": "note",
+      "content": "Expected: the table begins below the setup text, then splits across pages with a repeated header on the continuation.",
+      "properties": {
+        "style": {
+          "fontWeight": "bold",
+          "color": "#5a3b1e"
+        }
+      }
+    },
+    {
+      "type": "p",
+      "content": "Setup: narrow column forces extra wrapping so the table begins mid-page.",
+      "properties": {
+        "style": {
+          "width": 260,
+          "fontWeight": "bold",
+          "color": "#2d2d2d"
+        }
+      }
+    },
+    {
+      "type": "p",
+      "content": "Scenario lead: limited vertical space remains above — the table must split even though it does not start at the page top.",
+      "properties": {
+        "style": {
+          "fontWeight": "bold",
+          "color": "#0f4c81"
+        }
+      }
+    },
+    {
+      "type": "p",
+      "content": "Continuation note: the header row should repeat on every page carrying table content.",
+      "properties": {
+        "style": {
+          "fontWeight": "bold",
+          "color": "#0f4c81"
+        }
+      }
+    },
+    {
+      "type": "table",
+      "content": "",
+      "properties": {
+        "sourceId": "table-split",
+        "table": {
+          "headerRows": 1,
+          "repeatHeader": true,
+          "columnGap": 4,
+          "rowGap": 2,
+          "columns": [
+            { "mode": "fixed", "value": 70 },
+            { "mode": "flex", "fr": 2, "min": 120 },
+            { "mode": "fixed", "value": 70 }
+          ]
+        },
+        "paginationContinuation": {
+          "enabled": true,
+          "markerAfterSplit": {
+            "type": "split-marker",
+            "content": "Split boundary — continues on next page"
+          },
+          "markerBeforeContinuation": {
+            "type": "split-marker",
+            "content": "Split boundary — continued from previous page"
+          }
+        }
+      },
+      "children": [
+        {
+          "type": "table-row",
+          "properties": { "semanticRole": "header" },
+          "children": [
+            { "type": "table-cell", "content": "ID" },
+            { "type": "table-cell", "content": "Milestone" },
+            { "type": "table-cell", "content": "Status" }
+          ]
+        },
+        { "type": "table-row", "children": [
+          { "type": "table-cell", "content": "M-01" },
+          { "type": "table-cell", "content": "Typographic baseline grid" },
+          { "type": "table-cell", "content": "Done" }
+        ]},
+        { "type": "table-row", "children": [
+          { "type": "table-cell", "content": "M-02" },
+          { "type": "table-cell", "content": "Variable font axis resolution" },
+          { "type": "table-cell", "content": "Done" }
+        ]},
+        { "type": "table-row", "children": [
+          { "type": "table-cell", "content": "M-03" },
+          { "type": "table-cell", "content": "Advanced justification engine" },
+          { "type": "table-cell", "content": "Active" }
+        ]},
+        { "type": "table-row", "children": [
+          { "type": "table-cell", "content": "M-04" },
+          { "type": "table-cell", "content": "Table column sizing" },
+          { "type": "table-cell", "content": "Active" }
+        ]},
+        { "type": "table-row", "children": [
+          { "type": "table-cell", "content": "M-05" },
+          { "type": "table-cell", "content": "Header row repetition" },
+          { "type": "table-cell", "content": "Queued" }
+        ]},
+        { "type": "table-row", "children": [
+          { "type": "table-cell", "content": "M-06" },
+          { "type": "table-cell", "content": "Story float layout" },
+          { "type": "table-cell", "content": "Queued" }
+        ]},
+        { "type": "table-row", "children": [
+          { "type": "table-cell", "content": "M-07" },
+          { "type": "table-cell", "content": "RTL paragraph shaping" },
+          { "type": "table-cell", "content": "Queued" }
+        ]},
+        { "type": "table-row", "children": [
+          { "type": "table-cell", "content": "M-08" },
+          { "type": "table-cell", "content": "Inline object baseline" },
+          { "type": "table-cell", "content": "Queued" }
+        ]},
+        { "type": "table-row", "children": [
+          { "type": "table-cell", "content": "M-09" },
+          { "type": "table-cell", "content": "Drop cap continuation" },
+          { "type": "table-cell", "content": "Queued" }
+        ]},
+        { "type": "table-row", "children": [
+          { "type": "table-cell", "content": "M-10" },
+          { "type": "table-cell", "content": "Soft-hyphen priority" },
+          { "type": "table-cell", "content": "Queued" }
+        ]},
+        { "type": "table-row", "children": [
+          { "type": "table-cell", "content": "M-11" },
+          { "type": "table-cell", "content": "Grapheme cluster safety" },
+          { "type": "table-cell", "content": "Queued" }
+        ]},
+        { "type": "table-row", "children": [
+          { "type": "table-cell", "content": "M-12" },
+          { "type": "table-cell", "content": "Overlay architecture" },
+          { "type": "table-cell", "content": "Queued" }
+        ]},
+        { "type": "table-row", "children": [
+          { "type": "table-cell", "content": "M-13" },
+          { "type": "table-cell", "content": "Orientation + page size" },
+          { "type": "table-cell", "content": "Queued" }
+        ]},
+        { "type": "table-row", "children": [
+          { "type": "table-cell", "content": "M-14" },
+          { "type": "table-cell", "content": "span pagination" },
+          { "type": "table-cell", "content": "Queued" }
+        ]},
+        { "type": "table-row", "children": [
+          { "type": "table-cell", "content": "M-15" },
+          { "type": "table-cell", "content": "CLI integration" },
+          { "type": "table-cell", "content": "Queued" }
+        ]},
+        { "type": "table-row", "children": [
+          { "type": "table-cell", "content": "M-16" },
+          { "type": "table-cell", "content": "PDF context pass" },
+          { "type": "table-cell", "content": "Queued" }
+        ]},
+        { "type": "table-row", "children": [
+          { "type": "table-cell", "content": "M-17" },
+          { "type": "table-cell", "content": "Visual regression sign-off" },
+          { "type": "table-cell", "content": "Queued" }
+        ]},
+        { "type": "table-row", "children": [
+          { "type": "table-cell", "content": "M-18" },
+          { "type": "table-cell", "content": "Public release" },
+          { "type": "table-cell", "content": "Queued" }
+        ]}
+      ]
+    },
+    {
+      "type": "h2",
+      "content": "§3 — Page-Top Overflow Split",
+      "properties": {
+        "style": {
+          "pageBreakBefore": true
+        }
+      }
+    },
+    {
+      "type": "note",
+      "content": "Expected: the long paragraph begins at the top of a fresh page, overflows even that empty page, and is split with a marker at the page top.",
+      "properties": {
+        "style": {
+          "fontWeight": "bold",
+          "color": "#5a3b1e"
+        }
+      }
+    },
+    {
+      "type": "p",
+      "content": "Scenario lead: the next paragraph is forced to a new page and will overflow even an empty page.",
+      "properties": {
+        "style": {
+          "fontWeight": "bold",
+          "color": "#0f4c81",
+          "pageBreakBefore": true,
+          "marginBottom": 10
+        }
+      }
+    },
+    {
+      "type": "p",
+      "content": "Continuation note: the paragraph below must split at the page top — there is no preceding content to position it mid-page.",
+      "properties": {
+        "style": {
+          "fontWeight": "bold",
+          "color": "#0f4c81"
+        }
+      }
+    },
+    {
+      "type": "p",
+      "content": "The Roman codex replaced the scroll as the dominant book form around the first century CE. Unlike the scroll, whose text ran in a single continuous column, the codex gathered leaves into ordered quires — a structure well suited to the page-break concept that layout engines still model today. The Roman codex replaced the scroll as the dominant book form around the first century CE. Unlike the scroll, whose text ran in a single continuous column, the codex gathered leaves into ordered quires — a structure well suited to the page-break concept that layout engines still model today. The Roman codex replaced the scroll as the dominant book form around the first century CE. Unlike the scroll, whose text ran in a single continuous column, the codex gathered leaves into ordered quires — a structure well suited to the page-break concept that layout engines still model today. The Roman codex replaced the scroll as the dominant book form around the first century CE. Unlike the scroll, whose text ran in a single continuous column, the codex gathered leaves into ordered quires — a structure well suited to the page-break concept that layout engines still model today. The Roman codex replaced the scroll as the dominant book form around the first century CE.",
+      "properties": {
+        "sourceId": "page-top-split",
+        "style": {
+          "width": 260
+        },
+        "paginationContinuation": {
+          "enabled": true,
+          "markerAfterSplit": {
+            "type": "split-marker",
+            "content": "Split boundary — continues on next page"
+          },
+          "markerBeforeContinuation": {
+            "type": "split-marker",
+            "content": "Split boundary — continued from previous page"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "name": "vmprint",
+  "version": "0.1.0",
+  "description": "Deterministic typesetting engine for the programmable web. Pure-JS, zero-browser document composition with bit-perfect PDF output.",
+  "author": "cosmiciron",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cosmiciron/vmprint.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cosmiciron/vmprint/issues"
+  },
+  "homepage": "https://github.com/cosmiciron/vmprint#readme",
+  "workspaces": [
+    "contracts",
+    "engine",
+    "cli",
+    "contexts/pdf",
+    "font-managers/local",
+    "draft2final"
+  ],
+  "scripts": {
+    "clean": "npm run clean --workspaces --if-present",
+    "build": "npm run build --workspace=contracts && npm run build --workspace=engine && npm run build --workspace=contexts/pdf && npm run build --workspace=font-managers/local && npm run build --workspace=cli && npm run build --workspace=draft2final",
+    "test:boundary-imports": "npm --prefix draft2final run test:boundaries",
+    "test:packaged-integration": "node scripts/test-packaged-vmprint-integration.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.2",
+    "tsx": "^4.21.0"
+  }
+}

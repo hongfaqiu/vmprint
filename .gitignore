@@ -1,0 +1,17 @@
+node_modules/
+dist/
+build/
+coverage/
+.env
+.env.test
+npm-debug.log*
+yarn-debug.log*
+lerna-debug.log*
+*.log
+
+# Personal/Editor settings
+.claude/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

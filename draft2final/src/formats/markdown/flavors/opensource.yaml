@@ -1,0 +1,256 @@
+typography:
+  fontFamily: Carlito
+  fontSize: 11.1
+  lineHeight: 1.68
+  color: "#1a1f29"
+
+layout:
+  pageSize: A4
+  margins:
+    top: 84
+    right: 76
+    bottom: 86
+    left: 76
+  hyphenation: soft
+  justifyEngine: advanced
+  justifyStrategy: auto
+  showPageNumbers: false
+  pageNumberFormat: "{n}"
+  pageNumberPosition: bottom
+  pageNumberAlignment: center
+  pageNumberOffset: 30
+  pageNumberStartPage: 1
+  pageNumberFontSize: 8.6
+  pageNumberColor: "#8a94a6"
+  pageNumberFont: Carlito
+
+list:
+  textIndentPerLevel: 17
+  markerGap: 7
+  itemSpacingAfter: 4.4
+  tightItemSpacingAfter: 1.0
+  continuationIndentLevels: 1
+  unorderedMarkers:
+    - "-"
+    - "+"
+    - "*"
+  orderedMarkers:
+    - decimal
+    - lower-alpha
+    - lower-roman
+
+links:
+  mode: footnote
+
+references:
+  enabled: true
+  heading: Footnotes
+  numberingStyle: decimal
+  includeLinkTitle: true
+
+title:
+  subheading:
+    enabled: true
+    markerPattern: '^::\s+'
+    requireMarker: true
+    stripMarker: true
+    applyToFirstH1Only: true
+    keepWithNext: true
+
+blockquote:
+  attribution:
+    enabled: true
+    markerPattern: '^[-\u2014\u2013]{1,2}\s+'
+
+images:
+  blockStyle:
+    width: 445
+    marginTop: 14
+    marginBottom: 10
+  frame:
+    mode: all
+    style:
+      borderWidth: 0.65
+      borderColor: "#8d99aa"
+      borderRadius: 0
+      paddingTop: 11
+      paddingRight: 11
+      paddingBottom: 11
+      paddingLeft: 11
+      backgroundColor: "#fdfdfc"
+
+captions:
+  pattern: '^(Figure|Fig\\.|Table|Plate|Source)\\s+([0-9]+|[IVXLC]+)\\b'
+  blockquoteUnderImageAsFigureCaption: true
+  style:
+    textAlign: center
+    hyphenation: off
+    fontFamily: Carlito
+    fontSize: 9.3
+    lineHeight: 1.28
+    color: "#5b6474"
+    marginTop: 3
+    marginBottom: 16
+  blockquoteStyle:
+    textAlign: center
+    hyphenation: off
+    fontFamily: Caladea
+    fontStyle: italic
+    fontSize: 10
+    lineHeight: 1.3
+    color: "#505a6a"
+    marginTop: 3
+    marginBottom: 16
+
+codeBlocks:
+  defaultMode: listing
+  languageModes:
+    ts: listing
+    js: listing
+    json: listing
+    yaml: listing
+    yml: listing
+    bash: listing
+    sh: listing
+  modes:
+    listing:
+      style:
+        fontFamily: Cousine
+        fontSize: 9.7
+        lineHeight: 1.36
+        allowLineSplit: true
+        overflowPolicy: clip
+        color: "#1f2937"
+        backgroundColor: "#f8fafc"
+        borderWidth: 0.8
+        borderColor: "#d7deea"
+        borderRadius: 4
+        paddingTop: 8
+        paddingBottom: 8
+        paddingLeft: 11
+        paddingRight: 11
+        marginTop: 10
+        marginBottom: 14
+
+tables:
+  zebra: true
+  zebraColor: "#f8fbff"
+  headerColor: "#eaf1fa"
+
+styles:
+  d2f_heading_1:
+    fontFamily: Caladea
+    fontSize: 27
+    lineHeight: 1.2
+    color: "#101622"
+    marginTop: 38
+    marginBottom: 22
+    hyphenation: off
+    textAlign: center
+    keepWithNext: true
+  d2f_subheading:
+    fontFamily: Carlito
+    fontSize: 10.2
+    lineHeight: 1.36
+    color: "#6f7785"
+    letterSpacing: 0.9
+    textAlign: center
+    marginTop: -8
+    marginBottom: 28
+    keepWithNext: true
+  d2f_heading_2:
+    fontFamily: Carlito
+    fontSize: 12
+    fontWeight: 700
+    color: "#2f3d52"
+    marginTop: 30
+    marginBottom: 12
+    hyphenation: off
+    textAlign: left
+  d2f_heading_3:
+    fontFamily: Carlito
+    fontSize: 10.8
+    fontWeight: 700
+    color: "#506079"
+    marginTop: 20
+    marginBottom: 8
+    hyphenation: off
+    textAlign: left
+  d2f_paragraph:
+    textAlign: left
+    hyphenation: soft
+    lineHeight: 1.7
+    marginBottom: 11.8
+  d2f_references_heading:
+    fontFamily: Carlito
+  d2f_references_item:
+    fontFamily: Carlito
+  d2f_inline_code:
+    fontFamily: Cousine
+    fontSize: 9.6
+    color: "#1f3550"
+    backgroundColor: "#f0f3f8"
+    borderRadius: 2
+  d2f_code_block:
+    fontFamily: Cousine
+    fontSize: 9.7
+    lineHeight: 1.36
+    allowLineSplit: true
+    overflowPolicy: clip
+    color: "#1f2937"
+    backgroundColor: "#f8fafc"
+    borderWidth: 0.8
+    borderColor: "#d7deea"
+    borderRadius: 4
+    paddingTop: 8
+    paddingBottom: 8
+    paddingLeft: 11
+    paddingRight: 11
+    marginTop: 10
+    marginBottom: 14
+  d2f_blockquote:
+    textAlign: left
+    hyphenation: off
+    fontFamily: Caladea
+    fontStyle: italic
+    fontSize: 12
+    lineHeight: 1.56
+    color: "#2a3344"
+    paddingLeft: 18
+    paddingRight: 18
+    borderLeftWidth: 0
+    backgroundColor: "#ffffff"
+    marginTop: 14
+    marginBottom: 16
+  d2f_blockquote_attribution:
+    textAlign: right
+    fontStyle: normal
+    fontFamily: Carlito
+    fontSize: 9.8
+    color: "#677185"
+    marginTop: 3
+    marginBottom: 10
+  d2f_thematic_break:
+    width: 132
+    marginLeft: 0
+    borderTopWidth: 0.45
+    borderTopColor: "#aeb9ca"
+    opacity: 0.9
+    marginTop: 28
+    marginBottom: 24
+  d2f_definition_term:
+    fontWeight: 700
+    color: "#2f3d52"
+    marginTop: 8
+    marginBottom: 2
+  d2f_definition_desc:
+    paddingLeft: 14
+    marginBottom: 8
+  table-cell:
+    fontFamily: Carlito
+    paddingTop: 5
+    paddingBottom: 5
+    paddingLeft: 6
+    paddingRight: 6
+    borderWidth: 0.6
+    borderColor: "#bfc9d8"
