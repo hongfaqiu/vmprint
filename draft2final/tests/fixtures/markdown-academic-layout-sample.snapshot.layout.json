@@ -5,16 +5,16 @@
     "height": 792,
     "boxes": [
       {
-        "type": "d2f_heading_1",
+        "type": "heading-1",
         "x": 72,
-        "y": 92,
+        "y": 72,
         "w": 468,
-        "h": 28.2,
+        "h": 33,
         "lines": [
           [
             {
               "text": "Deterministic Layout Notes",
-              "width": 243.36,
+              "width": 221.7,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -23,226 +23,16 @@
         ]
       },
       {
-        "type": "d2f_paragraph",
+        "type": "paragraph",
         "x": 72,
-        "y": 128.2,
+        "y": 105,
         "w": 468,
         "h": 17.82,
         "lines": [
           [
             {
-              "text": "This",
-              "width": 19.224,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "academic",
-              "width": 41.3964,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "fixture",
-              "width": 29.8728,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "checks",
-              "width": 29.6676,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "theorem",
-              "width": 37.098,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "-",
-              "width": 3.5532,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "mode",
-              "width": 24.3432,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "blocks",
-              "width": 28.1016,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": ",",
-              "width": 2.214,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "citation",
-              "width": 33.8364,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "references",
-              "width": 45.3384,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": ",",
-              "width": 2.214,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "and",
-              "width": 16.7184,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "structured",
-              "width": 46.3644,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "lists",
-              "width": 17.8956,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "memo",
-              "width": 27.5076,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "[",
-              "width": 3.01,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "1",
-              "width": 3.1132,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "]",
-              "width": 3.01,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": ".",
-              "width": 2.2248,
+              "text": "This academic fixture checks theorem-mode blocks, citation references, and structured lists memo[1].",
+              "width": 445.176,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -251,16 +41,16 @@
         ]
       },
       {
-        "type": "d2f_heading_2",
+        "type": "heading-2",
         "x": 72,
-        "y": 164.02,
+        "y": 122.82,
         "w": 468,
-        "h": 24.65,
+        "h": 28.05,
         "lines": [
           [
             {
               "text": "Core Claims",
-              "width": 89.692,
+              "width": 81.311,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -269,128 +59,16 @@
         ]
       },
       {
-        "type": "d2f_list_item_ordered_0",
+        "type": "list-item-ordered-0",
         "x": 72,
-        "y": 195.67,
+        "y": 150.87,
         "w": 468,
         "h": 17.82,
         "lines": [
           [
             {
-              "text": "1",
-              "width": 3.9096,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": ".",
-              "width": 2.2248,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "  ",
-              "width": 4.752,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "Pagination",
-              "width": 47.3796,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "should",
-              "width": 29.8404,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "stay",
-              "width": 17.8092,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "deterministic",
-              "width": 58.9032,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "across",
-              "width": 27.3888,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "repeated",
-              "width": 38.124,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "runs",
-              "width": 20.4336,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": ".",
-              "width": 2.2248,
+              "text": "1.  Pagination should stay deterministic across repeated runs.",
+              "width": 267.246,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -399,142 +77,16 @@
         ]
       },
       {
-        "type": "d2f_list_item_ordered_0",
+        "type": "list-item-ordered-0",
         "x": 72,
-        "y": 214.39,
+        "y": 169.59,
         "w": 468,
         "h": 17.82,
         "lines": [
           [
             {
-              "text": "2",
-              "width": 5.0976,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": ".",
-              "width": 2.2248,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "  ",
-              "width": 4.752,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "Citation",
-              "width": 34.8948,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "references",
-              "width": 45.3384,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "should",
-              "width": 29.8404,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "render",
-              "width": 29.5596,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "as",
-              "width": 9.3096,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "print",
-              "width": 22.4208,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "-",
-              "width": 3.5532,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "safe",
-              "width": 17.3232,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "markers",
-              "width": 36.8388,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": ".",
-              "width": 2.2248,
+              "text": "2.  Citation references should render as print-safe markers.",
+              "width": 257.634,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -543,142 +95,16 @@
         ]
       },
       {
-        "type": "d2f_list_item_ordered_0",
+        "type": "list-item-ordered-0",
         "x": 72,
-        "y": 233.11,
+        "y": 188.31,
         "w": 468,
         "h": 17.82,
         "lines": [
           [
             {
-              "text": "3",
-              "width": 4.9788,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": ".",
-              "width": 2.2248,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "  ",
-              "width": 4.752,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "Theorem",
-              "width": 39.6036,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "blocks",
-              "width": 28.1016,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "should",
-              "width": 29.8404,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "keep",
-              "width": 20.628,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "their",
-              "width": 21.5244,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "academic",
-              "width": 41.3964,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "style",
-              "width": 20.5092,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "profile",
-              "width": 28.9764,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": ".",
-              "width": 2.2248,
+              "text": "3.  Theorem blocks should keep their academic style profile.",
+              "width": 261.3924,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -687,9 +113,9 @@
         ]
       },
       {
-        "type": "d2f_code_block",
+        "type": "code-block",
         "x": 72,
-        "y": 258.93,
+        "y": 214.13,
         "w": 468,
         "h": 63.516,
         "lines": [
@@ -723,9 +149,9 @@
         ]
       },
       {
-        "type": "d2f_definition_term",
+        "type": "definition-term",
         "x": 72,
-        "y": 330.446,
+        "y": 285.646,
         "w": 468,
         "h": 17.82,
         "lines": [
@@ -741,107 +167,16 @@
         ]
       },
       {
-        "type": "d2f_definition_desc",
+        "type": "definition-desc",
         "x": 72,
-        "y": 349.466,
+        "y": 304.666,
         "w": 468,
         "h": 17.82,
         "lines": [
           [
             {
-              "text": "A",
-              "width": 6.4692,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "repeatable",
-              "width": 46.224,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "line",
-              "width": 16.7076,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "-",
-              "width": 3.5532,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "break",
-              "width": 25.2396,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "signature",
-              "width": 41.5692,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "across",
-              "width": 27.3888,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.376,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "reruns",
-              "width": 29.3112,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": ".",
-              "width": 2.2248,
+              "text": "A repeatable line-break signature across reruns.",
+              "width": 210.5676,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -850,9 +185,9 @@
         ]
       },
       {
-        "type": "d2f_blockquote",
+        "type": "blockquote",
         "x": 72,
-        "y": 375.286,
+        "y": 330.486,
         "w": 468,
         "h": 16.96,
         "lines": [
@@ -868,11 +203,11 @@
         ]
       },
       {
-        "type": "d2f_blockquote",
+        "type": "blockquote-attribution",
         "x": 72,
-        "y": 401.246,
+        "y": 356.446,
         "w": 468,
-        "h": 16.83,
+        "h": 16.32,
         "lines": [
           [
             {
@@ -886,24 +221,24 @@
         ]
       },
       {
-        "type": "d2f_thematic_break",
+        "type": "thematic-break",
         "x": 72,
-        "y": 432.076,
+        "y": 379.766,
         "w": 468,
-        "h": 0.7,
+        "h": 0,
         "lines": []
       },
       {
-        "type": "d2f_references_heading",
+        "type": "references-heading",
         "x": 72,
-        "y": 448.776,
+        "y": 395.766,
         "w": 468,
         "h": 22.44,
         "lines": [
           [
             {
               "text": "References",
-              "width": 67.184,
+              "width": 60.0032,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -912,23 +247,16 @@
         ]
       },
       {
-        "type": "d2f_references_item",
+        "type": "references-item",
         "x": 72,
-        "y": 477.016,
+        "y": 424.006,
         "w": 468,
         "h": 16.12,
         "lines": [
           [
             {
-              "text": "1. Layout Memo. ",
-              "width": 70.928,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "https://example.com/research/memo",
-              "width": 163.2904,
+              "text": "1. Layout Memo. https://example.com/research/memo",
+              "width": 234.2184,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"

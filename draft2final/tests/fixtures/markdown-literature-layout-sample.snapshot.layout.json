@@ -5,16 +5,16 @@
     "height": 612,
     "boxes": [
       {
-        "type": "d2f_heading_1",
+        "type": "heading-1",
         "x": 54,
         "y": 82,
         "w": 288,
-        "h": 29.328,
+        "h": 34.736,
         "lines": [
           [
             {
               "text": "Field Journal of the Orchard",
-              "width": 260.0416,
+              "width": 236.3296,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -23,9 +23,9 @@
         ]
       },
       {
-        "type": "d2f_paragraph",
+        "type": "paragraph",
         "x": 54,
-        "y": 120.328,
+        "y": 125.736,
         "w": 288,
         "h": 35.404,
         "lines": [
@@ -40,22 +40,8 @@
           ],
           [
             {
-              "text": "carried echoes",
-              "width": 62.222,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "[1]",
-              "width": 9.1332,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": ".",
-              "width": 2.1836,
+              "text": "carried echoes[1].",
+              "width": 75.6628,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -64,9 +50,9 @@
         ]
       },
       {
-        "type": "d2f_list_item_ordered_0",
+        "type": "list-item-ordered-0",
         "x": 54,
-        "y": 164.332,
+        "y": 169.74,
         "w": 288,
         "h": 17.702,
         "lines": [
@@ -82,9 +68,9 @@
         ]
       },
       {
-        "type": "d2f_list_item_ordered_0",
+        "type": "list-item-ordered-0",
         "x": 54,
-        "y": 183.234,
+        "y": 188.642,
         "w": 288,
         "h": 17.702,
         "lines": [
@@ -100,9 +86,9 @@
         ]
       },
       {
-        "type": "d2f_list_item_unordered_0",
+        "type": "list-item-unordered-0",
         "x": 54,
-        "y": 202.136,
+        "y": 207.544,
         "w": 288,
         "h": 17.702,
         "lines": [
@@ -118,9 +104,9 @@
         ]
       },
       {
-        "type": "d2f_list_item_unordered_0",
+        "type": "list-item-unordered-0",
         "x": 54,
-        "y": 221.038,
+        "y": 226.446,
         "w": 288,
         "h": 17.702,
         "lines": [
@@ -136,9 +122,9 @@
         ]
       },
       {
-        "type": "d2f_code_block",
+        "type": "code-block",
         "x": 54,
-        "y": 247.74,
+        "y": 253.148,
         "w": 288,
         "h": 72.204,
         "lines": [
@@ -172,9 +158,9 @@
         ]
       },
       {
-        "type": "d2f_code_block",
+        "type": "code-block",
         "x": 54,
-        "y": 329.944,
+        "y": 335.352,
         "w": 288,
         "h": 67.44,
         "lines": [
@@ -208,9 +194,9 @@
         ]
       },
       {
-        "type": "d2f_blockquote",
+        "type": "blockquote",
         "x": 54,
-        "y": 407.384,
+        "y": 412.792,
         "w": 288,
         "h": 16.64,
         "lines": [
@@ -226,9 +212,9 @@
         ]
       },
       {
-        "type": "d2f_blockquote",
+        "type": "blockquote",
         "x": 54,
-        "y": 433.024,
+        "y": 438.432,
         "w": 288,
         "h": 16.64,
         "lines": [
@@ -244,24 +230,24 @@
         ]
       },
       {
-        "type": "d2f_thematic_break",
+        "type": "thematic-break",
         "x": 54,
-        "y": 463.664,
+        "y": 464.072,
         "w": 288,
-        "h": 0.7,
+        "h": 0,
         "lines": []
       },
       {
-        "type": "d2f_references_heading",
+        "type": "references-heading",
         "x": 54,
-        "y": 478.364,
+        "y": 476.072,
         "w": 288,
         "h": 20.708,
         "lines": [
           [
             {
               "text": "Notes",
-              "width": 31.2976,
+              "width": 28.7928,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -270,23 +256,16 @@
         ]
       },
       {
-        "type": "d2f_references_item",
+        "type": "references-item",
         "x": 54,
-        "y": 504.072,
+        "y": 501.78,
         "w": 288,
         "h": 14.21,
         "lines": [
           [
             {
-              "text": "i. ",
-              "width": 6.8894,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "https://example.com/orchard-notes",
-              "width": 146.0788,
+              "text": "i. https://example.com/orchard-notes",
+              "width": 152.9682,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"

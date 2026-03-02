@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { compileMarkdownToVmprint } from '../src/build';
-import { listFormatFlavors, listFormats } from '../src/formats';
+import { compileToVmprint } from '../src/build';
+import { listFormatThemes, listFormats } from '../src/formats';
 import { LayoutEngine, createEngineRuntime, toLayoutConfig, resolveDocumentPaths } from '@vmprint/engine';
 import { LocalFontManager } from '@vmprint/local-fonts';
 
@@ -10,7 +10,8 @@ type LayoutSnapshotCase = {
   name: string;
   fixturePath: string;
   format: string;
-  flavor?: string;
+  theme?: string;
+  config?: Record<string, unknown>;
 };
 
 type LayoutSnapshotSegment = {
@@ -42,25 +43,28 @@ const LAYOUT_SNAPSHOT_CASES: LayoutSnapshotCase[] = [
     name: 'markdown-default-layout',
     fixturePath: path.resolve('tests/fixtures/markdown-layout-sample.md'),
     format: 'markdown',
-    flavor: 'default'
-  },
-  {
-    name: 'markdown-academic-layout',
-    fixturePath: path.resolve('tests/fixtures/markdown-academic-layout-sample.md'),
-    format: 'markdown',
-    flavor: 'academic'
-  },
-  {
-    name: 'markdown-literature-layout',
-    fixturePath: path.resolve('tests/fixtures/markdown-literature-layout-sample.md'),
-    format: 'markdown',
-    flavor: 'literature'
+    theme: 'default'
   },
   {
     name: 'markdown-opensource-layout',
     fixturePath: path.resolve('tests/fixtures/markdown-opensource-layout-sample.md'),
     format: 'markdown',
-    flavor: 'opensource'
+    theme: 'opensource',
+    config: {
+      title: { subheading: { enabled: true } }
+    }
+  },
+  {
+    name: 'literature-default-layout',
+    fixturePath: path.resolve('tests/fixtures/markdown-literature-layout-sample.md'),
+    format: 'literature',
+    theme: 'default'
+  },
+  {
+    name: 'academic-default-layout',
+    fixturePath: path.resolve('tests/fixtures/markdown-academic-layout-sample.md'),
+    format: 'academic',
+    theme: 'default'
   },
   {
     name: 'screenplay-default-layout',
@@ -71,7 +75,7 @@ const LAYOUT_SNAPSHOT_CASES: LayoutSnapshotCase[] = [
     name: 'screenplay-production-layout',
     fixturePath: path.resolve('tests/fixtures/screenplay-production-layout-sample.md'),
     format: 'screenplay',
-    flavor: 'production'
+    theme: 'production'
   }
 ];
 
@@ -107,17 +111,17 @@ function shouldUpdateSnapshots(): boolean {
   return process.argv.includes('--update-layout-snapshots') || process.env.DRAFT2FINAL_UPDATE_LAYOUT_SNAPSHOTS === '1';
 }
 
-function matrixKey(format: string, flavor?: string): string {
-  return `${format}:${flavor || 'default'}`;
+function matrixKey(format: string, theme?: string): string {
+  return `${format}:${theme || 'default'}`;
 }
 
 function assertSnapshotMatrixCoverage(): void {
   const knownFormats = new Set(listFormats());
-  const supportedFlavorKeys = new Set<string>();
+  const supportedThemeKeys = new Set<string>();
   for (const format of knownFormats) {
-    const flavors = listFormatFlavors(format);
-    for (const flavor of flavors) {
-      supportedFlavorKeys.add(matrixKey(format, flavor));
+    const themes = listFormatThemes(format);
+    for (const theme of themes) {
+      supportedThemeKeys.add(matrixKey(format, theme));
     }
   }
 
@@ -125,27 +129,27 @@ function assertSnapshotMatrixCoverage(): void {
   for (const testCase of LAYOUT_SNAPSHOT_CASES) {
     assert.ok(knownFormats.has(testCase.format), `snapshot case "${testCase.name}" uses unknown format "${testCase.format}"`);
 
-    const supportedFlavors = new Set(listFormatFlavors(testCase.format));
-    const resolvedFlavor = testCase.flavor || 'default';
+    const supportedThemes = new Set(listFormatThemes(testCase.format));
+    const resolvedTheme = testCase.theme || 'default';
     assert.ok(
-      supportedFlavors.has(resolvedFlavor),
-      `snapshot case "${testCase.name}" uses unknown flavor "${resolvedFlavor}" for format "${testCase.format}"`
+      supportedThemes.has(resolvedTheme),
+      `snapshot case "${testCase.name}" uses unknown theme "${resolvedTheme}" for format "${testCase.format}"`
     );
 
-    const key = matrixKey(testCase.format, testCase.flavor);
+    const key = matrixKey(testCase.format, testCase.theme);
     assert.equal(
       coveredKeys.has(key),
       false,
-      `duplicate snapshot coverage for format/flavor pair "${key}" (case "${testCase.name}")`
+      `duplicate snapshot coverage for format/theme pair "${key}" (case "${testCase.name}")`
     );
     coveredKeys.add(key);
   }
 
-  const missingKeys = [...supportedFlavorKeys].filter((key) => !coveredKeys.has(key)).sort();
+  const missingKeys = [...supportedThemeKeys].filter((key) => !coveredKeys.has(key)).sort();
   assert.equal(
     missingKeys.length,
     0,
-    `layout snapshot coverage missing for supported format/flavor pairs: ${missingKeys.join(', ')}`
+    `layout snapshot coverage missing for supported format/theme pairs: ${missingKeys.join(', ')}`
   );
 }
 
@@ -156,7 +160,15 @@ function resolveSnapshotPath(fixturePath: string): string {
 
 async function buildLayoutSnapshot(testCase: LayoutSnapshotCase): Promise<LayoutSnapshotPage[]> {
   const markdown = fs.readFileSync(testCase.fixturePath, 'utf-8');
-  const documentInput = compileMarkdownToVmprint(markdown, testCase.fixturePath, testCase.format, testCase.flavor).ir;
+  // For screenplay: pass theme as flavor (screenplay uses listFlavors/compile-with-flavor)
+  const flavor = testCase.theme && testCase.theme !== 'default' ? testCase.theme : undefined;
+  const cliFlags: Record<string, unknown> = {
+    format: testCase.format,
+    theme: testCase.theme,
+    flavor,
+    ...(testCase.config ?? {})
+  };
+  const documentInput = compileToVmprint(markdown, testCase.fixturePath, cliFlags).ir;
   const ir = resolveDocumentPaths(documentInput, testCase.fixturePath);
   const config = toLayoutConfig(ir, false);
   const runtime = createEngineRuntime({ fontManager: new LocalFontManager() });

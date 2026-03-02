@@ -1,6 +1,6 @@
 # VMPrint Deployment Handbook
 
-This default markdown flavor targets a modern technical manual: comfortable on screen, crisp in print, and visually structured for fast scanning during implementation work [manual].
+This default markdown theme targets a modern technical manual: comfortable on screen, crisp in print, and visually structured for fast scanning during implementation work [manual].
 
 [manual]: https://example.com/vmprint/handbook "VMPrint Deployment Handbook"
 
@@ -12,7 +12,7 @@ The baseline should preserve typographic discipline while still feeling contempo
 
 ### Diagram Preview
 
-![VMPrint system diagram](./sample_image.jpg "VMPrint system diagram")
+![VMPrint system diagram](./markdown-sample-image.jpg "VMPrint system diagram")
 
 _Figure 1. VMPrint architecture overview. The diagram should scale naturally in flow and preserve stable spacing around surrounding blocks._
 
@@ -20,7 +20,7 @@ _Figure 1. VMPrint architecture overview. The diagram should scale naturally in 
 - [x] Confirm citation + references flow for print-safe links.
 - [ ] Validate final output against release checklist in staging.
 
-1. Build with explicit flavor selection.
+1. Build with explicit theme selection.
 2. Validate list and continuation spacing.
 3. Review final PDF at 100% and 150% zoom.
    1. Check heading rhythm and visual hierarchy.
@@ -60,7 +60,7 @@ Release hygiene
 
 ```bash
 npm run build
-npm run dev -- build src/formats/markdown/flavors/sample_default.md -o out.pdf --format markdown --flavor default
+npm run dev -- build tests/fixtures/markdown-sample.md -o out.pdf --format markdown --theme default
 ```
 
 ```ts
@@ -74,9 +74,10 @@ export function classifyParagraph(width: number, lineCount: number): string {
 ```json
 {
   "format": "markdown",
-  "flavor": "default",
+  "theme": "default",
   "notes": "screen and print balanced"
 }
 ```
 
-Final note: this sample should demonstrate that the default flavor can be practical, publication-grade, and still visually modern.
+Final note: this sample should demonstrate that the default theme can be practical, publication-grade, and still visually modern.
+

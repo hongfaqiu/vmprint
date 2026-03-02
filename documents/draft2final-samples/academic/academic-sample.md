@@ -4,7 +4,7 @@
 
 We report a controlled study of 143 accidental coffee releases aboard the orbital campus *Asterion*. Contrary to common lab folklore, spill trajectories are not random but cluster into repeatable topologies determined by mug lip geometry, speaker enthusiasm, and local fan harmonics [Orbital Maintenance Archive][oma].
 
-![Topological classification map for zero-gravity spill events](./sample_academic_image.jpg "Topological classification map for zero-gravity spill events")
+![Topological classification map for zero-gravity spill events](./academic-sample-image.jpg "Topological classification map for zero-gravity spill events")
 
 _Figure 1. Spill-morphology classification framework used in the coding protocol, showing radial bloom, ribbon drift, and catastrophic bead swarm classes._
 

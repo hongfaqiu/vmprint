@@ -15,7 +15,7 @@ By morning the town had sorted itself into rituals:
 - Letters tied to apple branches for the dead to collect.
 - A brass clock in the square that chimed only when no one listened.
 
-![Ashmere river chart and field annotations](./sample_literature_image.jpg "Ashmere river chart and field annotations")
+![Ashmere river chart and field annotations](./literature-sample-image.jpg "Ashmere river chart and field annotations")
 
 _Plate I. Ashmere survey sheet, date uncertain, with later pencil glosses attributed to the old surveyor._
 

@@ -395,7 +395,9 @@ DocumentInput (vmprint IR)
 PDF file
 ```
 
-Each step is a pure function. The format modules (currently `markdown` and `screenplay`) are the only place that knows about document conventions—what font to use for a `h1`, how wide a blockquote indent should be, whether a scene heading gets `keepWithNext: true`. Multiple format flavors (`academic`, `literature`) are supported by passing overrides into the base format module.
+Each step is a pure function. The format modules (`markdown`, `academic`, `literature`, and `screenplay`) are the only place that knows about document conventions—what font to use for a `h1`, how wide a blockquote indent should be, whether a scene heading gets `keepWithNext: true`. Derived formats such as `academic` and `literature` extend the same `MarkdownFormat` base handler and are registered as independent named `FormatModule` instances.
+
+Each format has a `config.defaults.yaml` for behavioral options. Themes supply style and layout values via `themes/<name>.yaml`. Per-theme behavioral overrides can be placed in a `themes/<name>.config.yaml` sidecar, which is merged after format defaults but before document frontmatter. This allows a theme to enable features (e.g. the `opensource` theme enabling the `::` title subheading) without requiring frontmatter in every source file.
 
 The `SemanticDocument` type is a mid-level AST that normalizes away remark idiosyncrasies (e.g. it resolves link references before handing them to format modules). Format modules never see raw remark nodes.
 

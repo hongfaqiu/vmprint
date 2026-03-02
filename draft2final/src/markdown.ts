@@ -27,7 +27,7 @@ export type MdNode = {
   position?: MdPosition;
 };
 
-const KEEP_WITH_NEXT_PATTERN = /^\s*<!--\s*keep-with-next\s*-->\s*$/i;
+export const KEEP_WITH_NEXT_PATTERN = /^\s*<!--\s*keep-with-next\s*-->\s*$/i;
 
 const UNSUPPORTED_NODE_TYPES = new Set<string>([
   'footnoteDefinition',

@@ -24,21 +24,21 @@ npm run dev -- --help
 draft2final build input.md -o output.pdf
 ```
 
-### Formats and flavors
+### Formats and themes
 
 ```bash
 # Named format
 draft2final build script.md -o script.pdf --format screenplay
 
-# Format + flavor
-draft2final build input.md -o output.pdf --format markdown --flavor academic
+# Format + theme
+draft2final build input.md -o output.pdf --format markdown --theme opensource
 ```
 
 Pass `?` to list available options:
 
 ```bash
 draft2final build input.md -o output.pdf --format ?   # list formats
-draft2final build input.md -o output.pdf --flavor ?   # list flavors for active format
+draft2final build input.md -o output.pdf --theme ?    # list themes for active format
 ```
 
 ## Options
@@ -48,7 +48,7 @@ draft2final build input.md -o output.pdf --flavor ?   # list flavors for active 
 | `<input.md>` | Path to the input Markdown file |
 | `-o, --output <path>` | Output PDF path (must end in `.pdf`) |
 | `--format <name>` | Document format (default: `markdown`) |
-| `--flavor <name>` | Format flavor / style variant |
+| `--theme <name>` | Format theme / style variant |
 | `--debug` | Embed layout debug boxes in the output PDF |
 
 ## Exit codes

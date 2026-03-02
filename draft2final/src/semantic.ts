@@ -1,5 +1,5 @@
 import { Draft2FinalError } from './errors';
-import { MdNode } from './markdown';
+import { MdNode, KEEP_WITH_NEXT_PATTERN } from './markdown';
 
 export type SourceRange = {
   lineStart: number;
@@ -58,8 +58,6 @@ export type SemanticNode = WithSource & {
   align?: Array<'left' | 'right' | 'center' | null>;
   keepWithNext?: boolean;
 };
-
-const KEEP_WITH_NEXT_PATTERN = /^\s*<!--\s*keep-with-next\s*-->\s*$/i;
 
 export type SemanticDocument = WithSource & {
   type: 'Document';

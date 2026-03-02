@@ -1,12 +1,7 @@
-import type { DocumentInput } from '@vmprint/engine';
-import type { SemanticDocument } from '../semantic';
-
-export type FormatCompileOptions = {
-  flavor?: string;
-};
+import type { FormatHandler } from './compiler';
 
 export type FormatModule = {
   name: string;
-  listFlavors(): string[];
-  compile(document: SemanticDocument, inputPath: string, options?: FormatCompileOptions): DocumentInput;
+  listThemes(): string[];
+  createHandler(config: Record<string, unknown>): FormatHandler;
 };

@@ -5,7 +5,7 @@
     "height": 792,
     "boxes": [
       {
-        "type": "d2f_sp_title",
+        "type": "title",
         "x": 72,
         "y": 252,
         "w": 468,
@@ -23,7 +23,7 @@
         ]
       },
       {
-        "type": "d2f_sp_title_meta",
+        "type": "title-meta",
         "x": 72,
         "y": 277.476563,
         "w": 468,
@@ -41,7 +41,7 @@
         ]
       },
       {
-        "type": "d2f_sp_title_meta",
+        "type": "title-meta",
         "x": 72,
         "y": 290.953125,
         "w": 468,
@@ -59,7 +59,7 @@
         ]
       },
       {
-        "type": "d2f_sp_title_contact",
+        "type": "title-contact",
         "x": 72,
         "y": 560.429688,
         "w": 468,
@@ -67,8 +67,8 @@
         "lines": [
           [
             {
-              "text": "email: mira.quell@example.com",
-              "width": 208.664063,
+              "text": "email: mira.quell@example.com[1]",
+              "width": 230.25,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -77,7 +77,7 @@
         ]
       },
       {
-        "type": "d2f_sp_title_contact",
+        "type": "title-contact",
         "x": 72,
         "y": 573.90625,
         "w": 468,
@@ -95,7 +95,7 @@
         ]
       },
       {
-        "type": "d2f_sp_title_contact",
+        "type": "title-contact",
         "x": 72,
         "y": 587.382813,
         "w": 468,
@@ -120,7 +120,7 @@
     "height": 792,
     "boxes": [
       {
-        "type": "d2f_sp_scene_heading",
+        "type": "scene-heading",
         "x": 108,
         "y": 84,
         "w": 432,
@@ -128,8 +128,8 @@
         "lines": [
           [
             {
-              "text": "1 INT. SUBTERRANEAN SERVER CATHEDRAL - PRE-DAWN 1",
-              "width": 352.570313,
+              "text": "INT. SUBTERRANEAN SERVER CATHEDRAL - PRE-DAWN",
+              "width": 323.789063,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -138,11 +138,11 @@
         ]
       },
       {
-        "type": "d2f_sp_action",
+        "type": "action",
         "x": 108,
         "y": 109.476563,
         "w": 432,
-        "h": 53.90625,
+        "h": 67.382813,
         "lines": [
           [
             {
@@ -155,7 +155,16 @@
           ],
           [
             {
-              "text": "cobalt and amber. Rows of cooling towers breathe like ",
+              "text": "cobalt and amber.\r",
+              "width": 129.515625,
+              "ascent": 781.25,
+              "descent": 341.796875,
+              "fontFamily": "Courier Prime"
+            }
+          ],
+          [
+            {
+              "text": "Rows of cooling towers breathe like sleeping animals.\r",
               "width": 388.546875,
               "ascent": 781.25,
               "descent": 341.796875,
@@ -164,8 +173,8 @@
           ],
           [
             {
-              "text": "sleeping animals. Battery backup lights pulse in strict ",
-              "width": 402.9375,
+              "text": "Battery backup lights pulse in strict rhythm with the city ",
+              "width": 424.523438,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -173,8 +182,8 @@
           ],
           [
             {
-              "text": "rhythm with the city load forecast.",
-              "width": 251.835938,
+              "text": "load forecast.",
+              "width": 100.734375,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -183,9 +192,9 @@
         ]
       },
       {
-        "type": "d2f_sp_character",
+        "type": "character",
         "x": 266.4,
-        "y": 175.382813,
+        "y": 188.859375,
         "w": 165.6,
         "h": 13.476563,
         "lines": [
@@ -201,9 +210,9 @@
         ]
       },
       {
-        "type": "d2f_sp_parenthetical",
+        "type": "parenthetical",
         "x": 223.2,
-        "y": 188.859375,
+        "y": 202.335938,
         "w": 172.8,
         "h": 13.476563,
         "lines": [
@@ -219,11 +228,11 @@
         ]
       },
       {
-        "type": "d2f_sp_dialogue",
+        "type": "dialogue",
         "x": 180,
-        "y": 202.335938,
+        "y": 215.8125,
         "w": 252,
-        "h": 498.632813,
+        "h": 485.15625,
         "lines": [
           [
             {
@@ -548,20 +557,11 @@
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
             }
-          ],
-          [
-            {
-              "text": "normal release freeze.",
-              "width": 158.296875,
-              "ascent": 781.25,
-              "descent": 341.796875,
-              "fontFamily": "Courier Prime"
-            }
           ]
         ]
       },
       {
-        "type": "d2f_sp_more",
+        "type": "more",
         "x": 180,
         "y": 700.96875,
         "w": 252,
@@ -586,7 +586,7 @@
     "height": 792,
     "boxes": [
       {
-        "type": "d2f_sp_character",
+        "type": "character",
         "x": 266.4,
         "y": 84,
         "w": 165.6,
@@ -604,7 +604,7 @@
         ]
       },
       {
-        "type": "d2f_sp_parenthetical",
+        "type": "parenthetical",
         "x": 223.2,
         "y": 97.476563,
         "w": 172.8,
@@ -622,12 +622,21 @@
         ]
       },
       {
-        "type": "d2f_sp_dialogue",
+        "type": "dialogue",
         "x": 180,
         "y": 110.953125,
         "w": 252,
-        "h": 94.335938,
+        "h": 107.8125,
         "lines": [
+          [
+            {
+              "text": "normal release freeze.",
+              "width": 158.296875,
+              "ascent": 781.25,
+              "descent": 341.796875,
+              "fontFamily": "Courier Prime"
+            }
+          ],
           [
             {
               "text": "",
@@ -694,9 +703,9 @@
         ]
       },
       {
-        "type": "d2f_sp_character",
+        "type": "character",
         "x": 266.4,
-        "y": 217.289063,
+        "y": 230.765625,
         "w": 165.6,
         "h": 13.476563,
         "lines": [
@@ -712,9 +721,9 @@
         ]
       },
       {
-        "type": "d2f_sp_parenthetical",
+        "type": "parenthetical",
         "x": 223.2,
-        "y": 230.765625,
+        "y": 244.242188,
         "w": 172.8,
         "h": 13.476563,
         "lines": [
@@ -730,9 +739,9 @@
         ]
       },
       {
-        "type": "d2f_sp_dialogue",
+        "type": "dialogue",
         "x": 180,
-        "y": 244.242188,
+        "y": 257.71875,
         "w": 252,
         "h": 40.429688,
         "lines": [
@@ -766,9 +775,9 @@
         ]
       },
       {
-        "type": "d2f_sp_action",
+        "type": "action",
         "x": 108,
-        "y": 296.671875,
+        "y": 310.148438,
         "w": 432,
         "h": 26.953125,
         "lines": [
@@ -793,9 +802,9 @@
         ]
       },
       {
-        "type": "d2f_sp_transition",
+        "type": "transition",
         "x": 108,
-        "y": 335.625,
+        "y": 349.101563,
         "w": 432,
         "h": 13.476563,
         "lines": [
@@ -811,16 +820,16 @@
         ]
       },
       {
-        "type": "d2f_sp_scene_heading",
+        "type": "scene-heading",
         "x": 108,
-        "y": 361.101563,
+        "y": 374.578125,
         "w": 432,
         "h": 13.476563,
         "lines": [
           [
             {
-              "text": "2 EXT. CITY ROOFTOPS - BLUE HOUR 2",
-              "width": 244.640625,
+              "text": "EXT. CITY ROOFTOPS - BLUE HOUR",
+              "width": 215.859375,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -829,11 +838,11 @@
         ]
       },
       {
-        "type": "d2f_sp_action",
+        "type": "action",
         "x": 108,
-        "y": 386.578125,
+        "y": 400.054688,
         "w": 432,
-        "h": 40.429688,
+        "h": 53.90625,
         "lines": [
           [
             {
@@ -846,8 +855,8 @@
           ],
           [
             {
-              "text": "through narrow lanes. Sirens Doppler below, too far to ",
-              "width": 395.742188,
+              "text": "through narrow lanes.\r",
+              "width": 158.296875,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -855,8 +864,17 @@
           ],
           [
             {
-              "text": "locate, too close to ignore.",
-              "width": 201.46875,
+              "text": "Sirens Doppler below, too far to locate, too close to ignore",
+              "width": 431.71875,
+              "ascent": 781.25,
+              "descent": 341.796875,
+              "fontFamily": "Courier Prime"
+            }
+          ],
+          [
+            {
+              "text": ".",
+              "width": 7.195313,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -865,9 +883,9 @@
         ]
       },
       {
-        "type": "d2f_sp_character_dual_left",
+        "type": "character-dual-left",
         "x": 162,
-        "y": 439.007813,
+        "y": 465.960938,
         "w": 150,
         "h": 13.476563,
         "lines": [
@@ -883,9 +901,9 @@
         ]
       },
       {
-        "type": "d2f_sp_dialogue_dual_left",
+        "type": "dialogue-dual-left",
         "x": 108,
-        "y": 452.484375,
+        "y": 479.4375,
         "w": 204,
         "h": 40.429688,
         "lines": [
@@ -919,9 +937,9 @@
         ]
       },
       {
-        "type": "d2f_sp_character_dual_right",
+        "type": "character-dual-right",
         "x": 390,
-        "y": 492.914063,
+        "y": 525.867188,
         "w": 150,
         "h": 13.476563,
         "lines": [
@@ -937,9 +955,9 @@
         ]
       },
       {
-        "type": "d2f_sp_parenthetical_dual_right",
+        "type": "parenthetical-dual-right",
         "x": 372,
-        "y": 506.390625,
+        "y": 539.34375,
         "w": 162,
         "h": 13.476563,
         "lines": [
@@ -955,9 +973,9 @@
         ]
       },
       {
-        "type": "d2f_sp_dialogue_dual_right",
+        "type": "dialogue-dual-right",
         "x": 336,
-        "y": 519.867188,
+        "y": 552.820313,
         "w": 204,
         "h": 26.953125,
         "lines": [
@@ -982,9 +1000,9 @@
         ]
       },
       {
-        "type": "d2f_sp_action",
+        "type": "action",
         "x": 108,
-        "y": 552.820313,
+        "y": 585.773438,
         "w": 432,
         "h": 13.476563,
         "lines": [
@@ -1000,9 +1018,9 @@
         ]
       },
       {
-        "type": "d2f_sp_insert",
+        "type": "insert",
         "x": 108,
-        "y": 578.296875,
+        "y": 611.25,
         "w": 432,
         "h": 26.953125,
         "lines": [
@@ -1027,9 +1045,9 @@
         ]
       },
       {
-        "type": "d2f_sp_transition",
+        "type": "transition",
         "x": 108,
-        "y": 617.25,
+        "y": 650.203125,
         "w": 432,
         "h": 13.476563,
         "lines": [
@@ -1045,16 +1063,41 @@
         ]
       },
       {
-        "type": "d2f_sp_scene_heading",
+        "type": "page_number",
         "x": 108,
-        "y": 642.726563,
+        "y": 36,
+        "w": 432,
+        "h": 12,
+        "lines": [
+          [
+            {
+              "text": "2.",
+              "width": 14.390625,
+              "ascent": 781.25,
+              "descent": 341.796875,
+              "fontFamily": "Courier Prime"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "index": 3,
+    "width": 612,
+    "height": 792,
+    "boxes": [
+      {
+        "type": "scene-heading",
+        "x": 108,
+        "y": 84,
         "w": 432,
         "h": 13.476563,
         "lines": [
           [
             {
-              "text": "3 INT. SERVER CATHEDRAL - MOMENTS LATER 3",
-              "width": 295.007813,
+              "text": "INT. SERVER CATHEDRAL - MOMENTS LATER",
+              "width": 266.226563,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -1063,9 +1106,9 @@
         ]
       },
       {
-        "type": "d2f_sp_action",
+        "type": "action",
         "x": 108,
-        "y": 668.203125,
+        "y": 109.476563,
         "w": 432,
         "h": 26.953125,
         "lines": [
@@ -1090,34 +1133,9 @@
         ]
       },
       {
-        "type": "page_number",
-        "x": 108,
-        "y": 36,
-        "w": 432,
-        "h": 12,
-        "lines": [
-          [
-            {
-              "text": "2.A",
-              "width": 21.585938,
-              "ascent": 781.25,
-              "descent": 341.796875,
-              "fontFamily": "Courier Prime"
-            }
-          ]
-        ]
-      }
-    ]
-  },
-  {
-    "index": 3,
-    "width": 612,
-    "height": 792,
-    "boxes": [
-      {
-        "type": "d2f_sp_character",
+        "type": "character",
         "x": 266.4,
-        "y": 84,
+        "y": 148.429688,
         "w": 165.6,
         "h": 13.476563,
         "lines": [
@@ -1133,9 +1151,9 @@
         ]
       },
       {
-        "type": "d2f_sp_dialogue",
+        "type": "dialogue",
         "x": 180,
-        "y": 97.476563,
+        "y": 161.90625,
         "w": 252,
         "h": 13.476563,
         "lines": [
@@ -1151,9 +1169,9 @@
         ]
       },
       {
-        "type": "d2f_sp_character",
+        "type": "character",
         "x": 266.4,
-        "y": 122.953125,
+        "y": 187.382813,
         "w": 165.6,
         "h": 13.476563,
         "lines": [
@@ -1169,9 +1187,9 @@
         ]
       },
       {
-        "type": "d2f_sp_dialogue",
+        "type": "dialogue",
         "x": 180,
-        "y": 136.429688,
+        "y": 200.859375,
         "w": 252,
         "h": 13.476563,
         "lines": [
@@ -1195,8 +1213,8 @@
         "lines": [
           [
             {
-              "text": "3.A",
-              "width": 21.585938,
+              "text": "3.",
+              "width": 14.390625,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"

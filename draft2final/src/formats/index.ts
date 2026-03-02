@@ -1,10 +1,14 @@
 import { Draft2FinalError } from '../errors';
 import { markdownFormat } from './markdown';
+import { literatureFormat } from './literature';
+import { academicFormat } from './academic';
 import { screenplayFormat } from './screenplay';
-import { FormatModule } from './types';
+import type { FormatModule } from './types';
 
 const modulesByName: Record<string, FormatModule> = {
   [markdownFormat.name]: markdownFormat,
+  [literatureFormat.name]: literatureFormat,
+  [academicFormat.name]: academicFormat,
   [screenplayFormat.name]: screenplayFormat
 };
 
@@ -18,8 +22,8 @@ export function getFormatModule(name: string): FormatModule {
   throw new Draft2FinalError('format', name, `Unknown format "${name}". Available formats: ${listFormats().join(', ')}`, 2);
 }
 
-export function listFormatFlavors(formatName: string): string[] {
-  return getFormatModule(formatName).listFlavors();
+export function listFormatThemes(formatName: string): string[] {
+  return getFormatModule(formatName).listThemes();
 }
 
 export type { FormatModule } from './types';

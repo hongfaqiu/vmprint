@@ -5,7 +5,7 @@
     "height": 792,
     "boxes": [
       {
-        "type": "d2f_heading_1",
+        "type": "heading-1",
         "x": 80,
         "y": 100,
         "w": 452,
@@ -14,7 +14,7 @@
           [
             {
               "text": "Layout Snapshot Baseline",
-              "width": 285.925,
+              "width": 259.625,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -23,7 +23,7 @@
         ]
       },
       {
-        "type": "d2f_paragraph",
+        "type": "paragraph",
         "x": 80,
         "y": 145.75,
         "w": 452,
@@ -50,7 +50,7 @@
         ]
       },
       {
-        "type": "d2f_paragraph",
+        "type": "paragraph",
         "x": 80,
         "y": 193.092,
         "w": 452,
@@ -133,7 +133,7 @@
         ]
       },
       {
-        "type": "d2f_list_item_unordered_0",
+        "type": "list-item-unordered-0",
         "x": 80,
         "y": 240.729801,
         "w": 452,
@@ -148,78 +148,8 @@
               "fontFamily": "Noto Sans Symbols 2"
             },
             {
-              "text": "  ",
-              "width": 4.972,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "Freeze",
-              "width": 29.6173,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.486,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "parser",
-              "width": 29.5495,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.486,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "and",
-              "width": 17.4924,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.486,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "semantic",
-              "width": 41.7761,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.486,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "output",
-              "width": 30.9846,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": ".",
-              "width": 2.3278,
+              "text": "  Freeze parser and semantic output.",
+              "width": 166.6637,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -228,7 +158,7 @@
         ]
       },
       {
-        "type": "d2f_list_item_unordered_0",
+        "type": "list-item-unordered-0",
         "x": 80,
         "y": 266.804501,
         "w": 452,
@@ -243,92 +173,8 @@
               "fontFamily": "Noto Sans Symbols 2"
             },
             {
-              "text": "  ",
-              "width": 4.972,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "Confirm",
-              "width": 37.9228,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.486,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "visual",
-              "width": 27.4138,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.486,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "regression",
-              "width": 47.4826,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.486,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "snapshots",
-              "width": 46.1379,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.486,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "before",
-              "width": 28.9732,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.486,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "release",
-              "width": 32.0581,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": ".",
-              "width": 2.3278,
+              "text": "  Confirm visual regression snapshots before release.",
+              "width": 239.7182,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -337,7 +183,7 @@
         ]
       },
       {
-        "type": "d2f_list_item_ordered_0",
+        "type": "list-item-ordered-0",
         "x": 80,
         "y": 292.879201,
         "w": 452,
@@ -345,78 +191,8 @@
         "lines": [
           [
             {
-              "text": "1",
-              "width": 4.0906,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": ".",
-              "width": 2.3278,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "  ",
-              "width": 4.972,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "Build",
-              "width": 24.7809,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.486,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "the",
-              "width": 14.916,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.486,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "document",
-              "width": 46.3752,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.486,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "IR",
-              "width": 10.8028,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": ".",
-              "width": 2.3278,
+              "text": "1.  Build the document IR.",
+              "width": 118.0511,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -425,7 +201,7 @@
         ]
       },
       {
-        "type": "d2f_list_item_ordered_0",
+        "type": "list-item-ordered-0",
         "x": 80,
         "y": 312.750201,
         "w": 452,
@@ -433,92 +209,8 @@
         "lines": [
           [
             {
-              "text": "2",
-              "width": 5.3336,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": ".",
-              "width": 2.3278,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "  ",
-              "width": 4.972,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "Paginate",
-              "width": 39.5952,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.486,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "to",
-              "width": 8.9948,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.486,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "renderer",
-              "width": 40.2167,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "-",
-              "width": 3.7177,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "ready",
-              "width": 25.6962,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.486,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "pages",
-              "width": 25.6623,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": ".",
-              "width": 2.3278,
+              "text": "2.  Paginate to renderer-ready pages.",
+              "width": 166.3021,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -527,7 +219,7 @@
         ]
       },
       {
-        "type": "d2f_list_item_ordered_0",
+        "type": "list-item-ordered-0",
         "x": 80,
         "y": 332.621201,
         "w": 452,
@@ -535,92 +227,8 @@
         "lines": [
           [
             {
-              "text": "3",
-              "width": 5.2093,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": ".",
-              "width": 2.3278,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "  ",
-              "width": 4.972,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "Compare",
-              "width": 40.9512,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.486,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "against",
-              "width": 33.2559,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.486,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "committed",
-              "width": 49.7878,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.486,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "layout",
-              "width": 28.6342,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": " ",
-              "width": 2.486,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "snapshots",
-              "width": 46.1379,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": ".",
-              "width": 2.3278,
+              "text": "3.  Compare against committed layout snapshots.",
+              "width": 223.5479,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -629,7 +237,7 @@
         ]
       },
       {
-        "type": "d2f_blockquote",
+        "type": "blockquote",
         "x": 80,
         "y": 360.492201,
         "w": 452,
@@ -647,7 +255,7 @@
         ]
       },
       {
-        "type": "d2f_blockquote",
+        "type": "blockquote",
         "x": 80,
         "y": 390.363201,
         "w": 452,
@@ -665,7 +273,7 @@
         ]
       },
       {
-        "type": "d2f_thematic_break",
+        "type": "thematic-break",
         "x": 80,
         "y": 425.234201,
         "w": 452,
@@ -673,7 +281,7 @@
         "lines": []
       },
       {
-        "type": "d2f_code_block",
+        "type": "code-block",
         "x": 80,
         "y": 442.034201,
         "w": 452,
@@ -716,7 +324,7 @@
         ]
       },
       {
-        "type": "d2f_thematic_break",
+        "type": "thematic-break",
         "x": 80,
         "y": 528.053601,
         "w": 452,
@@ -724,7 +332,7 @@
         "lines": []
       },
       {
-        "type": "d2f_references_heading",
+        "type": "references-heading",
         "x": 80,
         "y": 546.853601,
         "w": 452,
@@ -733,7 +341,7 @@
           [
             {
               "text": "References",
-              "width": 68.172,
+              "width": 60.8856,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -742,7 +350,7 @@
         ]
       },
       {
-        "type": "d2f_references_item",
+        "type": "references-item",
         "x": 80,
         "y": 575.899601,
         "w": 452,
@@ -750,15 +358,8 @@
         "lines": [
           [
             {
-              "text": "1. ",
-              "width": 8.1164,
-              "ascent": 900,
-              "descent": 250,
-              "fontFamily": "Caladea"
-            },
-            {
-              "text": "https://example.com/reference",
-              "width": 133.7867,
+              "text": "1. https://example.com/reference",
+              "width": 141.9031,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"

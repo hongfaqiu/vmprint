@@ -135,13 +135,13 @@ The tests cover:
 
 **Inline styling** — Verifies that bold, italic, and code inline markup survives through blockquotes and screenplay dialogue without style resets or loss.
 
-**Flavor selection and geometry** — Verifies that different flavors produce different layout configurations. Verifies WGA-standard screenplay geometry numerically: character name margins, dialogue margins, parenthetical margins, page number format and offset.
+**Theme selection and geometry** — Verifies that different themes produce different layout configurations. Verifies WGA-standard screenplay geometry numerically: character name margins, dialogue margins, parenthetical margins, page number format and offset.
 
 **Continuation metadata** — Verifies that the `paginationContinuation` block on dialogue elements carries `(MORE)` and `CONT'D` markers, and that parentheticals present on the opening cue also appear in the continuation's `markersBeforeContinuation`.
 
-**Dual dialogue** — Verifies that consecutive blockquotes with the `^` flag produce `d2f_sp_character_dual_left`, `d2f_sp_dialogue_dual_left`, and their right-column counterparts.
+**Dual dialogue** — Verifies that consecutive blockquotes with the `^` flag produce `character-dual-left`, `dialogue-dual-left`, and their right-column counterparts.
 
-**Production flavor** — Verifies scene number prefixes/suffixes and locked-page revision labels in the page number format.
+**Production theme** — Verifies scene number prefixes/suffixes and locked-page revision labels in the page number format via the `production` theme for the screenplay format.
 
 **Image handling** — Local file images are embedded as base64 in the IR. Data URI images pass through. Remote HTTP/HTTPS URLs throw a typed `Draft2FinalError` with `stage: 'format'`. Missing local files throw with a clear path error.
 
@@ -151,11 +151,11 @@ The tests cover:
 
 ### Layout Snapshots
 
-`tests/layout-snapshots.ts` runs every registered format+flavor combination through the full pipeline — compile, resolve, paginate — and compares the resulting `Page[]` snapshot against a stored file.
+`tests/layout-snapshots.ts` runs every registered format+theme combination through the full pipeline — compile, resolve, paginate — and compares the resulting `Page[]` snapshot against a stored file.
 
 The snapshot shape is the same as the engine's: box type, position rounded to 6 decimal places, line text, and segment metrics.
 
-An important safety check runs first: the suite verifies that every supported format+flavor pair has a test case. Adding a new flavor to a format without adding a snapshot case is a test failure.
+An important safety check runs first: the suite verifies that every supported format+theme pair has a test case. Adding a new theme to a format without adding a snapshot case is a test failure.
 
 Each snapshot case also verifies determinism independently: `paginate()` is called twice and the results are compared before touching the snapshot file.
 

@@ -43,7 +43,7 @@ And because each format module is an independent compilation pass over the same 
 - **No new syntax.** You're writing CommonMark + GFM. The structural conventions — headings, blockquotes, lists — are the same ones you're already using. They carry domain meaning when compiled; they carry structural meaning when read as plain text.
 - **The output meets the standard, not an approximation.** Screenplay output is WGA-compliant. Page layout, margins, element positions, page numbering, and continuation markers are all correct — not roughly correct.
 - **Language is not a constraint.** Multilingual documents — mixed scripts, non-Latin alphabets, CJK text — are first-class. This was a core requirement from the beginning.
-- **Formats are composable, not monolithic.** A format defines structure. A flavor defines style. Swapping a flavor changes the look without touching the source. Adding a format adds a new compilation target without touching any existing one.
+- **Formats are composable, not monolithic.** A format defines structure. A theme defines style. Swapping a theme changes the look without touching the source. Adding a format adds a new compilation target without touching any existing one.
 
 ## What It Produces
 
@@ -59,7 +59,7 @@ The `@` prefix on a name inside a blockquote signals a dialogue turn. Everything
 
 **Title pages** are generated from the first `h1` and the surrounding front matter and list items. Metadata (written by, draft date, revision) and contact information are laid out in the correct positions.
 
-**Scene numbers** can be enabled per flavor — decimal or alpha, with optional zero-padding.
+**Scene numbers** can be enabled per configuration — decimal or alpha, with optional zero-padding.
 
 **Locked pages** for production: revision labels can be appended or prepended to page numbers (`1A.`, `A1.`).
 
@@ -67,9 +67,9 @@ The `@` prefix on a name inside a blockquote signals a dialogue turn. Everything
 
 The `markdown` format renders structured prose documents with typographic precision. It supports the full CommonMark + GFM surface: paragraphs, headings, blockquotes, lists (ordered, unordered, task lists), tables, fenced code blocks, and inline formatting.
 
-Available flavors:
+Available themes/formats:
 
-| Flavor | Description |
+| Format/Theme | Description |
 |---|---|
 | `default` | Clean, readable general-purpose document |
 | `academic` | Citation markers, references section, definition lists, formal typography |
@@ -110,13 +110,13 @@ A format is a TypeScript module that exports a `FormatModule`. Its job is to wal
 ```ts
 export const myFormat: FormatModule = {
   name: 'my-format',
-  listFlavors(): string[] {
-    return listFlavorNames('my-format');
+  listThemes(): string[] {
+    return listThemes('my-format');
   },
-  compile(document: SemanticDocument, inputPath: string, options?: { flavor?: string }): DocumentInput {
-    const flavor = loadFormatFlavor<MyFlavor>('my-format', options?.flavor);
-    // Walk document.children, emit elements, return DocumentInput
-    return { documentVersion: '1.0', layout, styles, elements };
+  createHandler(config: Record<string, unknown>): FormatHandler {
+    return new MyFormat(config);
+    // Handler emits blocks via FormatContext; compiler assembles DocumentInput
+    
   }
 };
 ```
@@ -125,14 +125,16 @@ You control what each Markdown construct maps to, what styles the resulting elem
 
 Formats are registered in `src/formats/index.ts`.
 
-### Flavors
+### Themes and Config
 
-A flavor is a YAML file placed in `src/formats/<format-name>/flavors/<flavor-name>.yaml`. It provides declarative overrides — fonts, margins, spacing, style properties — that a format's `compile()` function merges on top of its defaults.
+A theme is a YAML file placed in `src/formats/<format-name>/themes/<theme-name>.yaml`. It provides declarative style and layout values. Behavioral options live in `src/formats/<format-name>/config.defaults.yaml` and can be overridden from frontmatter or CLI flags.
 
-Flavors contain no code. If you know what a correctly formatted legal brief, technical report, or stage play should look like, you can write a flavor without touching any TypeScript.
+A per-theme behavioral override file can also be placed at `themes/<theme-name>.config.yaml`. It is merged after the format defaults but before document frontmatter, so user frontmatter always wins. This is how the `opensource` theme enables `:: ...` title subheadings automatically — the feature is off by default, and the theme's config sidecar turns it on without requiring frontmatter in every document.
+
+Themes contain no code. If you know what a correctly formatted legal brief, technical report, or stage play should look like, you can write a theme without touching any TypeScript.
 
 ```yaml
-# src/formats/screenplay/flavors/production.yaml
+# src/formats/screenplay/config.defaults.yaml
 production:
   sceneNumbers:
     enabled: true
@@ -146,7 +148,7 @@ production:
 
 ### The SemanticDocument
 
-The `SemanticDocument` passed to `compile()` is the normalized form of the parsed Markdown. Every node carries `kind`, `children`, `value` (for leaf nodes), `sourceRange`, and `sourceSyntax`. Front matter is available at `document.frontMatter`. Inline formatting — `em`, `strong`, `link`, `inlineCode` — is preserved in the child tree of each block node.
+The `SemanticDocument` passed to the handler is the normalized form of the parsed Markdown. Every node carries `kind`, `children`, `value` (for leaf nodes), `sourceRange`, and `sourceSyntax`. Front matter is available at `document.frontMatter`. Inline formatting — `em`, `strong`, `link`, `inlineCode` — is preserved in the child tree of each block node.
 
 You're not parsing Markdown yourself. You receive a clean, typed, annotated document and decide what it becomes.
 
@@ -172,6 +174,8 @@ See [QUICKSTART.md](QUICKSTART.md) for install and command reference.
 
 ## Status
 
-Version `0.1.0`. Screenplay and markdown formats are working and covered by layout regression fixtures. Additional flavors for legal, technical, and stage play formats are planned.
+Version `0.1.0`. Screenplay and markdown formats are working and covered by layout regression fixtures. Additional themes and format modules for legal, technical, and stage play documents are planned.
 
 This is pre-1.0 software. The API may change.
+
+
