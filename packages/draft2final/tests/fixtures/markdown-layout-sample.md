@@ -2,7 +2,7 @@
 
 This fixture is intentionally stable and should only change when we accept a deliberate layout update.
 
-Primary evidence includes **bold emphasis**, *italic rhythm*, and inline `code` spans with a source [reference](https://example.com/reference).
+Primary evidence includes **bold emphasis**, _italic rhythm_, and inline `code` spans with a source [reference](https://example.com/reference).
 
 - [x] Freeze parser and semantic output.
 - [ ] Confirm visual regression snapshots before release.
@@ -18,6 +18,5 @@ Primary evidence includes **bold emphasis**, *italic rhythm*, and inline `code` 
 ---
 
 ```ts
-export const layoutSignature = (pageCount: number, boxCount: number): string =>
-  `${pageCount}:${boxCount}`;
+export const layoutSignature = (pageCount: number, boxCount: number): string => `${pageCount}:${boxCount}`;
 ```

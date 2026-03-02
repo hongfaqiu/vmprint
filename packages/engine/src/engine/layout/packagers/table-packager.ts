@@ -14,8 +14,12 @@ export class TablePackager implements PackagerUnit {
     private cachedBoxes: Box[] | null = null;
     private requiredHeight: number = 0;
 
-    get pageBreakBefore(): boolean | undefined { return this.flowBox.pageBreakBefore; }
-    get keepWithNext(): boolean | undefined { return this.flowBox.keepWithNext; }
+    get pageBreakBefore(): boolean | undefined {
+        return this.flowBox.pageBreakBefore;
+    }
+    get keepWithNext(): boolean | undefined {
+        return this.flowBox.keepWithNext;
+    }
 
     constructor(processor: LayoutProcessor, flowBox: FlowBox) {
         this.processor = processor;
@@ -37,7 +41,7 @@ export class TablePackager implements PackagerUnit {
                 context,
                 fontSize,
                 lineHeight,
-                (this.processor as any).getTableLayoutContext()
+                (this.processor as any).getTableLayoutContext(),
             );
             this.flowBox._unresolvedElement = undefined;
         } else {
@@ -62,7 +66,7 @@ export class TablePackager implements PackagerUnit {
             this.flowBox.marginTop,
             context.margins,
             availableWidth,
-            0
+            0,
         );
 
         const boxes = Array.isArray(positioned) ? positioned : [positioned];
@@ -100,11 +104,7 @@ export class TablePackager implements PackagerUnit {
             return [null, this];
         }
 
-        const splitResult = splitTableFlowBox(
-            this.flowBox,
-            availableHeight,
-            this.flowBox.marginTop
-        );
+        const splitResult = splitTableFlowBox(this.flowBox, availableHeight, this.flowBox.marginTop);
 
         if (!splitResult) {
             return [null, this];

@@ -4,7 +4,11 @@ import { LAYOUT_DEFAULTS } from '../defaults';
 import { PackagerContext, PackagerUnit, LayoutBox } from './packager-types';
 import { FlowBoxPackager } from './flow-box-packager';
 
-export function paginatePackagers(processor: LayoutProcessor, packagers: PackagerUnit[], contextBase: Omit<PackagerContext, 'pageIndex' | 'cursorY'>): Page[] {
+export function paginatePackagers(
+    processor: LayoutProcessor,
+    packagers: PackagerUnit[],
+    contextBase: Omit<PackagerContext, 'pageIndex' | 'cursorY'>,
+): Page[] {
     const pages: Page[] = [];
     let currentPageBoxes: LayoutBox[] = [];
     let currentPageIndex = 0;
@@ -14,8 +18,7 @@ export function paginatePackagers(processor: LayoutProcessor, packagers: Package
     let lastSpacingAfter = 0;
 
     const pageLimit = contextBase.pageHeight - margins.bottom;
-    const resolveLayoutBefore = (prevAfter: number, marginTop: number): number =>
-        Math.max(prevAfter, marginTop);
+    const resolveLayoutBefore = (prevAfter: number, marginTop: number): number => Math.max(prevAfter, marginTop);
 
     const pushNewPage = () => {
         if (currentPageBoxes.length > 0) {
@@ -23,7 +26,7 @@ export function paginatePackagers(processor: LayoutProcessor, packagers: Package
                 index: currentPageIndex,
                 boxes: currentPageBoxes,
                 width: contextBase.pageWidth,
-                height: contextBase.pageHeight
+                height: contextBase.pageHeight,
             });
         }
         currentPageIndex++;
@@ -39,7 +42,7 @@ export function paginatePackagers(processor: LayoutProcessor, packagers: Package
         const context: PackagerContext = {
             ...contextBase,
             pageIndex: currentPageIndex,
-            cursorY: currentY
+            cursorY: currentY,
         };
 
         const availableWidth = contextBase.pageWidth - margins.left - margins.right;
@@ -126,7 +129,11 @@ export function paginatePackagers(processor: LayoutProcessor, packagers: Package
                         splitFlowBox?.properties?.paginationContinuation ??
                         splitFlowBox?._sourceElement?.properties?.paginationContinuation;
                     if (continuationSpec) {
-                        if (splitFlowBox && splitFlowBox.properties && splitFlowBox.properties.paginationContinuation === undefined) {
+                        if (
+                            splitFlowBox &&
+                            splitFlowBox.properties &&
+                            splitFlowBox.properties.paginationContinuation === undefined
+                        ) {
                             splitFlowBox.properties.paginationContinuation = continuationSpec;
                         }
                         continuation = (processor as any).getContinuationArtifacts(splitFlowBox);
@@ -149,11 +156,11 @@ export function paginatePackagers(processor: LayoutProcessor, packagers: Package
                         const pMarginBottom = p.getMarginBottom();
                         const pLayoutBefore = resolveLayoutBefore(lastSpacingAfter, pMarginTop);
                         const pLayoutDelta = pLayoutBefore - pMarginTop;
-                        const pAvailableHeight = (pageLimit - currentY) - pLayoutDelta;
+                        const pAvailableHeight = pageLimit - currentY - pLayoutDelta;
                         const pContext = {
                             ...contextBase,
                             pageIndex: currentPageIndex,
-                            cursorY: currentY
+                            cursorY: currentY,
                         };
                         const pBoxes = p.emitBoxes(availableWidth, pAvailableHeight, pContext) || [];
                         for (const box of pBoxes) {
@@ -172,20 +179,25 @@ export function paginatePackagers(processor: LayoutProcessor, packagers: Package
                     const candidateMarginBottom = splitCandidate.getMarginBottom();
                     const candidateLayoutBefore = resolveLayoutBefore(lastSpacingAfter, candidateMarginTop);
                     const candidateLayoutDelta = candidateLayoutBefore - candidateMarginTop;
-                    const candidateAvailable = (pageLimit - currentY) - candidateLayoutDelta - markerReserve;
+                    const candidateAvailable = pageLimit - currentY - candidateLayoutDelta - markerReserve;
                     const splitContext = {
                         ...contextBase,
                         pageIndex: currentPageIndex,
-                        cursorY: currentY
+                        cursorY: currentY,
                     };
                     const [partA, partB] = splitCandidate.split(candidateAvailable, splitContext);
                     if (partA && partB) {
                         const partAContext = {
                             ...contextBase,
                             pageIndex: currentPageIndex,
-                            cursorY: currentY
+                            cursorY: currentY,
                         };
-                        const partABoxes = partA.emitBoxes(availableWidth, (pageLimit - currentY) - candidateLayoutDelta, partAContext) || [];
+                        const partABoxes =
+                            partA.emitBoxes(
+                                availableWidth,
+                                pageLimit - currentY - candidateLayoutDelta,
+                                partAContext,
+                            ) || [];
                         for (const box of partABoxes) {
                             box.y = (box.y || 0) + currentY + candidateLayoutDelta;
                             if (box.meta) box.meta = { ...box.meta, pageIndex: currentPageIndex };
@@ -194,7 +206,10 @@ export function paginatePackagers(processor: LayoutProcessor, packagers: Package
                         const partAMarginTop = partA.getMarginTop();
                         const partAMarginBottom = partA.getMarginBottom();
                         const partALayoutBefore = resolveLayoutBefore(lastSpacingAfter, partAMarginTop);
-                        const partAContentHeight = Math.max(0, partA.getRequiredHeight() - partAMarginTop - partAMarginBottom);
+                        const partAContentHeight = Math.max(
+                            0,
+                            partA.getRequiredHeight() - partAMarginTop - partAMarginBottom,
+                        );
                         const partARequiredHeight = partAContentHeight + partALayoutBefore + partAMarginBottom;
                         const partAEffectiveHeight = Math.max(partARequiredHeight, LAYOUT_DEFAULTS.minEffectiveHeight);
                         currentY += partAEffectiveHeight - partAMarginBottom;
@@ -214,14 +229,17 @@ export function paginatePackagers(processor: LayoutProcessor, packagers: Package
                                     markerLayoutBefore,
                                     margins,
                                     availableWidth,
-                                    currentPageIndex
+                                    currentPageIndex,
                                 );
                                 const markerBoxes = Array.isArray(positioned) ? positioned : [positioned];
                                 for (const box of markerBoxes) {
                                     if (box.meta) box.meta = { ...box.meta, pageIndex: currentPageIndex };
                                     currentPageBoxes.push(box);
                                 }
-                                const markerEffectiveHeight = Math.max(markerTotalHeight, LAYOUT_DEFAULTS.minEffectiveHeight);
+                                const markerEffectiveHeight = Math.max(
+                                    markerTotalHeight,
+                                    LAYOUT_DEFAULTS.minEffectiveHeight,
+                                );
                                 currentY += markerEffectiveHeight - Math.max(0, marker.marginBottom || 0);
                                 lastSpacingAfter = Math.max(0, marker.marginBottom || 0);
                             }
@@ -229,8 +247,8 @@ export function paginatePackagers(processor: LayoutProcessor, packagers: Package
 
                         pushNewPage();
                         if (continuation?.markersBeforeContinuation?.length > 0) {
-                            const markerPackagers = continuation.markersBeforeContinuation.map((marker: any) =>
-                                new FlowBoxPackager(processor, marker)
+                            const markerPackagers = continuation.markersBeforeContinuation.map(
+                                (marker: any) => new FlowBoxPackager(processor, marker),
                             );
                             packagers.splice(i, sequence.length, ...markerPackagers, partB);
                         } else {
@@ -273,7 +291,7 @@ export function paginatePackagers(processor: LayoutProcessor, packagers: Package
         // It doesn't fit
         if (isAtPageTop) {
             if (packager.isUnbreakable(availableHeight)) {
-                // It's unbreakable and we're at the top, we must force it or it's an error. 
+                // It's unbreakable and we're at the top, we must force it or it's an error.
                 // As per design: packager decides the overflow behavior. We just place it.
                 if (boxes) {
                     for (const box of boxes) {
@@ -306,13 +324,13 @@ export function paginatePackagers(processor: LayoutProcessor, packagers: Package
                 // Tables and stories are allowed to split mid-page.
                 // Skip the page-top split forcing.
             } else {
-            const emptyLayoutBefore = resolveLayoutBefore(0, marginTop);
-            const emptyAvailable = pageLimit - margins.top;
-            const requiredOnEmpty = contentHeight + emptyLayoutBefore + marginBottom;
-            if (requiredOnEmpty > emptyAvailable + LAYOUT_DEFAULTS.wrapTolerance) {
-                pushNewPage();
-                continue;
-            }
+                const emptyLayoutBefore = resolveLayoutBefore(0, marginTop);
+                const emptyAvailable = pageLimit - margins.top;
+                const requiredOnEmpty = contentHeight + emptyLayoutBefore + marginBottom;
+                if (requiredOnEmpty > emptyAvailable + LAYOUT_DEFAULTS.wrapTolerance) {
+                    pushNewPage();
+                    continue;
+                }
             }
         }
 
@@ -320,7 +338,8 @@ export function paginatePackagers(processor: LayoutProcessor, packagers: Package
         const flowBox = (packager as any).flowBox;
         let continuation: any = null;
         let markerReserve = 0;
-        const continuationSpec = flowBox?.properties?.paginationContinuation ?? flowBox?._sourceElement?.properties?.paginationContinuation;
+        const continuationSpec =
+            flowBox?.properties?.paginationContinuation ?? flowBox?._sourceElement?.properties?.paginationContinuation;
         if (continuationSpec) {
             if (flowBox && flowBox.properties && flowBox.properties.paginationContinuation === undefined) {
                 flowBox.properties.paginationContinuation = continuationSpec;
@@ -365,7 +384,7 @@ export function paginatePackagers(processor: LayoutProcessor, packagers: Package
         const splitContext: PackagerContext = {
             ...contextBase,
             pageIndex: currentPageIndex,
-            cursorY: currentY
+            cursorY: currentY,
         };
         const fitsMarginTop = fitsCurrent.getMarginTop();
         const fitsMarginBottom = fitsCurrent.getMarginBottom();
@@ -402,7 +421,7 @@ export function paginatePackagers(processor: LayoutProcessor, packagers: Package
                     markerLayoutBefore,
                     margins,
                     availableWidth,
-                    currentPageIndex
+                    currentPageIndex,
                 );
                 const markerBoxes = Array.isArray(positioned) ? positioned : [positioned];
                 for (const box of markerBoxes) {
@@ -419,8 +438,8 @@ export function paginatePackagers(processor: LayoutProcessor, packagers: Package
         // The remaining packager takes the place of the current packager but we don't advance i
         if (pushedNext) {
             if (continuation?.markersBeforeContinuation?.length > 0) {
-                const markerPackagers = continuation.markersBeforeContinuation.map((marker: any) =>
-                    new FlowBoxPackager(processor, marker)
+                const markerPackagers = continuation.markersBeforeContinuation.map(
+                    (marker: any) => new FlowBoxPackager(processor, marker),
                 );
                 packagers.splice(i, 1, ...markerPackagers, pushedNext);
             } else {
@@ -436,7 +455,7 @@ export function paginatePackagers(processor: LayoutProcessor, packagers: Package
             index: currentPageIndex,
             boxes: currentPageBoxes,
             width: contextBase.pageWidth,
-            height: contextBase.pageHeight
+            height: contextBase.pageHeight,
         });
     }
 

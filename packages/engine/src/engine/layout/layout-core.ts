@@ -9,7 +9,7 @@ import {
     FlowBox,
     FlowIdentitySeed,
     FlowMaterializationContext,
-    ResolvedLinesResult
+    ResolvedLinesResult,
 } from './layout-core-types';
 import { getContinuationArtifactsWithCallbacks, splitFlowBoxWithCallbacks } from './layout-flow-splitting';
 import { finalizePagesWithCallbacks } from './layout-page-finalization';
@@ -19,18 +19,19 @@ import {
     materializeTableFlowBox,
     positionTableFlowBoxes,
     splitTableFlowBox,
-    TableLayoutContext
+    TableLayoutContext,
 } from './layout-table';
 import { DropCapPackager } from './packagers/dropcap-packager';
 import { createPackagers } from './packagers/create-packagers';
 import { paginatePackagers } from './packagers/paginate-packagers';
 
-
 export class LayoutProcessor extends TextProcessor {
     private normalizeOverflowPolicy(value: unknown): OverflowPolicy {
         if (value === undefined || value === null || value === '') return LAYOUT_DEFAULTS.overflowPolicy;
         if (value === 'clip' || value === 'move-whole' || value === 'error') return value;
-        throw new Error(`[LayoutProcessor] Invalid overflowPolicy "${String(value)}". Expected "clip", "move-whole", or "error".`);
+        throw new Error(
+            `[LayoutProcessor] Invalid overflowPolicy "${String(value)}". Expected "clip", "move-whole", or "error".`,
+        );
     }
 
     private normalizeLineConstraint(value: number, fallback: number = LAYOUT_DEFAULTS.orphans): number {
@@ -41,11 +42,11 @@ export class LayoutProcessor extends TextProcessor {
     private createFlowMaterializationContext(
         pageIndex: number,
         cursorY: number,
-        _pageWidth: number
+        _pageWidth: number,
     ): FlowMaterializationContext {
         return {
             pageIndex,
-            cursorY
+            cursorY,
         };
     }
 
@@ -60,7 +61,7 @@ export class LayoutProcessor extends TextProcessor {
         style: ElementStyle,
         _context: FlowMaterializationContext | undefined,
         _fontSize: number,
-        _lineHeight: number
+        _lineHeight: number,
     ): number {
         if (_context && Number.isFinite(_context.contentWidth)) {
             return Math.max(0, Number(_context.contentWidth));
@@ -73,7 +74,7 @@ export class LayoutProcessor extends TextProcessor {
         overrides: {
             fontSize: number;
             lineHeight: number;
-        }
+        },
     ): ElementStyle {
         return {
             ...style,
@@ -93,12 +94,29 @@ export class LayoutProcessor extends TextProcessor {
             lang: style.lang || this.config.layout.lang || LAYOUT_DEFAULTS.textLayout.lang,
             direction: style.direction || this.config.layout.direction || LAYOUT_DEFAULTS.textLayout.direction,
             hyphenation: style.hyphenation || this.config.layout.hyphenation || LAYOUT_DEFAULTS.textLayout.hyphenation,
-            hyphenateCaps: style.hyphenateCaps ?? this.config.layout.hyphenateCaps ?? LAYOUT_DEFAULTS.textLayout.hyphenateCaps,
-            hyphenMinWordLength: Number(style.hyphenMinWordLength ?? this.config.layout.hyphenMinWordLength ?? LAYOUT_DEFAULTS.textLayout.hyphenMinWordLength),
-            hyphenMinPrefix: Number(style.hyphenMinPrefix ?? this.config.layout.hyphenMinPrefix ?? LAYOUT_DEFAULTS.textLayout.hyphenMinPrefix),
-            hyphenMinSuffix: Number(style.hyphenMinSuffix ?? this.config.layout.hyphenMinSuffix ?? LAYOUT_DEFAULTS.textLayout.hyphenMinSuffix),
-            justifyEngine: style.justifyEngine || this.config.layout.justifyEngine || LAYOUT_DEFAULTS.textLayout.justifyEngine,
-            justifyStrategy: style.justifyStrategy || this.config.layout.justifyStrategy || LAYOUT_DEFAULTS.textLayout.justifyStrategy
+            hyphenateCaps:
+                style.hyphenateCaps ?? this.config.layout.hyphenateCaps ?? LAYOUT_DEFAULTS.textLayout.hyphenateCaps,
+            hyphenMinWordLength: Number(
+                style.hyphenMinWordLength ??
+                    this.config.layout.hyphenMinWordLength ??
+                    LAYOUT_DEFAULTS.textLayout.hyphenMinWordLength,
+            ),
+            hyphenMinPrefix: Number(
+                style.hyphenMinPrefix ??
+                    this.config.layout.hyphenMinPrefix ??
+                    LAYOUT_DEFAULTS.textLayout.hyphenMinPrefix,
+            ),
+            hyphenMinSuffix: Number(
+                style.hyphenMinSuffix ??
+                    this.config.layout.hyphenMinSuffix ??
+                    LAYOUT_DEFAULTS.textLayout.hyphenMinSuffix,
+            ),
+            justifyEngine:
+                style.justifyEngine || this.config.layout.justifyEngine || LAYOUT_DEFAULTS.textLayout.justifyEngine,
+            justifyStrategy:
+                style.justifyStrategy ||
+                this.config.layout.justifyStrategy ||
+                LAYOUT_DEFAULTS.textLayout.justifyStrategy,
         };
     }
 
@@ -111,10 +129,12 @@ export class LayoutProcessor extends TextProcessor {
             getElementText: (element) => this.getElementText(element),
             resolveEmbeddedImage: (element) => this.resolveEmbeddedImage(element),
             resolveLines: (element, style, fontSize, context) => this.resolveLines(element, style, fontSize, context),
-            calculateLineBlockHeight: (lines, style, lineYOffsets) => this.calculateLineBlockHeight(lines, style, lineYOffsets),
+            calculateLineBlockHeight: (lines, style, lineYOffsets) =>
+                this.calculateLineBlockHeight(lines, style, lineYOffsets),
             getHorizontalInsets: (style) => LayoutUtils.getHorizontalInsets(style),
             getVerticalInsets: (style) => LayoutUtils.getVerticalInsets(style),
-            getContextualBoxWidth: (style, context, fontSize, lineHeight) => this.getContextualBoxWidth(style, context, fontSize, lineHeight),
+            getContextualBoxWidth: (style, context, fontSize, lineHeight) =>
+                this.getContextualBoxWidth(style, context, fontSize, lineHeight),
             getBoxWidth: (style) => LayoutUtils.getBoxWidth(this.config, style),
             resolveMeasurementFontForStyle: (style) => this.resolveMeasurementFontForStyle(style),
             measureText: (text, font, fontSize, letterSpacing) => this.measureText(text, font, fontSize, letterSpacing),
@@ -129,25 +149,21 @@ export class LayoutProcessor extends TextProcessor {
                     cursorY: context?.cursorY ?? 0,
                     margins: { top: 0, right: 0, bottom: 0, left: 0 },
                     pageWidth: Number.isFinite(width) ? Math.max(0, Number(width)) : pageDims.width,
-                    pageHeight: pageDims.height
+                    pageHeight: pageDims.height,
                 };
                 return packager.emitBoxes(
                     Number.isFinite(width) ? Math.max(0, Number(width)) : pageDims.width,
                     Number.POSITIVE_INFINITY,
-                    packagerContext
+                    packagerContext,
                 ) as any;
-            }
+            },
         };
     }
 
     private resolveMeasurementFontForStyle(style: ElementStyle): any {
         if (!style.fontFamily) return this.font;
         try {
-            return this.resolveLoadedFamilyFont(
-                style.fontFamily,
-                style.fontWeight ?? 400,
-                style.fontStyle ?? 'normal'
-            );
+            return this.resolveLoadedFamilyFont(style.fontFamily, style.fontWeight ?? 400, style.fontStyle ?? 'normal');
         } catch {
             return this.font;
         }
@@ -157,7 +173,7 @@ export class LayoutProcessor extends TextProcessor {
         style: ElementStyle,
         context: FlowMaterializationContext | undefined,
         fontSize: number,
-        lineHeight: number
+        lineHeight: number,
     ): number {
         if (style.width !== undefined) {
             return Math.max(0, LayoutUtils.validateUnit(style.width));
@@ -174,7 +190,7 @@ export class LayoutProcessor extends TextProcessor {
     private getUniformLineHeight(lines: RichLine[], style: ElementStyle): number {
         if (!lines || lines.length === 0) return 0;
         const totalHeight = this.calculateLinesHeight(lines, style);
-        return totalHeight > 0 ? (totalHeight / lines.length) : 0;
+        return totalHeight > 0 ? totalHeight / lines.length : 0;
     }
 
     private calculateLineBlockHeight(lines: RichLine[], style: ElementStyle, lineYOffsets?: number[]): number {
@@ -209,13 +225,13 @@ export class LayoutProcessor extends TextProcessor {
             return {
                 ...element,
                 content: '',
-                children: this.sliceElements(element.children, trimCount, trimCount + remainingLength)
+                children: this.sliceElements(element.children, trimCount, trimCount + remainingLength),
             };
         }
 
         return {
             ...element,
-            content: text.slice(trimCount)
+            content: text.slice(trimCount),
         };
     }
 
@@ -248,7 +264,8 @@ export class LayoutProcessor extends TextProcessor {
 
             // Normalize whitespace runs conservatively.
             if (/\s/.test(renderedChar) && /\s/.test(sourceChar)) {
-                while (renderedIndex < renderedText.length && /\s/.test(renderedText[renderedIndex])) renderedIndex += 1;
+                while (renderedIndex < renderedText.length && /\s/.test(renderedText[renderedIndex]))
+                    renderedIndex += 1;
                 while (sourceIndex < sourceText.length && /\s/.test(sourceText[sourceIndex])) sourceIndex += 1;
                 continue;
             }
@@ -306,18 +323,20 @@ export class LayoutProcessor extends TextProcessor {
             LayoutUtils.normalizeAuthorSourceId(element.properties?.sourceId);
 
         const sourceId = explicitSourceId || this.buildAutoSourceId(path, sourceType);
-        const engineKey = (typeof seed?.engineKey === 'string' && seed.engineKey.trim())
-            ? seed.engineKey.trim()
-            : this.buildEngineKey(path, sourceType);
+        const engineKey =
+            typeof seed?.engineKey === 'string' && seed.engineKey.trim()
+                ? seed.engineKey.trim()
+                : this.buildEngineKey(path, sourceType);
         const explicitReflowKey = this.normalizeReflowKey(seed?.reflowKey ?? element.properties?.reflowKey);
         const reflowKey = explicitReflowKey || this.buildReflowKey(path, sourceType);
-        const semanticRole = (typeof seed?.semanticRole === 'string' && seed.semanticRole.trim())
-            ? seed.semanticRole.trim()
-            : (typeof element.properties?.semanticRole === 'string' && element.properties.semanticRole.trim()
-                ? element.properties.semanticRole.trim()
-                : undefined);
+        const semanticRole =
+            typeof seed?.semanticRole === 'string' && seed.semanticRole.trim()
+                ? seed.semanticRole.trim()
+                : typeof element.properties?.semanticRole === 'string' && element.properties.semanticRole.trim()
+                  ? element.properties.semanticRole.trim()
+                  : undefined;
         const fragmentIndex = Math.max(0, Math.floor(Number(seed?.fragmentIndex ?? 0)));
-        const continuation = seed?.isContinuation ?? (fragmentIndex > 0);
+        const continuation = seed?.isContinuation ?? fragmentIndex > 0;
 
         const meta: BoxMeta = {
             sourceId,
@@ -327,7 +346,7 @@ export class LayoutProcessor extends TextProcessor {
             fragmentIndex,
             isContinuation: continuation,
             generated: !!seed?.generated,
-            originSourceId: seed?.originSourceId
+            originSourceId: seed?.originSourceId,
         };
 
         if (reflowKey) meta.reflowKey = reflowKey;
@@ -339,7 +358,7 @@ export class LayoutProcessor extends TextProcessor {
         return getContinuationArtifactsWithCallbacks(box, {
             shapeElement: (element, identitySeed) => this.shapeElement(element, identitySeed),
             materializeFlowBox: (unit) => this.materializeFlowBox(unit),
-            normalizeAuthorSourceId: (value) => LayoutUtils.normalizeAuthorSourceId(value)
+            normalizeAuthorSourceId: (value) => LayoutUtils.normalizeAuthorSourceId(value),
         });
     }
 
@@ -354,7 +373,7 @@ export class LayoutProcessor extends TextProcessor {
             processor: this,
             pageWidth,
             pageHeight,
-            margins: this.config.layout.margins
+            margins: this.config.layout.margins,
         };
         const pages = paginatePackagers(this, packagers, contextBase);
         return this.finalizePages(pages);
@@ -370,7 +389,7 @@ export class LayoutProcessor extends TextProcessor {
         const model = buildTableModel(element);
         const normalizedStyle = this.normalizeElementStyle(style, {
             fontSize,
-            lineHeight
+            lineHeight,
         });
 
         return {
@@ -384,7 +403,7 @@ export class LayoutProcessor extends TextProcessor {
                 _isFirstLine: true,
                 _isLastLine: true,
                 _isFirstFragmentInLine: true,
-                _isLastFragmentInLine: true
+                _isLastFragmentInLine: true,
             },
             marginTop,
             marginBottom,
@@ -398,7 +417,7 @@ export class LayoutProcessor extends TextProcessor {
             heightOverride: style.height !== undefined ? LayoutUtils.validateUnit(style.height) : undefined,
             _materializationMode: 'reflowable',
             _sourceElement: element,
-            _unresolvedElement: element
+            _unresolvedElement: element,
         };
     }
 
@@ -421,7 +440,7 @@ export class LayoutProcessor extends TextProcessor {
         const allowLineSplit = hasEmbeddedImage ? false : style.allowLineSplit !== false;
         const normalizedStyle = this.normalizeElementStyle(style, {
             fontSize,
-            lineHeight
+            lineHeight,
         });
 
         const heightOverride = style.height !== undefined ? LayoutUtils.validateUnit(style.height) : undefined;
@@ -436,7 +455,7 @@ export class LayoutProcessor extends TextProcessor {
                 _isFirstLine: true,
                 _isLastLine: true,
                 _isFirstFragmentInLine: true,
-                _isLastFragmentInLine: true
+                _isLastFragmentInLine: true,
             },
             marginTop,
             marginBottom,
@@ -444,13 +463,19 @@ export class LayoutProcessor extends TextProcessor {
             pageBreakBefore: !!style.pageBreakBefore,
             allowLineSplit,
             overflowPolicy: this.normalizeOverflowPolicy(style.overflowPolicy),
-            orphans: this.normalizeLineConstraint(LayoutUtils.validateUnit(style.orphans ?? LAYOUT_DEFAULTS.orphans), LAYOUT_DEFAULTS.orphans),
-            widows: this.normalizeLineConstraint(LayoutUtils.validateUnit(style.widows ?? LAYOUT_DEFAULTS.widows), LAYOUT_DEFAULTS.widows),
+            orphans: this.normalizeLineConstraint(
+                LayoutUtils.validateUnit(style.orphans ?? LAYOUT_DEFAULTS.orphans),
+                LAYOUT_DEFAULTS.orphans,
+            ),
+            widows: this.normalizeLineConstraint(
+                LayoutUtils.validateUnit(style.widows ?? LAYOUT_DEFAULTS.widows),
+                LAYOUT_DEFAULTS.widows,
+            ),
             measuredContentHeight: heightOverride ?? 0,
             heightOverride,
             _materializationMode: 'reflowable',
             _sourceElement: element,
-            _unresolvedElement: element
+            _unresolvedElement: element,
         };
     }
 
@@ -463,7 +488,7 @@ export class LayoutProcessor extends TextProcessor {
             mimeType: parsed.mimeType,
             intrinsicWidth: parsed.intrinsicWidth,
             intrinsicHeight: parsed.intrinsicHeight,
-            fit: parsed.fit
+            fit: parsed.fit,
         };
     }
 
@@ -472,7 +497,7 @@ export class LayoutProcessor extends TextProcessor {
         element: Element,
         context: FlowMaterializationContext | undefined,
         fontSize: number,
-        lineHeight: number
+        lineHeight: number,
     ): FlowBox {
         const resolvedImage = unit.image || this.resolveEmbeddedImage(element);
         if (!resolvedImage) return unit;
@@ -483,22 +508,29 @@ export class LayoutProcessor extends TextProcessor {
 
         const contextualBoxWidth = this.getContextualBoxWidth(style, context, fontSize, lineHeight);
         const intrinsicBoxWidth = resolvedImage.intrinsicWidth + insetsHorizontal;
-        let boxWidth = style.width !== undefined
-            ? Math.max(0, LayoutUtils.validateUnit(style.width))
-            : Math.min(Math.max(insetsHorizontal, intrinsicBoxWidth), Math.max(insetsHorizontal, contextualBoxWidth));
+        let boxWidth =
+            style.width !== undefined
+                ? Math.max(0, LayoutUtils.validateUnit(style.width))
+                : Math.min(
+                      Math.max(insetsHorizontal, intrinsicBoxWidth),
+                      Math.max(insetsHorizontal, contextualBoxWidth),
+                  );
 
         if (!Number.isFinite(boxWidth) || boxWidth <= 0) {
             boxWidth = Math.max(insetsHorizontal, contextualBoxWidth || intrinsicBoxWidth);
         }
 
         const contentWidth = Math.max(0, boxWidth - insetsHorizontal);
-        const explicitHeight = style.height !== undefined ? Math.max(0, LayoutUtils.validateUnit(style.height)) : undefined;
-        const computedContentHeight = contentWidth > 0
-            ? (contentWidth * (resolvedImage.intrinsicHeight / Math.max(1, resolvedImage.intrinsicWidth)))
-            : 0;
-        const measuredHeight = explicitHeight !== undefined
-            ? explicitHeight
-            : Math.max(insetsVertical, computedContentHeight + insetsVertical);
+        const explicitHeight =
+            style.height !== undefined ? Math.max(0, LayoutUtils.validateUnit(style.height)) : undefined;
+        const computedContentHeight =
+            contentWidth > 0
+                ? contentWidth * (resolvedImage.intrinsicHeight / Math.max(1, resolvedImage.intrinsicWidth))
+                : 0;
+        const measuredHeight =
+            explicitHeight !== undefined
+                ? explicitHeight
+                : Math.max(insetsVertical, computedContentHeight + insetsVertical);
 
         unit.image = resolvedImage;
         unit.lines = undefined;
@@ -517,7 +549,8 @@ export class LayoutProcessor extends TextProcessor {
     protected materializeFlowBox(unit: FlowBox, context?: FlowMaterializationContext): FlowBox {
         const contextKey = this.getMaterializationContextKey(unit, context);
         const canRematerialize = unit._materializationMode === 'reflowable' && !!unit._sourceElement;
-        if (!unit._unresolvedElement && (!canRematerialize || unit._materializationContextKey === contextKey)) return unit;
+        if (!unit._unresolvedElement && (!canRematerialize || unit._materializationContextKey === contextKey))
+            return unit;
 
         const element = unit._unresolvedElement || unit._sourceElement;
         if (!element) return unit;
@@ -546,16 +579,14 @@ export class LayoutProcessor extends TextProcessor {
 
         const resolved = this.resolveLines(element, style, fontSize, context);
         const lines = resolved.lines;
-        let contentHeight = lines.length > 0
-            ? this.calculateLineBlockHeight(lines, style, resolved.lineYOffsets)
-            : 0;
+        let contentHeight = lines.length > 0 ? this.calculateLineBlockHeight(lines, style, resolved.lineYOffsets) : 0;
 
         const insetsVertical = LayoutUtils.getVerticalInsets(style);
         contentHeight += insetsVertical;
 
         const text = this.getElementText(element);
         if (contentHeight === 0 && text) {
-            contentHeight = (fontSize * lineHeight) + LayoutUtils.getVerticalInsets(style);
+            contentHeight = fontSize * lineHeight + LayoutUtils.getVerticalInsets(style);
         }
 
         unit.lines = lines.length > 0 ? lines : undefined;
@@ -585,7 +616,7 @@ export class LayoutProcessor extends TextProcessor {
         element: Element,
         style: ElementStyle,
         fontSize: number,
-        context?: FlowMaterializationContext
+        context?: FlowMaterializationContext,
     ): ResolvedLinesResult {
         const text = this.getElementText(element);
         if (!text) return { lines: [] };
@@ -599,7 +630,7 @@ export class LayoutProcessor extends TextProcessor {
                 measurementFont = this.resolveLoadedFamilyFont(
                     style.fontFamily,
                     style.fontWeight ?? 400,
-                    style.fontStyle ?? 'normal'
+                    style.fontStyle ?? 'normal',
                 );
             } catch {
                 const fontConfig = LayoutUtils.resolveFontConfig(
@@ -607,7 +638,7 @@ export class LayoutProcessor extends TextProcessor {
                     style.fontWeight,
                     style.fontStyle,
                     this.runtime.fontRegistry,
-                    this.runtime.fontManager
+                    this.runtime.fontManager,
                 );
                 const cached = getCachedFont(fontConfig.src, this.runtime);
                 if (cached) measurementFont = cached;
@@ -625,7 +656,7 @@ export class LayoutProcessor extends TextProcessor {
             letterSpacing,
             textIndent,
             undefined,
-            undefined
+            undefined,
         );
         return { lines: wrapped };
     }
@@ -633,7 +664,7 @@ export class LayoutProcessor extends TextProcessor {
     protected splitFlowBox(
         box: FlowBox,
         availableHeight: number,
-        layoutBefore: number
+        layoutBefore: number,
     ): { partA: FlowBox; partB: FlowBox } | null {
         if (box.properties?._tableModel) {
             return splitTableFlowBox(box, availableHeight, layoutBefore);
@@ -643,18 +674,21 @@ export class LayoutProcessor extends TextProcessor {
             {
                 box,
                 availableHeight,
-                layoutBefore
+                layoutBefore,
             },
             {
                 normalizeLineConstraint: (value, fallback) => this.normalizeLineConstraint(value, fallback),
-                calculateLineBlockHeight: (lines, style, lineYOffsets) => this.calculateLineBlockHeight(lines, style, lineYOffsets),
-                rebuildFlowBox: (base, lines, style, meta, properties) => this.rebuildFlowBox(base, lines, style, meta, properties),
+                calculateLineBlockHeight: (lines, style, lineYOffsets) =>
+                    this.calculateLineBlockHeight(lines, style, lineYOffsets),
+                rebuildFlowBox: (base, lines, style, meta, properties) =>
+                    this.rebuildFlowBox(base, lines, style, meta, properties),
                 getElementText: (element) => this.getElementText(element),
                 getJoinedLineText: (lines) => this.getJoinedLineText(lines),
-                resolveConsumedSourceChars: (sourceText, renderedText) => this.resolveConsumedSourceChars(sourceText, renderedText),
+                resolveConsumedSourceChars: (sourceText, renderedText) =>
+                    this.resolveConsumedSourceChars(sourceText, renderedText),
                 sliceElements: (elements, start, end) => this.sliceElements(elements, start, end),
-                trimLeadingContinuationWhitespace: (element) => this.trimLeadingContinuationWhitespace(element)
-            }
+                trimLeadingContinuationWhitespace: (element) => this.trimLeadingContinuationWhitespace(element),
+            },
         );
     }
 
@@ -663,12 +697,12 @@ export class LayoutProcessor extends TextProcessor {
         lines: RichLine[],
         style: ElementStyle,
         meta: BoxMeta,
-        properties: Record<string, any>
+        properties: Record<string, any>,
     ): FlowBox {
         const lineHeight = this.calculateLineBlockHeight(
             lines,
             style,
-            Array.isArray(properties?._lineYOffsets) ? properties._lineYOffsets : undefined
+            Array.isArray(properties?._lineYOffsets) ? properties._lineYOffsets : undefined,
         );
         const insetsVertical = LayoutUtils.getVerticalInsets(style);
         const measuredContentHeight = lineHeight + insetsVertical;
@@ -681,10 +715,9 @@ export class LayoutProcessor extends TextProcessor {
             measuredContentHeight,
             _materializationMode: 'frozen',
             _materializationContextKey: undefined,
-            _unresolvedElement: undefined
+            _unresolvedElement: undefined,
         };
     }
-
 
     protected positionFlowBox(
         unit: FlowBox,
@@ -692,13 +725,15 @@ export class LayoutProcessor extends TextProcessor {
         layoutBefore: number,
         margins: { left: number },
         _pageWidth: number,
-        pageIndex: number
+        pageIndex: number,
     ): Box | Box[] {
         const style = unit.style;
         const glueOffset = LayoutUtils.validateUnit(unit.properties?._glueOffsetX ?? 0);
         const x = margins.left + LayoutUtils.validateUnit(style.marginLeft || 0) + glueOffset;
         const y = currentY + layoutBefore;
-        const w = Number.isFinite(unit.measuredWidth) ? Math.max(0, Number(unit.measuredWidth)) : LayoutUtils.getBoxWidth(this.config, style);
+        const w = Number.isFinite(unit.measuredWidth)
+            ? Math.max(0, Number(unit.measuredWidth))
+            : LayoutUtils.getBoxWidth(this.config, style);
         const h = Math.max(0, unit.measuredContentHeight);
 
         if (unit.properties?._tableModel) {
@@ -720,20 +755,17 @@ export class LayoutProcessor extends TextProcessor {
             properties: { ...unit.properties },
             meta: {
                 ...unit.meta,
-                pageIndex
-            }
+                pageIndex,
+            },
         };
     }
 
     private finalizePages(pages: Page[]): Page[] {
         return finalizePagesWithCallbacks(pages, this.config, {
-            resolveLoadedFamilyFont: (familyName, weight, style) => this.resolveLoadedFamilyFont(familyName, weight, style),
+            resolveLoadedFamilyFont: (familyName, weight, style) =>
+                this.resolveLoadedFamilyFont(familyName, weight, style),
             measureText: (text, font, fontSize, letterSpacing, populateSegment) =>
-                this.measureText(text, font, fontSize, letterSpacing, populateSegment)
+                this.measureText(text, font, fontSize, letterSpacing, populateSegment),
         });
     }
 }
-
-
-
-

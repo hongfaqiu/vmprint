@@ -23,8 +23,12 @@ class DropCapFragmentPackager implements PackagerUnit {
     private unifiedLayoutBefore: number;
     private requiredHeight: number;
 
-    get pageBreakBefore(): boolean | undefined { return this.wrap.pageBreakBefore; }
-    get keepWithNext(): boolean | undefined { return this.wrap.keepWithNext; }
+    get pageBreakBefore(): boolean | undefined {
+        return this.wrap.pageBreakBefore;
+    }
+    get keepWithNext(): boolean | undefined {
+        return this.wrap.keepWithNext;
+    }
 
     constructor(
         processor: LayoutProcessor,
@@ -32,7 +36,7 @@ class DropCapFragmentPackager implements PackagerUnit {
         wrap: FlowBox,
         body: FlowBox | null,
         wrapOffsetX: number,
-        unifiedLayoutBefore: number
+        unifiedLayoutBefore: number,
     ) {
         this.processor = processor;
         this.dropCap = dropCap;
@@ -63,7 +67,7 @@ class DropCapFragmentPackager implements PackagerUnit {
             this.unifiedLayoutBefore,
             context.margins,
             availableWidth,
-            0
+            0,
         );
         const positionedWrap = (this.processor as any).positionFlowBox(
             wrap,
@@ -71,7 +75,7 @@ class DropCapFragmentPackager implements PackagerUnit {
             this.unifiedLayoutBefore,
             context.margins,
             availableWidth,
-            0
+            0,
         );
 
         const boxes: Box[] = [];
@@ -88,7 +92,7 @@ class DropCapFragmentPackager implements PackagerUnit {
                 0,
                 context.margins,
                 availableWidth,
-                0
+                0,
             );
             boxes.push(...(Array.isArray(positionedBody) ? positionedBody : [positionedBody]));
         }
@@ -132,7 +136,7 @@ function resolveFontMetricScales(font: any): { ascentScale: number; descentScale
         if (Number.isFinite(rawAscent) && rawAscent > 0 && Number.isFinite(rawDescent)) {
             return {
                 ascentScale: rawAscent / upm,
-                descentScale: Math.abs(rawDescent) / upm
+                descentScale: Math.abs(rawDescent) / upm,
             };
         }
     }
@@ -225,17 +229,17 @@ function computeCapFontSize(
     bodyAscentScale: number,
     bodyDescentScale: number,
     capAscentScale: number,
-    capDescentScale: number
+    capDescentScale: number,
 ): { capFontSize: number; uniformBodyLH: number; vOffsetBody: number } {
     const bodyExcess = Math.max(0, bodyAscentScale + bodyDescentScale - 1);
     const uniformBodyLH = (lineHeight + bodyExcess) * bodyFontSize;
     const vOffsetBody = (uniformBodyLH - bodyFontSize) / 2;
 
     // Distance from the body line box top to body line N baseline.
-    const targetBaseline = (lines - 1) * uniformBodyLH + vOffsetBody + (bodyAscentScale * bodyFontSize);
+    const targetBaseline = (lines - 1) * uniformBodyLH + vOffsetBody + bodyAscentScale * bodyFontSize;
     const sizeByTop = targetBaseline / Math.max(0.01, capAscentScale);
-    const availableBelow = Math.max(0, (lines * uniformBodyLH) - targetBaseline);
-    const sizeByBottom = capDescentScale > 0 ? (availableBelow / capDescentScale) : sizeByTop;
+    const availableBelow = Math.max(0, lines * uniformBodyLH - targetBaseline);
+    const sizeByBottom = capDescentScale > 0 ? availableBelow / capDescentScale : sizeByTop;
     const capFontSize = Math.max(1, Math.min(sizeByTop, sizeByBottom));
 
     return { capFontSize, uniformBodyLH, vOffsetBody };
@@ -251,8 +255,12 @@ export class DropCapPackager implements PackagerUnit {
     private cachedAvailableWidth: number = -1;
     private requiredHeight: number = 0;
 
-    get pageBreakBefore(): boolean | undefined { return this.cachedParts?.wrap.pageBreakBefore ?? false; }
-    get keepWithNext(): boolean | undefined { return this.cachedParts?.wrap.keepWithNext ?? false; }
+    get pageBreakBefore(): boolean | undefined {
+        return this.cachedParts?.wrap.pageBreakBefore ?? false;
+    }
+    get keepWithNext(): boolean | undefined {
+        return this.cachedParts?.wrap.keepWithNext ?? false;
+    }
 
     constructor(processor: LayoutProcessor, element: Element, index: number, spec: DropCapSpec) {
         this.processor = processor;
@@ -315,9 +323,13 @@ export class DropCapPackager implements PackagerUnit {
         // Derive cap font size, uniform body line height, and vOffset_body.
         // See computeCapFontSize for the full derivation.
         const { capFontSize, uniformBodyLH } = computeCapFontSize(
-            specLines, bodyFontSize, lineHeight,
-            bodyAscentScale, bodyDescentScale,
-            capAscentScaleEffective, capDescentScaleEffective
+            specLines,
+            bodyFontSize,
+            lineHeight,
+            bodyAscentScale,
+            bodyDescentScale,
+            capAscentScaleEffective,
+            capDescentScaleEffective,
         );
 
         // Build the drop cap style, inheriting from the paragraph then overlaying
@@ -342,7 +354,7 @@ export class DropCapPackager implements PackagerUnit {
         const dropCapElement: Element = {
             type: 'dropcap',
             content: capChars,
-            properties: { style: dropCapStyle }
+            properties: { style: dropCapStyle },
         };
 
         const dropCapFlow = (this.processor as any).shapeElement(dropCapElement, {
@@ -353,13 +365,13 @@ export class DropCapPackager implements PackagerUnit {
             semanticRole: baseFlow.meta.semanticRole,
             reflowKey: baseFlow.meta.reflowKey,
             fragmentIndex: 0,
-            isContinuation: false
+            isContinuation: false,
         }) as FlowBox;
 
         (this.processor as any).materializeFlowBox(dropCapFlow, {
             pageIndex: 0,
             cursorY: 0,
-            contentWidth: availableWidth
+            contentWidth: availableWidth,
         });
 
         // Align segment ascent/descent to glyph bounds so rendering clamps
@@ -423,24 +435,23 @@ export class DropCapPackager implements PackagerUnit {
                 ...this.element,
                 type: this.element.type,
                 content: '',
-                children
+                children,
             };
         } else {
             remainingElement = {
                 ...this.element,
                 type: this.element.type,
-                content: text.slice(charUnitLength)
+                content: text.slice(charUnitLength),
             };
         }
 
         remainingElement = (this.processor as any).trimLeadingContinuationWhitespace(remainingElement) as Element;
 
-        const wrapLinesResult = (this.processor as any).resolveLines(
-            remainingElement,
-            baseFlow.style,
-            bodyFontSize,
-            { pageIndex: 0, cursorY: 0, contentWidth: wrapContentWidth }
-        );
+        const wrapLinesResult = (this.processor as any).resolveLines(remainingElement, baseFlow.style, bodyFontSize, {
+            pageIndex: 0,
+            cursorY: 0,
+            contentWidth: wrapContentWidth,
+        });
 
         const wrapLines = wrapLinesResult.lines || [];
         if (wrapLines.length === 0) {
@@ -458,9 +469,9 @@ export class DropCapPackager implements PackagerUnit {
             const candidateHeight = (this.processor as any).calculateLineBlockHeight(
                 candidateLines,
                 baseFlow.style,
-                wrapLinesResult.lineYOffsets?.slice(0, count)
+                wrapLinesResult.lineYOffsets?.slice(0, count),
             );
-            if ((candidateHeight + verticalInsets) <= (dropCapHeight + LAYOUT_DEFAULTS.wrapTolerance)) {
+            if (candidateHeight + verticalInsets <= dropCapHeight + LAYOUT_DEFAULTS.wrapTolerance) {
                 maxLinesFit = count;
                 continue;
             }
@@ -486,13 +497,17 @@ export class DropCapPackager implements PackagerUnit {
                     ...remainingElement,
                     type: remainingElement.type,
                     content: '',
-                    children: (this.processor as any).sliceElements(remainingElement.children, consumedNow, consumedNow + remainingChars)
+                    children: (this.processor as any).sliceElements(
+                        remainingElement.children,
+                        consumedNow,
+                        consumedNow + remainingChars,
+                    ),
                 };
             } else {
                 elementB = {
                     ...remainingElement,
                     type: remainingElement.type,
-                    content: (this.processor as any).getElementText(remainingElement).slice(consumedNow)
+                    content: (this.processor as any).getElementText(remainingElement).slice(consumedNow),
                 };
             }
             elementB = (this.processor as any).trimLeadingContinuationWhitespace(elementB);
@@ -505,31 +520,53 @@ export class DropCapPackager implements PackagerUnit {
         const wrapMeta = {
             ...baseFlow.meta,
             isContinuation: baseFlow.meta.isContinuation || baseFlow.meta.fragmentIndex > 0,
-            pageIndex: undefined
+            pageIndex: undefined,
         };
         const wrapProps = {
             ...baseFlow.properties,
             _isFirstLine: true,
-            _isLastLine: !elementB
+            _isLastLine: !elementB,
         };
 
-        const wrapFlow = (this.processor as any).rebuildFlowBox(baseFlow, linesA, wrapStyle, wrapMeta, wrapProps) as FlowBox;
+        const wrapFlow = (this.processor as any).rebuildFlowBox(
+            baseFlow,
+            linesA,
+            wrapStyle,
+            wrapMeta,
+            wrapProps,
+        ) as FlowBox;
         wrapFlow.measuredWidth = wrapContentWidth + LayoutUtils.getHorizontalInsets(wrapStyle);
         if (elementB) wrapFlow.marginBottom = 0;
 
         let bodyFlow: FlowBox | null = null;
         if (elementB && (this.processor as any).getElementText(elementB)) {
-            const bodyStyle: ElementStyle = { ...baseFlow.style, borderTopWidth: 0, paddingTop: 0, marginTop: 0, textIndent: 0 };
-            const bodyLinesResult = (this.processor as any).resolveLines(
-                elementB,
-                bodyStyle,
-                bodyFontSize,
-                { pageIndex: 0, cursorY: 0, contentWidth: availableWidth }
-            );
+            const bodyStyle: ElementStyle = {
+                ...baseFlow.style,
+                borderTopWidth: 0,
+                paddingTop: 0,
+                marginTop: 0,
+                textIndent: 0,
+            };
+            const bodyLinesResult = (this.processor as any).resolveLines(elementB, bodyStyle, bodyFontSize, {
+                pageIndex: 0,
+                cursorY: 0,
+                contentWidth: availableWidth,
+            });
             if (bodyLinesResult.lines && bodyLinesResult.lines.length > 0) {
-                const bodyMeta = { ...baseFlow.meta, fragmentIndex: baseFlow.meta.fragmentIndex + 1, isContinuation: true, pageIndex: undefined };
+                const bodyMeta = {
+                    ...baseFlow.meta,
+                    fragmentIndex: baseFlow.meta.fragmentIndex + 1,
+                    isContinuation: true,
+                    pageIndex: undefined,
+                };
                 const bodyProps = { ...baseFlow.properties, _isFirstLine: false, _isLastLine: true };
-                bodyFlow = (this.processor as any).rebuildFlowBox(baseFlow, bodyLinesResult.lines, bodyStyle, bodyMeta, bodyProps) as FlowBox;
+                bodyFlow = (this.processor as any).rebuildFlowBox(
+                    baseFlow,
+                    bodyLinesResult.lines,
+                    bodyStyle,
+                    bodyMeta,
+                    bodyProps,
+                ) as FlowBox;
                 bodyFlow.marginTop = 0;
             }
         }
@@ -550,7 +587,7 @@ export class DropCapPackager implements PackagerUnit {
             wrap: wrapFlow,
             body: bodyFlow,
             wrapOffsetX,
-            unifiedLayoutBefore
+            unifiedLayoutBefore,
         };
         this.cachedAvailableWidth = availableWidth;
         this.requiredHeight = required;
@@ -559,7 +596,10 @@ export class DropCapPackager implements PackagerUnit {
     emitBoxes(availableWidth: number, availableHeight: number, context: PackagerContext): LayoutBox[] | null {
         this.materialize(availableWidth, context);
         if (!this.cachedParts) {
-            const fallback = new FlowBoxPackager(this.processor, (this.processor as any).shapeElement(this.element, { path: [this.index] }));
+            const fallback = new FlowBoxPackager(
+                this.processor,
+                (this.processor as any).shapeElement(this.element, { path: [this.index] }),
+            );
             return fallback.emitBoxes(availableWidth, availableHeight, context) as LayoutBox[];
         }
 
@@ -569,7 +609,7 @@ export class DropCapPackager implements PackagerUnit {
             this.cachedParts.wrap,
             this.cachedParts.body,
             this.cachedParts.wrapOffsetX,
-            this.cachedParts.unifiedLayoutBefore
+            this.cachedParts.unifiedLayoutBefore,
         );
         return fragment.emitBoxes(availableWidth, availableHeight, context);
     }
@@ -610,7 +650,7 @@ export class DropCapPackager implements PackagerUnit {
             wrap,
             partA,
             wrapOffsetX,
-            unifiedLayoutBefore
+            unifiedLayoutBefore,
         );
         const pushedNext = new FlowBoxPackager(this.processor, partB);
         return [fitsCurrent, pushedNext];

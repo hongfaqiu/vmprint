@@ -9,25 +9,25 @@ import { FormatContextImpl } from './format-context';
  * then assembles the final DocumentInput with the theme styles and collected elements.
  */
 export function compile(
-  document: SemanticDocument,
-  handler: FormatHandler,
-  theme: ThemeDefinition,
-  config: Record<string, unknown>,
-  layout: DocumentInput['layout'],
-  inputPath: string
+    document: SemanticDocument,
+    handler: FormatHandler,
+    theme: ThemeDefinition,
+    config: Record<string, unknown>,
+    layout: DocumentInput['layout'],
+    inputPath: string,
 ): DocumentInput {
-  const ctx = new FormatContextImpl(theme, config, inputPath);
+    const ctx = new FormatContextImpl(theme, config, inputPath);
 
-  for (const node of document.children) {
-    handler.handleBlock(node, ctx);
-  }
+    for (const node of document.children) {
+        handler.handleBlock(node, ctx);
+    }
 
-  handler.flush(ctx);
+    handler.flush(ctx);
 
-  return {
-    documentVersion: '1.0',
-    layout,
-    styles: theme.styles,
-    elements: ctx.getElements()
-  };
+    return {
+        documentVersion: '1.0',
+        layout,
+        styles: theme.styles,
+        elements: ctx.getElements(),
+    };
 }

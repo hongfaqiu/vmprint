@@ -9,14 +9,14 @@ type FinalizePagesCallbacks = {
         font?: any,
         fontSize?: number,
         letterSpacing?: number,
-        populateSegment?: TextSegment
+        populateSegment?: TextSegment,
     ) => number;
 };
 
 export function finalizePagesWithCallbacks(
     pages: Page[],
     config: LayoutConfig,
-    callbacks: FinalizePagesCallbacks
+    callbacks: FinalizePagesCallbacks,
 ): Page[] {
     if (!config.layout.showPageNumbers) return pages;
 
@@ -54,14 +54,15 @@ export function finalizePagesWithCallbacks(
         const pageNumberSegment: TextSegment = {
             text,
             fontFamily,
-            style: { fontSize, color, fontFamily }
+            style: { fontSize, color, fontFamily },
         };
         const pageNumberFont = callbacks.resolveLoadedFamilyFont(fontFamily, 400);
         callbacks.measureText(text, pageNumberFont, fontSize, 0, pageNumberSegment);
 
-        const y = position === 'top'
-            ? (layout.pageNumberOffsetTop ?? offset)
-            : (pageHeight - (layout.pageNumberOffsetBottom ?? offset));
+        const y =
+            position === 'top'
+                ? (layout.pageNumberOffsetTop ?? offset)
+                : pageHeight - (layout.pageNumberOffsetBottom ?? offset);
 
         const x = layout.pageNumberOffsetLeft !== undefined ? layout.pageNumberOffsetLeft : margins.left;
         const rightMargin = layout.pageNumberOffsetRight !== undefined ? layout.pageNumberOffsetRight : margins.right;
@@ -77,14 +78,14 @@ export function finalizePagesWithCallbacks(
                 fontSize,
                 color,
                 fontFamily,
-                textAlign: alignment
+                textAlign: alignment,
             },
             lines: [[pageNumberSegment]],
             properties: {
                 _isFirstLine: true,
                 _isLastLine: true,
                 _isFirstFragmentInLine: true,
-                _isLastFragmentInLine: true
+                _isLastFragmentInLine: true,
             },
             meta: {
                 sourceId: `system:page-number:${visiblePageNum}`,
@@ -94,13 +95,13 @@ export function finalizePagesWithCallbacks(
                 fragmentIndex: 0,
                 isContinuation: false,
                 pageIndex: page.index,
-                generated: true
-            }
+                generated: true,
+            },
         };
 
         return {
             ...page,
-            boxes: [...page.boxes, pageNumberBox]
+            boxes: [...page.boxes, pageNumberBox],
         };
     });
 }

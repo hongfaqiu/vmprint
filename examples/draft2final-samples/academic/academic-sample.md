@@ -2,9 +2,9 @@
 
 ## Abstract
 
-We report a controlled study of 143 accidental coffee releases aboard the orbital campus *Asterion*. Contrary to common lab folklore, spill trajectories are not random but cluster into repeatable topologies determined by mug lip geometry, speaker enthusiasm, and local fan harmonics [Orbital Maintenance Archive][oma].
+We report a controlled study of 143 accidental coffee releases aboard the orbital campus _Asterion_. Contrary to common lab folklore, spill trajectories are not random but cluster into repeatable topologies determined by mug lip geometry, speaker enthusiasm, and local fan harmonics [Orbital Maintenance Archive][oma].
 
-![Topological classification map for zero-gravity spill events](./academic-sample-image.jpg "Topological classification map for zero-gravity spill events")
+![Topological classification map for zero-gravity spill events](./academic-sample-image.jpg 'Topological classification map for zero-gravity spill events')
 
 _Figure 1. Spill-morphology classification framework used in the coding protocol, showing radial bloom, ribbon drift, and catastrophic bead swarm classes._
 
@@ -37,12 +37,12 @@ The observation protocol used mixed instrumentation and adjudicated notes:
 
 The table below summarizes the most stable descriptors observed across the cohort, using variable-length entries and inline emphasis to validate alignment, wrapping, and baseline handling in academic tables.
 
-| Morphology class | Dominant driver | Diagnostic signature | Measurement protocol | Notes |
-|:--|:--|:--|:--|:--|
-| Radial bloom | Uncapped double espresso at high gesture amplitude | Circular bead halo with **high edge density** and short-lived satellite droplets | Dual-camera replay + manual trace overlay (`grid-8`) | Exhibits low variance under seat swaps; consistent with [oma]. |
-| Ribbon drift | *Lecture-induced turbulence* from lateral board sweeps | Elongated filament with asymmetric thinning, plus a brief recoil phase | 120 fps replay + airflow map correction | Most sensitive to fan phase; minimum divergence at 18 degrees. |
-| Catastrophic bead swarm | Sudden mug tilt beyond first slosh threshold | Multi-lobed burst, uneven bead sizes, and delayed coalescence | Three-pass adjudication + residue sheet scan | Rare, but correlates with two open cups and late Q&A. |
-| Hybrid bloom-ribbon | Mixed gesture cadence during topic transition | Bloom core with a trailing ribbon and intermittent bead shear | Combined protocol, weighted by coder agreement | Highest annotation time; inline notes include `Asterion-RT` anomalies. |
+| Morphology class        | Dominant driver                                        | Diagnostic signature                                                             | Measurement protocol                                 | Notes                                                                  |
+| :---------------------- | :----------------------------------------------------- | :------------------------------------------------------------------------------- | :--------------------------------------------------- | :--------------------------------------------------------------------- |
+| Radial bloom            | Uncapped double espresso at high gesture amplitude     | Circular bead halo with **high edge density** and short-lived satellite droplets | Dual-camera replay + manual trace overlay (`grid-8`) | Exhibits low variance under seat swaps; consistent with [oma].         |
+| Ribbon drift            | _Lecture-induced turbulence_ from lateral board sweeps | Elongated filament with asymmetric thinning, plus a brief recoil phase           | 120 fps replay + airflow map correction              | Most sensitive to fan phase; minimum divergence at 18 degrees.         |
+| Catastrophic bead swarm | Sudden mug tilt beyond first slosh threshold           | Multi-lobed burst, uneven bead sizes, and delayed coalescence                    | Three-pass adjudication + residue sheet scan         | Rare, but correlates with two open cups and late Q&A.                  |
+| Hybrid bloom-ribbon     | Mixed gesture cadence during topic transition          | Bloom core with a trailing ribbon and intermittent bead shear                    | Combined protocol, weighted by coder agreement       | Highest annotation time; inline notes include `Asterion-RT` anomalies. |
 
 ## 3. Core Claims
 
@@ -95,4 +95,4 @@ Outcome: ribbon drift with delayed bead swarm near aisle marker B.
 
 Our practical recommendation is modest: treat spills as measurable output, not incidental noise. Once classified, they inform room assignment, fan presets, and lecture pacing.
 
-[oma]: https://example.com/zero-g-coffee-spills "Orbital Maintenance Research Archive"
+[oma]: https://example.com/zero-g-coffee-spills 'Orbital Maintenance Research Archive'

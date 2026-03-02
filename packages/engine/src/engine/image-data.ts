@@ -20,15 +20,10 @@ const embeddedImagePayloadCacheOrder: EmbeddedImageCacheEntry[] = [];
 /** Fast-path: same payload object reference → O(1) lookup, no string comparison. */
 const embeddedImageWeakCache = new WeakMap<object, NormalizedEmbeddedImage>();
 
-const PNG_SIGNATURE = [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A];
-const JPEG_SIGNATURE = [0xFF, 0xD8];
+const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
+const JPEG_SIGNATURE = [0xff, 0xd8];
 
-const SOF_MARKERS = new Set<number>([
-    0xC0, 0xC1, 0xC2, 0xC3,
-    0xC5, 0xC6, 0xC7,
-    0xC9, 0xCA, 0xCB,
-    0xCD, 0xCE, 0xCF
-]);
+const SOF_MARKERS = new Set<number>([0xc0, 0xc1, 0xc2, 0xc3, 0xc5, 0xc6, 0xc7, 0xc9, 0xca, 0xcb, 0xcd, 0xce, 0xcf]);
 
 function isPng(bytes: Uint8Array): boolean {
     if (bytes.length < PNG_SIGNATURE.length) return false;
@@ -58,12 +53,12 @@ function getJpegDimensions(bytes: Uint8Array): { width: number; height: number }
     let offset = 2;
 
     while (offset + 1 < bytes.length) {
-        if (bytes[offset] !== 0xFF) {
+        if (bytes[offset] !== 0xff) {
             offset += 1;
             continue;
         }
 
-        while (offset < bytes.length && bytes[offset] === 0xFF) {
+        while (offset < bytes.length && bytes[offset] === 0xff) {
             offset += 1;
         }
         if (offset >= bytes.length) break;
@@ -71,7 +66,7 @@ function getJpegDimensions(bytes: Uint8Array): { width: number; height: number }
         const marker = bytes[offset];
         offset += 1;
 
-        if (marker === 0xD8 || marker === 0xD9 || marker === 0x01 || (marker >= 0xD0 && marker <= 0xD7)) {
+        if (marker === 0xd8 || marker === 0xd9 || marker === 0x01 || (marker >= 0xd0 && marker <= 0xd7)) {
             continue;
         }
 
@@ -109,7 +104,7 @@ function parseDataUri(raw: string): { mimeType: string; base64Data: string } | n
     if (!match) return null;
     return {
         mimeType: match[1].trim().toLowerCase(),
-        base64Data: match[2].replace(/\s+/g, '')
+        base64Data: match[2].replace(/\s+/g, ''),
     };
 }
 
@@ -143,7 +138,7 @@ function decodeBase64(base64Data: string): Uint8Array {
 export function parseEmbeddedImageData(
     rawData: string,
     explicitMimeType?: string,
-    fit: ImageFitMode = 'contain'
+    fit: ImageFitMode = 'contain',
 ): NormalizedEmbeddedImage {
     if (typeof rawData !== 'string' || rawData.trim().length === 0) {
         throw new Error('[image] Embedded image payload requires a non-empty "data" string.');
@@ -163,7 +158,9 @@ export function parseEmbeddedImageData(
     }
 
     if (inferredMime && mimeType !== inferredMime) {
-        throw new Error(`[image] Embedded image mimeType "${mimeType}" does not match decoded bytes ("${inferredMime}").`);
+        throw new Error(
+            `[image] Embedded image mimeType "${mimeType}" does not match decoded bytes ("${inferredMime}").`,
+        );
     }
 
     if (mimeType !== 'image/png' && mimeType !== 'image/jpeg') {
@@ -183,7 +180,7 @@ export function parseEmbeddedImageData(
         mimeType,
         intrinsicWidth: dims.width,
         intrinsicHeight: dims.height,
-        fit: normalizedFit
+        fit: normalizedFit,
     };
 }
 
@@ -229,7 +226,7 @@ export function parseEmbeddedImagePayloadCached(payload: EmbeddedImagePayload): 
     const entry: EmbeddedImageCacheEntry = {
         cacheKey,
         base64Data: parsed.base64Data,
-        parsed
+        parsed,
     };
     const targetBucket = bucket || [];
     targetBucket.push(entry);
@@ -256,4 +253,3 @@ export function parseEmbeddedImagePayloadCached(payload: EmbeddedImagePayload): 
 export function buildDataUri(base64Data: string, mimeType: string): string {
     return `data:${mimeType};base64,${base64Data}`;
 }
-

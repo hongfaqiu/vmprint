@@ -1,11 +1,11 @@
-# From *The Orchard Beyond Midnight*
+# From _The Orchard Beyond Midnight_
 
 ```epigraph
 Every town keeps one secret in plain view.
 Ashmere kept a river that refused its own name.
 ```
 
-In the year the river forgot its name, everyone in Ashmere began to speak in directions. Bakers said, "Turn west at the smell of bread." Children said, "Run north until the bells start laughing." Even grief became cartography: *two streets east of the house where he was alive.*
+In the year the river forgot its name, everyone in Ashmere began to speak in directions. Bakers said, "Turn west at the smell of bread." Children said, "Run north until the bells start laughing." Even grief became cartography: _two streets east of the house where he was alive._
 
 ## I. Arrival
 
@@ -15,7 +15,7 @@ By morning the town had sorted itself into rituals:
 - Letters tied to apple branches for the dead to collect.
 - A brass clock in the square that chimed only when no one listened.
 
-![Ashmere river chart and field annotations](./literature-sample-image.jpg "Ashmere river chart and field annotations")
+![Ashmere river chart and field annotations](./literature-sample-image.jpg 'Ashmere river chart and field annotations')
 
 _Plate I. Ashmere survey sheet, date uncertain, with later pencil glosses attributed to the old surveyor._
 
@@ -73,18 +73,20 @@ Pencil note in outer margin, uncertain hand:
 ```
 
 <!-- keep-with-next -->
+
 ### Table I. Variants and glosses from the Ashmere municipal archive
 
 <!-- keep-with-next -->
+
 The table below compares the ledger fragment across editions, collapsing local and archivist variants into a single column to keep the apparatus readable at paperback width while still stressing mixed inline styling and uneven lengths.
 
-| Line | Variant (local / archivist) | Gloss + comment |
-|:--:|:--|:--|
-| 1 | Local: “By order of the council: the eastern bridge remains closed at first thaw.” / Archivist: “By order of the council, the eastern bridge remains closed at first thaw.” | “first thaw” = earliest safe crossing; *not* the equinox. Punctuation regularized; cadence preserved. |
-| 2 | Local: “If the river answers when called, no ferries are to launch before dawn.” / Archivist: same. | “answers” glossed as `audible reply`, likely formulaic. |
-| 3 | Local: “Nothing drags itself through corridors.” / Archivist: same. | Echoes the letter’s earlier denial of hauntings; cross-ref *Night Letter*, para. 2. |
-| 4 | Local: “If it answers in your own voice, do not answer back.” / Archivist: same. | Voice-mirror taboo noted in pencil; attribution uncertain. |
+| Line | Variant (local / archivist)                                                                                                                                                 | Gloss + comment                                                                                       |
+| :--: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------- |
+|  1   | Local: “By order of the council: the eastern bridge remains closed at first thaw.” / Archivist: “By order of the council, the eastern bridge remains closed at first thaw.” | “first thaw” = earliest safe crossing; _not_ the equinox. Punctuation regularized; cadence preserved. |
+|  2   | Local: “If the river answers when called, no ferries are to launch before dawn.” / Archivist: same.                                                                         | “answers” glossed as `audible reply`, likely formulaic.                                               |
+|  3   | Local: “Nothing drags itself through corridors.” / Archivist: same.                                                                                                         | Echoes the letter’s earlier denial of hauntings; cross-ref _Night Letter_, para. 2.                   |
+|  4   | Local: “If it answers in your own voice, do not answer back.” / Archivist: same.                                                                                            | Voice-mirror taboo noted in pencil; attribution uncertain.                                            |
 
 At midnight the clock in the square rang once, though I was watching it. I counted the echo until it dissolved into the wind and understood, with unreasonable certainty, that Ashmere was waiting to see whether I would stay [archive notes][ashmere-archive].
 
-[ashmere-archive]: https://example.com/ashmere-notes "Archive Edition Notes"
+[ashmere-archive]: https://example.com/ashmere-notes 'Archive Edition Notes'

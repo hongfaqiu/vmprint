@@ -1,4 +1,12 @@
-import { DocumentIR, DocumentInput, Element, ElementProperties, LayoutConfig, VmprintDocumentVersion, VmprintIRVersion } from './types';
+import {
+    DocumentIR,
+    DocumentInput,
+    Element,
+    ElementProperties,
+    LayoutConfig,
+    VmprintDocumentVersion,
+    VmprintIRVersion,
+} from './types';
 
 export const CURRENT_DOCUMENT_VERSION: VmprintDocumentVersion = '1.0';
 export const CURRENT_IR_VERSION: VmprintIRVersion = '1.0';
@@ -39,10 +47,20 @@ const LAYOUT_KEYS = new Set([
     'hyphenMinSuffix',
     'justifyEngine',
     'justifyStrategy',
-    'opticalScaling'
+    'opticalScaling',
 ]);
 const MARGINS_KEYS = new Set(['top', 'right', 'bottom', 'left']);
-const OPTICAL_SCALING_KEYS = new Set(['enabled', 'cjk', 'korean', 'thai', 'devanagari', 'arabic', 'cyrillic', 'latin', 'default']);
+const OPTICAL_SCALING_KEYS = new Set([
+    'enabled',
+    'cjk',
+    'korean',
+    'thai',
+    'devanagari',
+    'arabic',
+    'cyrillic',
+    'latin',
+    'default',
+]);
 const ELEMENT_KEYS = new Set(['type', 'content', 'children', 'properties']);
 const ELEMENT_PROPERTIES_KEYS = new Set([
     'style',
@@ -63,15 +81,39 @@ const ELEMENT_PROPERTIES_KEYS = new Set([
     'layoutDirectives',
     'sourceRange',
     'sourceSyntax',
-    'language'
+    'language',
 ]);
 const LAYOUT_DIRECTIVES_KEYS = new Set(['suppressPageNumber']);
-const PAGINATION_CONTINUATION_KEYS = new Set(['enabled', 'markerAfterSplit', 'markerBeforeContinuation', 'markersBeforeContinuation']);
+const PAGINATION_CONTINUATION_KEYS = new Set([
+    'enabled',
+    'markerAfterSplit',
+    'markerBeforeContinuation',
+    'markersBeforeContinuation',
+]);
 const CONTINUATION_MARKER_KEYS = new Set(['type', 'content', 'style', 'properties']);
 const SOURCE_RANGE_KEYS = new Set(['lineStart', 'colStart', 'lineEnd', 'colEnd']);
 const IMAGE_PAYLOAD_KEYS = new Set(['data', 'mimeType', 'fit']);
-const TABLE_LAYOUT_KEYS = new Set(['headerRows', 'repeatHeader', 'columnGap', 'rowGap', 'columns', 'cellStyle', 'headerCellStyle']);
-const TABLE_COLUMN_KEYS = new Set(['mode', 'value', 'fr', 'min', 'max', 'basis', 'minContent', 'maxContent', 'grow', 'shrink']);
+const TABLE_LAYOUT_KEYS = new Set([
+    'headerRows',
+    'repeatHeader',
+    'columnGap',
+    'rowGap',
+    'columns',
+    'cellStyle',
+    'headerCellStyle',
+]);
+const TABLE_COLUMN_KEYS = new Set([
+    'mode',
+    'value',
+    'fr',
+    'min',
+    'max',
+    'basis',
+    'minContent',
+    'maxContent',
+    'grow',
+    'shrink',
+]);
 const DROP_CAP_KEYS = new Set(['enabled', 'lines', 'characters', 'gap', 'characterStyle']);
 const STORY_LAYOUT_DIRECTIVE_KEYS = new Set(['mode', 'x', 'y', 'align', 'wrap', 'gap']);
 const STYLE_KEYS = new Set([
@@ -131,7 +173,7 @@ const STYLE_KEYS = new Set([
     'borderTopColor',
     'borderBottomColor',
     'borderLeftColor',
-    'borderRightColor'
+    'borderRightColor',
 ]);
 
 function contractError(documentPath: string, path: string, message: string): never {
@@ -181,7 +223,7 @@ function assertAllowedKeys(
     allowed: Set<string>,
     path: string,
     documentPath: string,
-    options?: { allowUnderscore?: boolean }
+    options?: { allowUnderscore?: boolean },
 ): void {
     for (const key of Object.keys(value)) {
         if (allowed.has(key)) continue;
@@ -189,7 +231,7 @@ function assertAllowedKeys(
         contractError(
             documentPath,
             path,
-            `unexpected key "${key}". Allowed keys: ${Array.from(allowed).sort().join(', ')}.`
+            `unexpected key "${key}". Allowed keys: ${Array.from(allowed).sort().join(', ')}.`,
         );
     }
 }
@@ -241,21 +283,32 @@ function validateLayout(layout: unknown, documentPath: string): void {
     }
 
     if (obj.showPageNumbers !== undefined) assertBooleanAt(obj.showPageNumbers, 'layout.showPageNumbers', documentPath);
-    if (obj.pageNumberFormat !== undefined) assertStringAt(obj.pageNumberFormat, 'layout.pageNumberFormat', documentPath);
-    if (obj.pageNumberStartPage !== undefined) assertFiniteNumberAt(obj.pageNumberStartPage, 'layout.pageNumberStartPage', documentPath);
-    if (obj.pageNumberFontSize !== undefined) assertFiniteNumberAt(obj.pageNumberFontSize, 'layout.pageNumberFontSize', documentPath);
+    if (obj.pageNumberFormat !== undefined)
+        assertStringAt(obj.pageNumberFormat, 'layout.pageNumberFormat', documentPath);
+    if (obj.pageNumberStartPage !== undefined)
+        assertFiniteNumberAt(obj.pageNumberStartPage, 'layout.pageNumberStartPage', documentPath);
+    if (obj.pageNumberFontSize !== undefined)
+        assertFiniteNumberAt(obj.pageNumberFontSize, 'layout.pageNumberFontSize', documentPath);
     if (obj.pageNumberColor !== undefined) assertStringAt(obj.pageNumberColor, 'layout.pageNumberColor', documentPath);
     if (obj.pageNumberFont !== undefined) assertStringAt(obj.pageNumberFont, 'layout.pageNumberFont', documentPath);
-    if (obj.pageNumberOffset !== undefined) assertFiniteNumberAt(obj.pageNumberOffset, 'layout.pageNumberOffset', documentPath);
-    if (obj.pageNumberOffsetTop !== undefined) assertFiniteNumberAt(obj.pageNumberOffsetTop, 'layout.pageNumberOffsetTop', documentPath);
-    if (obj.pageNumberOffsetBottom !== undefined) assertFiniteNumberAt(obj.pageNumberOffsetBottom, 'layout.pageNumberOffsetBottom', documentPath);
-    if (obj.pageNumberOffsetLeft !== undefined) assertFiniteNumberAt(obj.pageNumberOffsetLeft, 'layout.pageNumberOffsetLeft', documentPath);
-    if (obj.pageNumberOffsetRight !== undefined) assertFiniteNumberAt(obj.pageNumberOffsetRight, 'layout.pageNumberOffsetRight', documentPath);
+    if (obj.pageNumberOffset !== undefined)
+        assertFiniteNumberAt(obj.pageNumberOffset, 'layout.pageNumberOffset', documentPath);
+    if (obj.pageNumberOffsetTop !== undefined)
+        assertFiniteNumberAt(obj.pageNumberOffsetTop, 'layout.pageNumberOffsetTop', documentPath);
+    if (obj.pageNumberOffsetBottom !== undefined)
+        assertFiniteNumberAt(obj.pageNumberOffsetBottom, 'layout.pageNumberOffsetBottom', documentPath);
+    if (obj.pageNumberOffsetLeft !== undefined)
+        assertFiniteNumberAt(obj.pageNumberOffsetLeft, 'layout.pageNumberOffsetLeft', documentPath);
+    if (obj.pageNumberOffsetRight !== undefined)
+        assertFiniteNumberAt(obj.pageNumberOffsetRight, 'layout.pageNumberOffsetRight', documentPath);
     if (obj.lang !== undefined) assertStringAt(obj.lang, 'layout.lang', documentPath);
     if (obj.hyphenateCaps !== undefined) assertBooleanAt(obj.hyphenateCaps, 'layout.hyphenateCaps', documentPath);
-    if (obj.hyphenMinWordLength !== undefined) assertFiniteNumberAt(obj.hyphenMinWordLength, 'layout.hyphenMinWordLength', documentPath);
-    if (obj.hyphenMinPrefix !== undefined) assertFiniteNumberAt(obj.hyphenMinPrefix, 'layout.hyphenMinPrefix', documentPath);
-    if (obj.hyphenMinSuffix !== undefined) assertFiniteNumberAt(obj.hyphenMinSuffix, 'layout.hyphenMinSuffix', documentPath);
+    if (obj.hyphenMinWordLength !== undefined)
+        assertFiniteNumberAt(obj.hyphenMinWordLength, 'layout.hyphenMinWordLength', documentPath);
+    if (obj.hyphenMinPrefix !== undefined)
+        assertFiniteNumberAt(obj.hyphenMinPrefix, 'layout.hyphenMinPrefix', documentPath);
+    if (obj.hyphenMinSuffix !== undefined)
+        assertFiniteNumberAt(obj.hyphenMinSuffix, 'layout.hyphenMinSuffix', documentPath);
 
     if (obj.opticalScaling !== undefined) {
         const optical = assertPlainObjectAt(obj.opticalScaling, 'layout.opticalScaling', documentPath);
@@ -284,24 +337,38 @@ function validateStyleObject(style: unknown, path: string, documentPath: string)
     assertEnumAt(obj.hyphenation, ['off', 'auto', 'soft'], `${path}.hyphenation`, documentPath);
     assertEnumAt(obj.justifyEngine, ['legacy', 'advanced'], `${path}.justifyEngine`, documentPath);
     assertEnumAt(obj.justifyStrategy, ['auto', 'space', 'inter-character'], `${path}.justifyStrategy`, documentPath);
-    assertEnumAt(obj.verticalAlign, ['baseline', 'text-top', 'middle', 'text-bottom', 'bottom'], `${path}.verticalAlign`, documentPath);
+    assertEnumAt(
+        obj.verticalAlign,
+        ['baseline', 'text-top', 'middle', 'text-bottom', 'bottom'],
+        `${path}.verticalAlign`,
+        documentPath,
+    );
     assertEnumAt(obj.overflowPolicy, ['clip', 'move-whole', 'error'], `${path}.overflowPolicy`, documentPath);
     if (obj.hyphenateCaps !== undefined) assertBooleanAt(obj.hyphenateCaps, `${path}.hyphenateCaps`, documentPath);
-    if (obj.hyphenMinWordLength !== undefined) assertFiniteNumberAt(obj.hyphenMinWordLength, `${path}.hyphenMinWordLength`, documentPath);
-    if (obj.hyphenMinPrefix !== undefined) assertFiniteNumberAt(obj.hyphenMinPrefix, `${path}.hyphenMinPrefix`, documentPath);
-    if (obj.hyphenMinSuffix !== undefined) assertFiniteNumberAt(obj.hyphenMinSuffix, `${path}.hyphenMinSuffix`, documentPath);
+    if (obj.hyphenMinWordLength !== undefined)
+        assertFiniteNumberAt(obj.hyphenMinWordLength, `${path}.hyphenMinWordLength`, documentPath);
+    if (obj.hyphenMinPrefix !== undefined)
+        assertFiniteNumberAt(obj.hyphenMinPrefix, `${path}.hyphenMinPrefix`, documentPath);
+    if (obj.hyphenMinSuffix !== undefined)
+        assertFiniteNumberAt(obj.hyphenMinSuffix, `${path}.hyphenMinSuffix`, documentPath);
     if (obj.marginTop !== undefined) assertFiniteNumberAt(obj.marginTop, `${path}.marginTop`, documentPath);
     if (obj.marginBottom !== undefined) assertFiniteNumberAt(obj.marginBottom, `${path}.marginBottom`, documentPath);
     if (obj.textIndent !== undefined) assertFiniteNumberAt(obj.textIndent, `${path}.textIndent`, documentPath);
     if (obj.lineHeight !== undefined) assertFiniteNumberAt(obj.lineHeight, `${path}.lineHeight`, documentPath);
     if (obj.letterSpacing !== undefined) assertFiniteNumberAt(obj.letterSpacing, `${path}.letterSpacing`, documentPath);
     if (obj.baselineShift !== undefined) assertFiniteNumberAt(obj.baselineShift, `${path}.baselineShift`, documentPath);
-    if (obj.inlineMarginLeft !== undefined) assertFiniteNumberAt(obj.inlineMarginLeft, `${path}.inlineMarginLeft`, documentPath);
-    if (obj.inlineMarginRight !== undefined) assertFiniteNumberAt(obj.inlineMarginRight, `${path}.inlineMarginRight`, documentPath);
-    if (obj.inlineOpticalInsetTop !== undefined) assertFiniteNumberAt(obj.inlineOpticalInsetTop, `${path}.inlineOpticalInsetTop`, documentPath);
-    if (obj.inlineOpticalInsetRight !== undefined) assertFiniteNumberAt(obj.inlineOpticalInsetRight, `${path}.inlineOpticalInsetRight`, documentPath);
-    if (obj.inlineOpticalInsetBottom !== undefined) assertFiniteNumberAt(obj.inlineOpticalInsetBottom, `${path}.inlineOpticalInsetBottom`, documentPath);
-    if (obj.inlineOpticalInsetLeft !== undefined) assertFiniteNumberAt(obj.inlineOpticalInsetLeft, `${path}.inlineOpticalInsetLeft`, documentPath);
+    if (obj.inlineMarginLeft !== undefined)
+        assertFiniteNumberAt(obj.inlineMarginLeft, `${path}.inlineMarginLeft`, documentPath);
+    if (obj.inlineMarginRight !== undefined)
+        assertFiniteNumberAt(obj.inlineMarginRight, `${path}.inlineMarginRight`, documentPath);
+    if (obj.inlineOpticalInsetTop !== undefined)
+        assertFiniteNumberAt(obj.inlineOpticalInsetTop, `${path}.inlineOpticalInsetTop`, documentPath);
+    if (obj.inlineOpticalInsetRight !== undefined)
+        assertFiniteNumberAt(obj.inlineOpticalInsetRight, `${path}.inlineOpticalInsetRight`, documentPath);
+    if (obj.inlineOpticalInsetBottom !== undefined)
+        assertFiniteNumberAt(obj.inlineOpticalInsetBottom, `${path}.inlineOpticalInsetBottom`, documentPath);
+    if (obj.inlineOpticalInsetLeft !== undefined)
+        assertFiniteNumberAt(obj.inlineOpticalInsetLeft, `${path}.inlineOpticalInsetLeft`, documentPath);
     if (obj.padding !== undefined) assertFiniteNumberAt(obj.padding, `${path}.padding`, documentPath);
     if (obj.paddingTop !== undefined) assertFiniteNumberAt(obj.paddingTop, `${path}.paddingTop`, documentPath);
     if (obj.paddingBottom !== undefined) assertFiniteNumberAt(obj.paddingBottom, `${path}.paddingBottom`, documentPath);
@@ -315,7 +382,8 @@ function validateStyleObject(style: unknown, path: string, documentPath: string)
     if (obj.color !== undefined) assertStringAt(obj.color, `${path}.color`, documentPath);
     if (obj.backgroundColor !== undefined) assertStringAt(obj.backgroundColor, `${path}.backgroundColor`, documentPath);
     if (obj.opacity !== undefined) assertFiniteNumberAt(obj.opacity, `${path}.opacity`, documentPath);
-    if (obj.pageBreakBefore !== undefined) assertBooleanAt(obj.pageBreakBefore, `${path}.pageBreakBefore`, documentPath);
+    if (obj.pageBreakBefore !== undefined)
+        assertBooleanAt(obj.pageBreakBefore, `${path}.pageBreakBefore`, documentPath);
     if (obj.keepWithNext !== undefined) assertBooleanAt(obj.keepWithNext, `${path}.keepWithNext`, documentPath);
     if (obj.allowLineSplit !== undefined) assertBooleanAt(obj.allowLineSplit, `${path}.allowLineSplit`, documentPath);
     if (obj.orphans !== undefined) assertFiniteNumberAt(obj.orphans, `${path}.orphans`, documentPath);
@@ -323,14 +391,20 @@ function validateStyleObject(style: unknown, path: string, documentPath: string)
     if (obj.borderWidth !== undefined) assertFiniteNumberAt(obj.borderWidth, `${path}.borderWidth`, documentPath);
     if (obj.borderColor !== undefined) assertStringAt(obj.borderColor, `${path}.borderColor`, documentPath);
     if (obj.borderRadius !== undefined) assertFiniteNumberAt(obj.borderRadius, `${path}.borderRadius`, documentPath);
-    if (obj.borderTopWidth !== undefined) assertFiniteNumberAt(obj.borderTopWidth, `${path}.borderTopWidth`, documentPath);
-    if (obj.borderBottomWidth !== undefined) assertFiniteNumberAt(obj.borderBottomWidth, `${path}.borderBottomWidth`, documentPath);
-    if (obj.borderLeftWidth !== undefined) assertFiniteNumberAt(obj.borderLeftWidth, `${path}.borderLeftWidth`, documentPath);
-    if (obj.borderRightWidth !== undefined) assertFiniteNumberAt(obj.borderRightWidth, `${path}.borderRightWidth`, documentPath);
+    if (obj.borderTopWidth !== undefined)
+        assertFiniteNumberAt(obj.borderTopWidth, `${path}.borderTopWidth`, documentPath);
+    if (obj.borderBottomWidth !== undefined)
+        assertFiniteNumberAt(obj.borderBottomWidth, `${path}.borderBottomWidth`, documentPath);
+    if (obj.borderLeftWidth !== undefined)
+        assertFiniteNumberAt(obj.borderLeftWidth, `${path}.borderLeftWidth`, documentPath);
+    if (obj.borderRightWidth !== undefined)
+        assertFiniteNumberAt(obj.borderRightWidth, `${path}.borderRightWidth`, documentPath);
     if (obj.borderTopColor !== undefined) assertStringAt(obj.borderTopColor, `${path}.borderTopColor`, documentPath);
-    if (obj.borderBottomColor !== undefined) assertStringAt(obj.borderBottomColor, `${path}.borderBottomColor`, documentPath);
+    if (obj.borderBottomColor !== undefined)
+        assertStringAt(obj.borderBottomColor, `${path}.borderBottomColor`, documentPath);
     if (obj.borderLeftColor !== undefined) assertStringAt(obj.borderLeftColor, `${path}.borderLeftColor`, documentPath);
-    if (obj.borderRightColor !== undefined) assertStringAt(obj.borderRightColor, `${path}.borderRightColor`, documentPath);
+    if (obj.borderRightColor !== undefined)
+        assertStringAt(obj.borderRightColor, `${path}.borderRightColor`, documentPath);
 }
 
 function validateLayoutDirectives(value: unknown, path: string, documentPath: string): void {
@@ -358,7 +432,8 @@ function validateContinuationMarker(value: unknown, path: string, documentPath: 
     if (marker.type !== undefined) assertStringAt(marker.type, `${path}.type`, documentPath);
     if (marker.content !== undefined) assertStringAt(marker.content, `${path}.content`, documentPath);
     if (marker.style !== undefined) validateStyleObject(marker.style, `${path}.style`, documentPath);
-    if (marker.properties !== undefined) validateElementProperties(marker.properties, `${path}.properties`, documentPath);
+    if (marker.properties !== undefined)
+        validateElementProperties(marker.properties, `${path}.properties`, documentPath);
 }
 
 function validateDropCapSpec(value: unknown, path: string, documentPath: string): void {
@@ -369,7 +444,8 @@ function validateDropCapSpec(value: unknown, path: string, documentPath: string)
     if (dropCap.lines !== undefined) assertFiniteNumberAt(dropCap.lines, `${path}.lines`, documentPath);
     if (dropCap.characters !== undefined) assertFiniteNumberAt(dropCap.characters, `${path}.characters`, documentPath);
     if (dropCap.gap !== undefined) assertFiniteNumberAt(dropCap.gap, `${path}.gap`, documentPath);
-    if (dropCap.characterStyle !== undefined) validateStyleObject(dropCap.characterStyle, `${path}.characterStyle`, documentPath);
+    if (dropCap.characterStyle !== undefined)
+        validateStyleObject(dropCap.characterStyle, `${path}.characterStyle`, documentPath);
 }
 
 function validateStoryLayoutDirective(value: unknown, path: string, documentPath: string): void {
@@ -402,7 +478,11 @@ function validatePaginationContinuation(value: unknown, path: string, documentPa
         validateContinuationMarker(continuation.markerAfterSplit, `${path}.markerAfterSplit`, documentPath);
     }
     if (continuation.markerBeforeContinuation !== undefined) {
-        validateContinuationMarker(continuation.markerBeforeContinuation, `${path}.markerBeforeContinuation`, documentPath);
+        validateContinuationMarker(
+            continuation.markerBeforeContinuation,
+            `${path}.markerBeforeContinuation`,
+            documentPath,
+        );
     }
     if (continuation.markersBeforeContinuation !== undefined) {
         if (!Array.isArray(continuation.markersBeforeContinuation)) {
@@ -439,7 +519,8 @@ function validateTableLayoutOptions(value: unknown, path: string, documentPath: 
     if (options.columnGap !== undefined) assertFiniteNumberAt(options.columnGap, `${path}.columnGap`, documentPath);
     if (options.rowGap !== undefined) assertFiniteNumberAt(options.rowGap, `${path}.rowGap`, documentPath);
     if (options.cellStyle !== undefined) validateStyleObject(options.cellStyle, `${path}.cellStyle`, documentPath);
-    if (options.headerCellStyle !== undefined) validateStyleObject(options.headerCellStyle, `${path}.headerCellStyle`, documentPath);
+    if (options.headerCellStyle !== undefined)
+        validateStyleObject(options.headerCellStyle, `${path}.headerCellStyle`, documentPath);
 
     if (options.columns !== undefined) {
         if (!Array.isArray(options.columns)) {
@@ -458,8 +539,10 @@ function validateElementProperties(properties: unknown, path: string, documentPa
     if (props.style !== undefined) validateStyleObject(props.style, `${path}.style`, documentPath);
     if (props.image !== undefined) validateEmbeddedImagePayload(props.image, `${path}.image`, documentPath);
     if (props.table !== undefined) validateTableLayoutOptions(props.table, `${path}.table`, documentPath);
-    if (props.layoutDirectives !== undefined) validateLayoutDirectives(props.layoutDirectives, `${path}.layoutDirectives`, documentPath);
-    if (props.paginationContinuation !== undefined) validatePaginationContinuation(props.paginationContinuation, `${path}.paginationContinuation`, documentPath);
+    if (props.layoutDirectives !== undefined)
+        validateLayoutDirectives(props.layoutDirectives, `${path}.layoutDirectives`, documentPath);
+    if (props.paginationContinuation !== undefined)
+        validatePaginationContinuation(props.paginationContinuation, `${path}.paginationContinuation`, documentPath);
     if (props.colSpan !== undefined) assertFiniteNumberAt(props.colSpan, `${path}.colSpan`, documentPath);
     if (props.rowSpan !== undefined) assertFiniteNumberAt(props.rowSpan, `${path}.rowSpan`, documentPath);
     if (props.keepWithNext !== undefined) assertBooleanAt(props.keepWithNext, `${path}.keepWithNext`, documentPath);
@@ -506,7 +589,9 @@ function validateElementNode(node: unknown, path: string, documentPath: string):
         if (!Array.isArray(element.children)) {
             contractError(documentPath, `${path}.children`, 'expected an array.');
         }
-        element.children.forEach((child, index) => validateElementNode(child, `${path}.children[${index}]`, documentPath));
+        element.children.forEach((child, index) =>
+            validateElementNode(child, `${path}.children[${index}]`, documentPath),
+        );
     }
 
     if (element.properties !== undefined) {
@@ -584,7 +669,7 @@ function normalizeElementNode(element: Element): Element {
     const normalizedProperties = normalizeElementProperties(element?.properties);
     const normalized: Element = {
         type,
-        content: typeof element?.content === 'string' ? element.content : ''
+        content: typeof element?.content === 'string' ? element.content : '',
     };
 
     if (normalizedChildren && normalizedChildren.length > 0) {
@@ -600,9 +685,7 @@ function normalizeElementNode(element: Element): Element {
 export function normalizeDocumentToIR(document: DocumentInput, documentPath: string): DocumentIR {
     const sourceVersion = String(document?.documentVersion || '').trim();
     if (sourceVersion !== CURRENT_DOCUMENT_VERSION) {
-        throw new Error(
-            `Document at "${documentPath}" must set "documentVersion" to "${CURRENT_DOCUMENT_VERSION}".`
-        );
+        throw new Error(`Document at "${documentPath}" must set "documentVersion" to "${CURRENT_DOCUMENT_VERSION}".`);
     }
 
     if (!Array.isArray(document?.elements)) {
@@ -634,7 +717,7 @@ export function normalizeDocumentToIR(document: DocumentInput, documentPath: str
 
     const normalizedLayout = deepSortObject({
         ...document.layout,
-        fontFamily: regular
+        fontFamily: regular,
     }) as LayoutConfig['layout'];
 
     const normalizedStyles = deepSortObject(document.styles || {}) as LayoutConfig['styles'];
@@ -647,10 +730,10 @@ export function normalizeDocumentToIR(document: DocumentInput, documentPath: str
         fonts: deepSortObject({
             ...document.fonts,
             ...normalizedFonts,
-            regular
+            regular,
         }) as LayoutConfig['fonts'],
         styles: normalizedStyles,
-        elements: normalizedElements
+        elements: normalizedElements,
     };
 }
 
@@ -687,7 +770,6 @@ export function toLayoutConfig(document: DocumentIR, debug: boolean): LayoutConf
         fonts: document.fonts || {},
         styles: document.styles,
         preloadFontFamilies: collectElementFontFamilies(document.elements),
-        debug
+        debug,
     };
 }
-

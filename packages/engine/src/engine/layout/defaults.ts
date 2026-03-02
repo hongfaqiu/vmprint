@@ -2,7 +2,7 @@ import { OverflowPolicy } from '../types';
 
 export const PAGE_SIZE_POINTS = {
     LETTER: { width: 612, height: 792 },
-    A4: { width: 595, height: 842 }
+    A4: { width: 595, height: 842 },
 } as const;
 
 export const PAGE_SIZE_FALLBACK = 'A4' as const;
@@ -21,7 +21,7 @@ export const LAYOUT_DEFAULTS = {
         color: 'black',
         offset: 40,
         position: 'bottom' as const,
-        alignment: 'center' as const
+        alignment: 'center' as const,
     },
     textLayout: {
         lang: 'und',
@@ -32,7 +32,7 @@ export const LAYOUT_DEFAULTS = {
         hyphenMinPrefix: 3,
         hyphenMinSuffix: 2,
         justifyEngine: 'legacy' as const,
-        justifyStrategy: 'auto' as const
+        justifyStrategy: 'auto' as const,
     },
     opticalScaling: {
         neutral: 1.0,
@@ -45,9 +45,7 @@ export const LAYOUT_DEFAULTS = {
             devanagari: 0.95,
             arabic: 0.95,
             cyrillic: 1.0,
-            default: 1.0
-        } as Record<string, number>
-    }
+            default: 1.0,
+        } as Record<string, number>,
+    },
 } as const;
-
-

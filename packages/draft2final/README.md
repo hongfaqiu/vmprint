@@ -1,6 +1,6 @@
 # draft2final
 
-*A Markdown compiler for industry-standard documents.*
+_A Markdown compiler for industry-standard documents._
 
 ---
 
@@ -34,9 +34,9 @@ you're looking at something that already makes sense. A heading that reads like 
 
 draft2final reads those structural hints and interprets them semantically. The blockquote isn't a citation — it's a dialogue turn. The `@` on the name isn't decoration — it's a character cue. The `h2` that starts with `INT.` isn't just a heading — it's a scene heading. A format module maps these conventions to the domain-specific elements they represent, then hands off to the vmprint layout engine to produce output that meets the industry standard.
 
-This is what makes it a *compiler*, not a template renderer. It compiles from one representation — Markdown with structural conventions — to another: a precisely-laid-out professional document. The source file doesn't change. The conventions are stable and readable without the tool. What changes is the compilation target.
+This is what makes it a _compiler_, not a template renderer. It compiles from one representation — Markdown with structural conventions — to another: a precisely-laid-out professional document. The source file doesn't change. The conventions are stable and readable without the tool. What changes is the compilation target.
 
-And because each format module is an independent compilation pass over the same source language, draft2final is a *platform*. A screenplay is one compilation target. A book manuscript is another. An academic paper, a legal brief, a technical report, a stage play — each is a format module that maps the same Markdown input to a different professional output. You write in Markdown. You choose what that Markdown becomes.
+And because each format module is an independent compilation pass over the same source language, draft2final is a _platform_. A screenplay is one compilation target. A book manuscript is another. An academic paper, a legal brief, a technical report, a stage play — each is a format module that maps the same Markdown input to a different professional output. You write in Markdown. You choose what that Markdown becomes.
 
 ## Philosophy
 
@@ -69,17 +69,18 @@ The `markdown` format renders structured prose documents with typographic precis
 
 Available themes/formats:
 
-| Format/Theme | Description |
-|---|---|
-| `default` | Clean, readable general-purpose document |
-| `academic` | Citation markers, references section, definition lists, formal typography |
-| `literature` | Book manuscript conventions |
+| Format/Theme | Description                                                                                                                                        |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `default`    | Clean, readable general-purpose document                                                                                                           |
+| `academic`   | Citation markers, references section, definition lists, formal typography                                                                          |
+| `literature` | Book manuscript conventions                                                                                                                        |
 | `opensource` | Publication-grade open-source documentation style with title subheading (`:: ...`), print-like framed figures, and blockquote-under-image captions |
 
 `opensource` title deck convention:
 
 ```markdown
 # Main Title
+
 :: Optional subheading line directly under the H1
 ```
 
@@ -109,15 +110,14 @@ A format is a TypeScript module that exports a `FormatModule`. Its job is to wal
 
 ```ts
 export const myFormat: FormatModule = {
-  name: 'my-format',
-  listThemes(): string[] {
-    return listThemes('my-format');
-  },
-  createHandler(config: Record<string, unknown>): FormatHandler {
-    return new MyFormat(config);
-    // Handler emits blocks via FormatContext; compiler assembles DocumentInput
-    
-  }
+    name: 'my-format',
+    listThemes(): string[] {
+        return listThemes('my-format');
+    },
+    createHandler(config: Record<string, unknown>): FormatHandler {
+        return new MyFormat(config);
+        // Handler emits blocks via FormatContext; compiler assembles DocumentInput
+    },
 };
 ```
 
@@ -136,14 +136,14 @@ Themes contain no code. If you know what a correctly formatted legal brief, tech
 ```yaml
 # src/formats/screenplay/config.defaults.yaml
 production:
-  sceneNumbers:
-    enabled: true
-    pad: 3
-    style: decimal
-  lockedPages:
-    enabled: true
-    revisionLabel: A
-    placement: suffix
+    sceneNumbers:
+        enabled: true
+        pad: 3
+        style: decimal
+    lockedPages:
+        enabled: true
+        revisionLabel: A
+        placement: suffix
 ```
 
 ### The SemanticDocument
@@ -177,5 +177,3 @@ See [QUICKSTART.md](QUICKSTART.md) for install and command reference.
 Version `0.1.0`. Screenplay and markdown formats are working and covered by layout regression fixtures. Additional themes and format modules for legal, technical, and stage play documents are planned.
 
 This is pre-1.0 software. The API may change.
-
-

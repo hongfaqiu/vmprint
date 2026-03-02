@@ -6,7 +6,7 @@ import {
     ContinuationMarkerSpec,
     FlowBox,
     FlowIdentitySeed,
-    PaginationContinuationSpec
+    PaginationContinuationSpec,
 } from './layout-core-types';
 
 type SplitFlowBoxInput = {
@@ -23,7 +23,7 @@ type SplitFlowBoxCallbacks = {
         lines: RichLine[],
         style: ElementStyle,
         meta: BoxMeta,
-        properties: Record<string, any>
+        properties: Record<string, any>,
     ) => FlowBox;
     getElementText: (element: Element) => string;
     getJoinedLineText: (lines: RichLine[]) => string;
@@ -49,18 +49,16 @@ function createContinuationFlowBox(
     originMeta: BoxMeta,
     markerRole: 'after' | 'before',
     markerIndex: number,
-    callbacks: ContinuationArtifactsCallbacks
+    callbacks: ContinuationArtifactsCallbacks,
 ): FlowBox | null {
     if (!spec || typeof spec !== 'object') return null;
     const content = typeof spec.content === 'string' ? spec.content : '';
     if (!content.trim()) return null;
 
-    const type = (typeof spec.type === 'string' && spec.type.trim().length > 0)
-        ? spec.type.trim()
-        : fallbackType;
+    const type = typeof spec.type === 'string' && spec.type.trim().length > 0 ? spec.type.trim() : fallbackType;
     const properties: Record<string, any> = {
         ...(spec.properties || {}),
-        _generatedContinuation: true
+        _generatedContinuation: true,
     };
 
     if (properties.paginationContinuation !== undefined) {
@@ -70,7 +68,7 @@ function createContinuationFlowBox(
     if (spec.style && typeof spec.style === 'object') {
         properties.style = {
             ...(properties.style || {}),
-            ...spec.style
+            ...spec.style,
         };
     }
 
@@ -90,21 +88,22 @@ function createContinuationFlowBox(
             fragmentIndex: 0,
             isContinuation: true,
             generated: true,
-            originSourceId: originMeta.sourceId
-        }
+            originSourceId: originMeta.sourceId,
+        },
     );
 }
 
 export function getContinuationArtifactsWithCallbacks(
     box: FlowBox,
-    callbacks: ContinuationArtifactsCallbacks
+    callbacks: ContinuationArtifactsCallbacks,
 ): ContinuationArtifacts {
     const spec = normalizeContinuationSpec(box.properties?.paginationContinuation);
     if (!spec || spec.enabled === false) {
         return { markersBeforeContinuation: [] };
     }
 
-    const markerAfterSplit = createContinuationFlowBox(spec.markerAfterSplit, box.type, box.meta, 'after', 0, callbacks) || undefined;
+    const markerAfterSplit =
+        createContinuationFlowBox(spec.markerAfterSplit, box.type, box.meta, 'after', 0, callbacks) || undefined;
     if (markerAfterSplit) callbacks.materializeFlowBox(markerAfterSplit);
 
     const markersBeforeContinuation: FlowBox[] = [];
@@ -119,7 +118,14 @@ export function getContinuationArtifactsWithCallbacks(
             }
         }
     } else {
-        const markerBeforeContinuation = createContinuationFlowBox(spec.markerBeforeContinuation, box.type, box.meta, 'before', 0, callbacks);
+        const markerBeforeContinuation = createContinuationFlowBox(
+            spec.markerBeforeContinuation,
+            box.type,
+            box.meta,
+            'before',
+            0,
+            callbacks,
+        );
         if (markerBeforeContinuation) {
             callbacks.materializeFlowBox(markerBeforeContinuation);
             markersBeforeContinuation.push(markerBeforeContinuation);
@@ -136,7 +142,7 @@ export function getContinuationArtifactsWithCallbacks(
 
 export function splitFlowBoxWithCallbacks(
     input: SplitFlowBoxInput,
-    callbacks: SplitFlowBoxCallbacks
+    callbacks: SplitFlowBoxCallbacks,
 ): { partA: FlowBox; partB: FlowBox } | null {
     const { box, availableHeight, layoutBefore } = input;
     if (!box.lines || box.lines.length <= 1) return null;
@@ -189,44 +195,56 @@ export function splitFlowBoxWithCallbacks(
         ...style,
         borderBottomWidth: 0,
         paddingBottom: 0,
-        marginBottom: 0
+        marginBottom: 0,
     };
     const partBStyle: ElementStyle = {
         ...style,
         borderTopWidth: 0,
         paddingTop: 0,
         marginTop: 0,
-        textIndent: 0
+        textIndent: 0,
     };
     const partAMeta: BoxMeta = {
         ...box.meta,
         isContinuation: box.meta.isContinuation || box.meta.fragmentIndex > 0,
-        pageIndex: undefined
+        pageIndex: undefined,
     };
     const partBMeta: BoxMeta = {
         ...box.meta,
         fragmentIndex: box.meta.fragmentIndex + 1,
         isContinuation: true,
-        pageIndex: undefined
+        pageIndex: undefined,
     };
 
     const partA = callbacks.rebuildFlowBox(box, linesA, partAStyle, partAMeta, {
         ...box.properties,
-        _lineOffsets: Array.isArray(box.properties?._lineOffsets) ? box.properties._lineOffsets.slice(0, linesA.length) : undefined,
-        _lineWidths: Array.isArray(box.properties?._lineWidths) ? box.properties._lineWidths.slice(0, linesA.length) : undefined,
-        _lineYOffsets: Array.isArray(box.properties?._lineYOffsets) ? box.properties._lineYOffsets.slice(0, linesA.length) : undefined,
+        _lineOffsets: Array.isArray(box.properties?._lineOffsets)
+            ? box.properties._lineOffsets.slice(0, linesA.length)
+            : undefined,
+        _lineWidths: Array.isArray(box.properties?._lineWidths)
+            ? box.properties._lineWidths.slice(0, linesA.length)
+            : undefined,
+        _lineYOffsets: Array.isArray(box.properties?._lineYOffsets)
+            ? box.properties._lineYOffsets.slice(0, linesA.length)
+            : undefined,
         _isFirstLine: true,
-        _isLastLine: false
+        _isLastLine: false,
     });
     partA.marginBottom = 0;
 
     const partB = callbacks.rebuildFlowBox(box, linesB, partBStyle, partBMeta, {
         ...box.properties,
-        _lineOffsets: Array.isArray(box.properties?._lineOffsets) ? box.properties._lineOffsets.slice(linesA_Count, totalLines) : undefined,
-        _lineWidths: Array.isArray(box.properties?._lineWidths) ? box.properties._lineWidths.slice(linesA_Count, totalLines) : undefined,
-        _lineYOffsets: Array.isArray(box.properties?._lineYOffsets) ? box.properties._lineYOffsets.slice(linesA_Count, totalLines) : undefined,
+        _lineOffsets: Array.isArray(box.properties?._lineOffsets)
+            ? box.properties._lineOffsets.slice(linesA_Count, totalLines)
+            : undefined,
+        _lineWidths: Array.isArray(box.properties?._lineWidths)
+            ? box.properties._lineWidths.slice(linesA_Count, totalLines)
+            : undefined,
+        _lineYOffsets: Array.isArray(box.properties?._lineYOffsets)
+            ? box.properties._lineYOffsets.slice(linesA_Count, totalLines)
+            : undefined,
         _isFirstLine: false,
-        _isLastLine: true
+        _isLastLine: true,
     });
     partB.marginTop = 0;
 

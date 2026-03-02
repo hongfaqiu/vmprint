@@ -2,11 +2,12 @@ import { FontConfig, FontManager, FallbackFontSource } from '@vmprint/contracts'
 import { cloneFontRegistry } from '@vmprint/engine';
 import { LOCAL_FONT_ALIASES, LOCAL_FONT_REGISTRY } from './config.js';
 
-const normalizeFamilyKey = (family: string): string => String(family || '')
-    .trim()
-    .toLowerCase()
-    .replace(/["']/g, '')
-    .replace(/\s+/g, ' ');
+const normalizeFamilyKey = (family: string): string =>
+    String(family || '')
+        .trim()
+        .toLowerCase()
+        .replace(/["']/g, '')
+        .replace(/\s+/g, ' ');
 
 export class LocalFontManager implements FontManager {
     private readonly seedFonts: FontConfig[];
@@ -37,7 +38,7 @@ export class LocalFontManager implements FontManager {
             .map((font) => ({
                 src: font.src,
                 name: font.name,
-                unicodeRange: font.unicodeRange
+                unicodeRange: font.unicodeRange,
             }));
     }
 
@@ -82,10 +83,7 @@ export class LocalFontManager implements FontManager {
             const normalizedRef = ref.replace(/\\/g, '/');
             const refWithoutSrcPrefix = normalizedRef.startsWith('src/') ? normalizedRef.slice(4) : normalizedRef;
             const refWithSrcPrefix = normalizedRef.startsWith('src/') ? normalizedRef : `src/${normalizedRef}`;
-            const packageRoots = [
-                pathMod.resolve(__dirname, '..'),
-                pathMod.resolve(__dirname, '..', '..')
-            ];
+            const packageRoots = [pathMod.resolve(__dirname, '..'), pathMod.resolve(__dirname, '..', '..')];
             const candidates: string[] = [];
 
             for (const packageRoot of packageRoots) {
@@ -95,7 +93,7 @@ export class LocalFontManager implements FontManager {
                     pathMod.resolve(packageRoot, refWithSrcPrefix),
                     pathMod.resolve(packageRoot, 'dist', refWithSrcPrefix),
                     pathMod.resolve(packageRoot, refWithoutSrcPrefix),
-                    pathMod.resolve(packageRoot, 'dist', refWithoutSrcPrefix)
+                    pathMod.resolve(packageRoot, 'dist', refWithoutSrcPrefix),
                 );
             }
 
@@ -105,7 +103,7 @@ export class LocalFontManager implements FontManager {
                 pathMod.resolve(process.cwd(), refWithSrcPrefix),
                 pathMod.resolve(process.cwd(), 'dist', refWithSrcPrefix),
                 pathMod.resolve(process.cwd(), refWithoutSrcPrefix),
-                pathMod.resolve(process.cwd(), 'dist', refWithoutSrcPrefix)
+                pathMod.resolve(process.cwd(), 'dist', refWithoutSrcPrefix),
             );
 
             for (const candidate of candidates) {

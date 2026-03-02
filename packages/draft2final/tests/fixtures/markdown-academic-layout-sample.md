@@ -2,7 +2,7 @@
 
 This academic fixture checks theorem-mode blocks, citation references, and structured lists [memo].
 
-[memo]: https://example.com/research/memo "Layout Memo"
+[memo]: https://example.com/research/memo 'Layout Memo'
 
 ## Core Claims
 

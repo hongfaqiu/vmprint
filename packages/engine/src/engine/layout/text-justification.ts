@@ -20,7 +20,7 @@ function shouldStretchBoundary(
     right: string,
     lineHasWhitespaceFlag: boolean,
     strategy: string,
-    isCjkOrThaiCluster: (text: string) => boolean
+    isCjkOrThaiCluster: (text: string) => boolean,
 ): boolean {
     if (!left || !right) return false;
     if (/\s$/u.test(left) || /^\s/u.test(right)) return true;
@@ -46,17 +46,23 @@ export function applyAdvancedJustification(params: {
 }): RichLine[] {
     const lines = params.lines;
     if (!Array.isArray(lines) || lines.length === 0) return lines;
-    const strategy = String(params.baseStyle?.justifyStrategy || params.layoutJustifyStrategy || LAYOUT_DEFAULTS.textLayout.justifyStrategy);
+    const strategy = String(
+        params.baseStyle?.justifyStrategy || params.layoutJustifyStrategy || LAYOUT_DEFAULTS.textLayout.justifyStrategy,
+    );
 
     for (let lineIdx = 0; lineIdx < lines.length; lineIdx++) {
         const line = lines[lineIdx];
-        line.forEach((seg) => { seg.justifyAfter = 0; });
+        line.forEach((seg) => {
+            seg.justifyAfter = 0;
+        });
 
         const isLastLine = lineIdx === lines.length - 1;
         if (isLastLine) continue;
         if (lineEndsWithForcedBreak(line)) continue;
 
-        const resolvedWidth = params.resolveLineWidth ? params.resolveLineWidth(lineIdx, params.maxWidth) : params.maxWidth;
+        const resolvedWidth = params.resolveLineWidth
+            ? params.resolveLineWidth(lineIdx, params.maxWidth)
+            : params.maxWidth;
         const available = resolvedWidth - (lineIdx === 0 ? params.textIndent : 0);
         const lineWidth = line.reduce((acc, seg) => acc + (seg.width || 0), 0);
         const extra = available - lineWidth;
@@ -83,5 +89,3 @@ export function applyAdvancedJustification(params: {
 
     return lines;
 }
-
-

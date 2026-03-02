@@ -12,13 +12,15 @@ const COMBINING_MARK_REGEX = /[\u0300-\u036f]/;
 const HARNESS_PACKAGE_ROOT = path.resolve(__dirname, '..', '..');
 const HARNESS_FIXTURES_CANDIDATES = [
     path.join(HARNESS_PACKAGE_ROOT, 'tests', 'fixtures'),
-    path.join(HARNESS_PACKAGE_ROOT, 'src', 'tests', 'fixtures')
+    path.join(HARNESS_PACKAGE_ROOT, 'src', 'tests', 'fixtures'),
 ];
 
 const resolveHarnessFixturesDir = (): string => {
     const resolved = HARNESS_FIXTURES_CANDIDATES.find((candidate) => fs.existsSync(candidate));
     if (!resolved) {
-        throw new Error(`[engine-harness] Could not find fixtures directory. Tried: ${HARNESS_FIXTURES_CANDIDATES.join(', ')}`);
+        throw new Error(
+            `[engine-harness] Could not find fixtures directory. Tried: ${HARNESS_FIXTURES_CANDIDATES.join(', ')}`,
+        );
     }
     return resolved;
 };
@@ -53,15 +55,21 @@ export async function loadLocalFontManager(): Promise<any> {
 type TextTraceCall = { str: string; x: number; y: number };
 type ImageTraceCall = { x: number; y: number; width: number; height: number };
 
-export function loadJsonDocumentFixtures(casesDir: string = HARNESS_REGRESSION_CASES_DIR): Array<{ name: string; document: DocumentIR; filePath: string }> {
-    const files = fs.readdirSync(casesDir)
+export function loadJsonDocumentFixtures(
+    casesDir: string = HARNESS_REGRESSION_CASES_DIR,
+): Array<{ name: string; document: DocumentIR; filePath: string }> {
+    const files = fs
+        .readdirSync(casesDir)
         .filter((file) => file.toLowerCase().endsWith('.json') && !file.toLowerCase().endsWith('.snapshot.layout.json'))
         .sort((a, b) => a.localeCompare(b));
 
     return files.map((name) => ({
         name,
         filePath: path.join(casesDir, name),
-        document: resolveDocumentPaths(JSON.parse(fs.readFileSync(path.join(casesDir, name), 'utf-8')), path.join(casesDir, name))
+        document: resolveDocumentPaths(
+            JSON.parse(fs.readFileSync(path.join(casesDir, name), 'utf-8')),
+            path.join(casesDir, name),
+        ),
     }));
 }
 
@@ -78,14 +86,16 @@ export function snapshotPages(pages: Page[]): any {
             y: Number(box.y.toFixed(6)),
             w: Number(box.w.toFixed(6)),
             h: Number(box.h.toFixed(6)),
-            lines: (box.lines || []).map((line) => line.map((seg) => ({
-                text: seg.text,
-                width: Number((seg.width || 0).toFixed(6)),
-                ascent: Number((seg.ascent || 0).toFixed(6)),
-                descent: Number((seg.descent || 0).toFixed(6)),
-                fontFamily: seg.fontFamily || ''
-            })))
-        }))
+            lines: (box.lines || []).map((line) =>
+                line.map((seg) => ({
+                    text: seg.text,
+                    width: Number((seg.width || 0).toFixed(6)),
+                    ascent: Number((seg.ascent || 0).toFixed(6)),
+                    descent: Number((seg.descent || 0).toFixed(6)),
+                    fontFamily: seg.fontFamily || '',
+                })),
+            ),
+        })),
     }));
 }
 
@@ -117,9 +127,19 @@ function assertFiniteBoxGeometry(pages: Page[], fixtureName: string): void {
             assert.ok(Number.isFinite(box.h), `${fixtureName} page=${pageIdx} box=${boxIdx}: non-finite h`);
             assert.ok(box.w >= 0, `${fixtureName} page=${pageIdx} box=${boxIdx}: negative width`);
             assert.ok(box.h >= 0, `${fixtureName} page=${pageIdx} box=${boxIdx}: negative height`);
-            assert.ok(box.x >= -epsilon, `${fixtureName} page=${pageIdx} box=${boxIdx}: x out of bounds (${box.x.toFixed(3)})`);
-            assert.ok(box.y >= -epsilon, `${fixtureName} page=${pageIdx} box=${boxIdx}: y out of bounds (${box.y.toFixed(3)})`);
-            assert.equal((box as any).children, undefined, `${fixtureName} page=${pageIdx} box=${boxIdx}: nested children found`);
+            assert.ok(
+                box.x >= -epsilon,
+                `${fixtureName} page=${pageIdx} box=${boxIdx}: x out of bounds (${box.x.toFixed(3)})`,
+            );
+            assert.ok(
+                box.y >= -epsilon,
+                `${fixtureName} page=${pageIdx} box=${boxIdx}: y out of bounds (${box.y.toFixed(3)})`,
+            );
+            assert.equal(
+                (box as any).children,
+                undefined,
+                `${fixtureName} page=${pageIdx} box=${boxIdx}: nested children found`,
+            );
         });
     });
 }
@@ -128,15 +148,48 @@ function assertBoxMetadata(pages: Page[], fixtureName: string): void {
     pages.forEach((page, pageIdx) => {
         page.boxes.forEach((box, boxIdx) => {
             assert.ok(box.meta, `${fixtureName} page=${pageIdx} box=${boxIdx}: missing box meta`);
-            assert.equal(typeof box.meta?.sourceId, 'string', `${fixtureName} page=${pageIdx} box=${boxIdx}: missing sourceId`);
-            assert.equal(typeof box.meta?.engineKey, 'string', `${fixtureName} page=${pageIdx} box=${boxIdx}: missing engineKey`);
-            assert.equal(typeof box.meta?.sourceType, 'string', `${fixtureName} page=${pageIdx} box=${boxIdx}: missing sourceType`);
-            assert.equal(typeof box.meta?.fragmentIndex, 'number', `${fixtureName} page=${pageIdx} box=${boxIdx}: missing fragmentIndex`);
-            assert.equal(typeof box.meta?.isContinuation, 'boolean', `${fixtureName} page=${pageIdx} box=${boxIdx}: missing isContinuation`);
-            assert.equal(box.meta?.pageIndex, pageIdx, `${fixtureName} page=${pageIdx} box=${boxIdx}: pageIndex mismatch`);
-            assert.ok((box.meta?.sourceId || '').length > 0, `${fixtureName} page=${pageIdx} box=${boxIdx}: empty sourceId`);
-            assert.ok((box.meta?.engineKey || '').length > 0, `${fixtureName} page=${pageIdx} box=${boxIdx}: empty engineKey`);
-            assert.ok((box.meta?.fragmentIndex || 0) >= 0, `${fixtureName} page=${pageIdx} box=${boxIdx}: negative fragmentIndex`);
+            assert.equal(
+                typeof box.meta?.sourceId,
+                'string',
+                `${fixtureName} page=${pageIdx} box=${boxIdx}: missing sourceId`,
+            );
+            assert.equal(
+                typeof box.meta?.engineKey,
+                'string',
+                `${fixtureName} page=${pageIdx} box=${boxIdx}: missing engineKey`,
+            );
+            assert.equal(
+                typeof box.meta?.sourceType,
+                'string',
+                `${fixtureName} page=${pageIdx} box=${boxIdx}: missing sourceType`,
+            );
+            assert.equal(
+                typeof box.meta?.fragmentIndex,
+                'number',
+                `${fixtureName} page=${pageIdx} box=${boxIdx}: missing fragmentIndex`,
+            );
+            assert.equal(
+                typeof box.meta?.isContinuation,
+                'boolean',
+                `${fixtureName} page=${pageIdx} box=${boxIdx}: missing isContinuation`,
+            );
+            assert.equal(
+                box.meta?.pageIndex,
+                pageIdx,
+                `${fixtureName} page=${pageIdx} box=${boxIdx}: pageIndex mismatch`,
+            );
+            assert.ok(
+                (box.meta?.sourceId || '').length > 0,
+                `${fixtureName} page=${pageIdx} box=${boxIdx}: empty sourceId`,
+            );
+            assert.ok(
+                (box.meta?.engineKey || '').length > 0,
+                `${fixtureName} page=${pageIdx} box=${boxIdx}: empty engineKey`,
+            );
+            assert.ok(
+                (box.meta?.fragmentIndex || 0) >= 0,
+                `${fixtureName} page=${pageIdx} box=${boxIdx}: negative fragmentIndex`,
+            );
         });
     });
 }
@@ -156,9 +209,21 @@ function assertMeasuredLinesFit(pages: Page[], fixtureName: string): void {
             box.lines.forEach((line, lineIdx) => {
                 let lineWidth = 0;
                 line.forEach((seg, segIdx) => {
-                    assert.equal(typeof seg.width, 'number', `${fixtureName} page=${pageIdx} box=${boxIdx} line=${lineIdx} seg=${segIdx}: missing width`);
-                    assert.equal(typeof seg.ascent, 'number', `${fixtureName} page=${pageIdx} box=${boxIdx} line=${lineIdx} seg=${segIdx}: missing ascent`);
-                    assert.equal(typeof seg.descent, 'number', `${fixtureName} page=${pageIdx} box=${boxIdx} line=${lineIdx} seg=${segIdx}: missing descent`);
+                    assert.equal(
+                        typeof seg.width,
+                        'number',
+                        `${fixtureName} page=${pageIdx} box=${boxIdx} line=${lineIdx} seg=${segIdx}: missing width`,
+                    );
+                    assert.equal(
+                        typeof seg.ascent,
+                        'number',
+                        `${fixtureName} page=${pageIdx} box=${boxIdx} line=${lineIdx} seg=${segIdx}: missing ascent`,
+                    );
+                    assert.equal(
+                        typeof seg.descent,
+                        'number',
+                        `${fixtureName} page=${pageIdx} box=${boxIdx} line=${lineIdx} seg=${segIdx}: missing descent`,
+                    );
                     lineWidth += seg.width || 0;
 
                     if (segIdx < line.length - 1) {
@@ -167,14 +232,14 @@ function assertMeasuredLinesFit(pages: Page[], fixtureName: string): void {
                         assert.equal(
                             lineBreakHasUnsafeBoundary(curr, next),
                             false,
-                            `${fixtureName} page=${pageIdx} box=${boxIdx} line=${lineIdx}: grapheme split across segments`
+                            `${fixtureName} page=${pageIdx} box=${boxIdx} line=${lineIdx}: grapheme split across segments`,
                         );
                     }
                 });
 
                 assert.ok(
-                    lineWidth <= (contentWidth + epsilon),
-                    `${fixtureName} page=${pageIdx} box=${boxIdx} line=${lineIdx}: width overflow (${lineWidth} > ${contentWidth})`
+                    lineWidth <= contentWidth + epsilon,
+                    `${fixtureName} page=${pageIdx} box=${boxIdx} line=${lineIdx}: width overflow (${lineWidth} > ${contentWidth})`,
                 );
             });
 
@@ -183,7 +248,7 @@ function assertMeasuredLinesFit(pages: Page[], fixtureName: string): void {
                 assert.equal(
                     lineBreakHasUnsafeBoundary(lineTexts[i], lineTexts[i + 1]),
                     false,
-                    `${fixtureName} page=${pageIdx} box=${boxIdx}: grapheme split across wrapped lines`
+                    `${fixtureName} page=${pageIdx} box=${boxIdx}: grapheme split across wrapped lines`,
                 );
             }
         });
@@ -201,11 +266,7 @@ export function assertFlatPipelineInvariants(pages: Page[], fixtureName: string)
 function hasRtlChars(text: string): boolean {
     for (const ch of text || '') {
         const cp = ch.codePointAt(0) || 0;
-        if (
-            (cp >= 0x0590 && cp <= 0x08FF) ||
-            (cp >= 0xFB1D && cp <= 0xFDFF) ||
-            (cp >= 0xFE70 && cp <= 0xFEFF)
-        ) {
+        if ((cp >= 0x0590 && cp <= 0x08ff) || (cp >= 0xfb1d && cp <= 0xfdff) || (cp >= 0xfe70 && cp <= 0xfeff)) {
             return true;
         }
     }
@@ -217,13 +278,23 @@ export function assertAdvancedLayoutSignals(pages: Page[], fixtureName: string):
 
     const justifyBoxes = pages
         .flatMap((page) => page.boxes)
-        .filter((box) => box.style?.justifyEngine === 'advanced' && box.style?.textAlign === 'justify' && Array.isArray(box.lines) && box.lines.length > 1);
+        .filter(
+            (box) =>
+                box.style?.justifyEngine === 'advanced' &&
+                box.style?.textAlign === 'justify' &&
+                Array.isArray(box.lines) &&
+                box.lines.length > 1,
+        );
 
     assert.ok(justifyBoxes.length > 0, `${fixtureName}: expected advanced justified boxes`);
     const hasExpandedBoundary = justifyBoxes.some((box) =>
-        (box.lines || []).slice(0, -1).some((line) => line.some((seg) => Number((seg as any).justifyAfter || 0) > 0))
+        (box.lines || []).slice(0, -1).some((line) => line.some((seg) => Number((seg as any).justifyAfter || 0) > 0)),
     );
-    assert.equal(hasExpandedBoundary, true, `${fixtureName}: expected justifyAfter spacing on non-final justified lines`);
+    assert.equal(
+        hasExpandedBoundary,
+        true,
+        `${fixtureName}: expected justifyAfter spacing on non-final justified lines`,
+    );
 
     const softHyphenBoxes = pages
         .flatMap((page) => page.boxes)
@@ -237,9 +308,13 @@ export function assertAdvancedLayoutSignals(pages: Page[], fixtureName: string):
     assert.equal(softHasVisibleBreak, true, `${fixtureName}: expected at least one visible soft-hyphen break`);
 
     const containsLiteralSoftHyphen = softHyphenBoxes.some((box) =>
-        (box.lines || []).some((line) => line.some((seg) => (seg.text || '').includes('\u00AD')))
+        (box.lines || []).some((line) => line.some((seg) => (seg.text || '').includes('\u00AD'))),
     );
-    assert.equal(containsLiteralSoftHyphen, false, `${fixtureName}: rendered lines should not preserve literal soft-hyphen characters`);
+    assert.equal(
+        containsLiteralSoftHyphen,
+        false,
+        `${fixtureName}: rendered lines should not preserve literal soft-hyphen characters`,
+    );
 }
 
 export function assertAdvancedRenderSignals(textTrace: TextTraceCall[], fixtureName: string): void {
@@ -270,31 +345,72 @@ export class MockContext implements Context {
     public textTrace: TextTraceCall[] = [];
     public imageTrace: ImageTraceCall[] = [];
 
-    constructor(private readonly _pageWidth: number = 1000, private readonly _pageHeight: number = 1000) {}
+    constructor(
+        private readonly _pageWidth: number = 1000,
+        private readonly _pageHeight: number = 1000,
+    ) {}
 
-    addPage(): void { this.pagesAdded += 1; }
-    end(): void { }
-    async registerFont(_id: string, _buffer: Uint8Array): Promise<void> { }
-    font(_family: string, _size?: number): this { return this; }
-    fontSize(_size: number): this { return this; }
-    save(): void { }
-    restore(): void { }
-    translate(_x: number, _y: number): this { return this; }
-    rotate(_angle: number, _originX?: number, _originY?: number): this { return this; }
-    opacity(_opacity: number): this { return this; }
-    fillColor(_color: string): this { return this; }
-    strokeColor(_color: string): this { return this; }
-    lineWidth(_width: number): this { return this; }
-    dash(_length: number, _options?: { space: number }): this { return this; }
-    undash(): this { return this; }
-    moveTo(_x: number, _y: number): this { return this; }
-    lineTo(_x: number, _y: number): this { return this; }
-    bezierCurveTo(_cp1x: number, _cp1y: number, _cp2x: number, _cp2y: number, _x: number, _y: number): this { return this; }
-    rect(_x: number, _y: number, _w: number, _h: number): this { return this; }
-    roundedRect(_x: number, _y: number, _w: number, _h: number, _r: number): this { return this; }
-    fill(_rule?: 'nonzero' | 'evenodd'): this { return this; }
-    stroke(): this { return this; }
-    fillAndStroke(_fillColor?: string, _strokeColor?: string): this { return this; }
+    addPage(): void {
+        this.pagesAdded += 1;
+    }
+    end(): void {}
+    async registerFont(_id: string, _buffer: Uint8Array): Promise<void> {}
+    font(_family: string, _size?: number): this {
+        return this;
+    }
+    fontSize(_size: number): this {
+        return this;
+    }
+    save(): void {}
+    restore(): void {}
+    translate(_x: number, _y: number): this {
+        return this;
+    }
+    rotate(_angle: number, _originX?: number, _originY?: number): this {
+        return this;
+    }
+    opacity(_opacity: number): this {
+        return this;
+    }
+    fillColor(_color: string): this {
+        return this;
+    }
+    strokeColor(_color: string): this {
+        return this;
+    }
+    lineWidth(_width: number): this {
+        return this;
+    }
+    dash(_length: number, _options?: { space: number }): this {
+        return this;
+    }
+    undash(): this {
+        return this;
+    }
+    moveTo(_x: number, _y: number): this {
+        return this;
+    }
+    lineTo(_x: number, _y: number): this {
+        return this;
+    }
+    bezierCurveTo(_cp1x: number, _cp1y: number, _cp2x: number, _cp2y: number, _x: number, _y: number): this {
+        return this;
+    }
+    rect(_x: number, _y: number, _w: number, _h: number): this {
+        return this;
+    }
+    roundedRect(_x: number, _y: number, _w: number, _h: number, _r: number): this {
+        return this;
+    }
+    fill(_rule?: 'nonzero' | 'evenodd'): this {
+        return this;
+    }
+    stroke(): this {
+        return this;
+    }
+    fillAndStroke(_fillColor?: string, _strokeColor?: string): this {
+        return this;
+    }
     text(_str: string, _x: number, _y: number, _options?: ContextTextOptions): this {
         this.textCalls += 1;
         this.textTrace.push({ str: _str, x: _x, y: _y });
@@ -306,7 +422,7 @@ export class MockContext implements Context {
             x: Number(_x),
             y: Number(_y),
             width: Number(_options?.width || 0),
-            height: Number(_options?.height || 0)
+            height: Number(_options?.height || 0),
         });
         return this;
     }
@@ -314,5 +430,3 @@ export class MockContext implements Context {
         return { width: this._pageWidth, height: this._pageHeight };
     }
 }
-
-

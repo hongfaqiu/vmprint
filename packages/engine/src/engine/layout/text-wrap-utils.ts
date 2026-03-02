@@ -42,7 +42,7 @@ export class StyleSignatureCache {
 export function splitToGraphemes(
     text: string,
     locale: string | undefined,
-    fallbackSplit: (value: string) => string[]
+    fallbackSplit: (value: string) => string[],
 ): string[] {
     if (!text) return [];
     try {
@@ -67,10 +67,11 @@ export function appendSegmentToLine(
     nextSegment: TextSegment,
     segmentWidth: number,
     allowMerge: boolean,
-    areStylesEquivalent: (left?: Record<string, any>, right?: Record<string, any>) => boolean
+    areStylesEquivalent: (left?: Record<string, any>, right?: Record<string, any>) => boolean,
 ): TextSegment[] {
     const last = line[line.length - 1];
-    const canMerge = allowMerge &&
+    const canMerge =
+        allowMerge &&
         !!last &&
         last.fontFamily === nextSegment.fontFamily &&
         areStylesEquivalent(last.style, nextSegment.style);
@@ -117,4 +118,3 @@ export function flattenSegmentsByHardBreak(segments: TextSegment[]): TextSegment
     }
     return flattened;
 }
-

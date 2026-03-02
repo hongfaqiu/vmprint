@@ -32,14 +32,14 @@ The contract for font loading and registry management. Implement this to provide
 
 ```ts
 interface FontManager {
-  getFontRegistrySnapshot(): FontConfig[];
-  resolveFamilyAlias(family: string): string;
-  getAllFonts(registry: FontConfig[]): FontConfig[];
-  getEnabledFallbackFonts(registry: FontConfig[]): FallbackFontSource[];
-  getFontsByFamily(family: string, registry: FontConfig[]): FontConfig[];
-  getFallbackFamilies(registry: FontConfig[]): string[];
-  registerFont(config: FontConfig, registry: FontConfig[]): void;
-  loadFontBuffer(src: string): Promise<ArrayBuffer>;
+    getFontRegistrySnapshot(): FontConfig[];
+    resolveFamilyAlias(family: string): string;
+    getAllFonts(registry: FontConfig[]): FontConfig[];
+    getEnabledFallbackFonts(registry: FontConfig[]): FallbackFontSource[];
+    getFontsByFamily(family: string, registry: FontConfig[]): FontConfig[];
+    getFallbackFamilies(registry: FontConfig[]): string[];
+    registerFont(config: FontConfig, registry: FontConfig[]): void;
+    loadFontBuffer(src: string): Promise<ArrayBuffer>;
 }
 ```
 
@@ -51,31 +51,31 @@ The rendering surface contract. Implement this to paint vmprint's layout output 
 
 ```ts
 interface Context {
-  addPage(): void;
-  end(): void;
-  registerFont(id: string, buffer: Uint8Array): Promise<void>;
-  font(family: string, size?: number): this;
-  fontSize(size: number): this;
-  save(): void;
-  restore(): void;
-  translate(x: number, y: number): this;
-  rotate(angle: number, originX?: number, originY?: number): this;
-  opacity(opacity: number): this;
-  fillColor(color: string): this;
-  strokeColor(color: string): this;
-  lineWidth(width: number): this;
-  dash(length: number, options?: { space: number }): this;
-  undash(): this;
-  moveTo(x: number, y: number): this;
-  lineTo(x: number, y: number): this;
-  rect(x: number, y: number, w: number, h: number): this;
-  roundedRect(x: number, y: number, w: number, h: number, r: number): this;
-  fill(rule?: 'nonzero' | 'evenodd'): this;
-  stroke(): this;
-  fillAndStroke(fillColor?: string, strokeColor?: string): this;
-  text(str: string, x: number, y: number, options?: ContextTextOptions): this;
-  image(source: string | Uint8Array, x: number, y: number, options?: ContextImageOptions): this;
-  getSize(): { width: number; height: number };
+    addPage(): void;
+    end(): void;
+    registerFont(id: string, buffer: Uint8Array): Promise<void>;
+    font(family: string, size?: number): this;
+    fontSize(size: number): this;
+    save(): void;
+    restore(): void;
+    translate(x: number, y: number): this;
+    rotate(angle: number, originX?: number, originY?: number): this;
+    opacity(opacity: number): this;
+    fillColor(color: string): this;
+    strokeColor(color: string): this;
+    lineWidth(width: number): this;
+    dash(length: number, options?: { space: number }): this;
+    undash(): this;
+    moveTo(x: number, y: number): this;
+    lineTo(x: number, y: number): this;
+    rect(x: number, y: number, w: number, h: number): this;
+    roundedRect(x: number, y: number, w: number, h: number, r: number): this;
+    fill(rule?: 'nonzero' | 'evenodd'): this;
+    stroke(): this;
+    fillAndStroke(fillColor?: string, strokeColor?: string): this;
+    text(str: string, x: number, y: number, options?: ContextTextOptions): this;
+    image(source: string | Uint8Array, x: number, y: number, options?: ContextImageOptions): this;
+    getSize(): { width: number; height: number };
 }
 ```
 
@@ -87,8 +87,8 @@ A hook for drawing before and after page content without modifying the layout. U
 
 ```ts
 interface OverlayProvider {
-  backdrop?(page: OverlayPage, context: OverlayContext): void;
-  overlay?(page: OverlayPage, context: OverlayContext): void;
+    backdrop?(page: OverlayPage, context: OverlayContext): void;
+    overlay?(page: OverlayPage, context: OverlayContext): void;
 }
 ```
 
@@ -101,10 +101,10 @@ Both methods receive `OverlayPage`, which carries the page dimensions and the fu
 
 ```ts
 interface OverlayPage {
-  readonly index: number;
-  readonly width: number;
-  readonly height: number;
-  readonly boxes: readonly OverlayBox[];
+    readonly index: number;
+    readonly width: number;
+    readonly height: number;
+    readonly boxes: readonly OverlayBox[];
 }
 ```
 
@@ -114,16 +114,16 @@ A minimal watermark example:
 import { OverlayProvider, OverlayPage, OverlayContext } from '@vmprint/contracts';
 
 class DraftWatermark implements OverlayProvider {
-  overlay(page: OverlayPage, ctx: OverlayContext): void {
-    ctx.save();
-    ctx.opacity(0.08);
-    ctx.fillColor('#000000');
-    ctx.font('Helvetica', 72);
-    ctx.translate(page.width / 2, page.height / 2);
-    ctx.rotate(-45);
-    ctx.text('DRAFT', -120, -36);
-    ctx.restore();
-  }
+    overlay(page: OverlayPage, ctx: OverlayContext): void {
+        ctx.save();
+        ctx.opacity(0.08);
+        ctx.fillColor('#000000');
+        ctx.font('Helvetica', 72);
+        ctx.translate(page.width / 2, page.height / 2);
+        ctx.rotate(-45);
+        ctx.text('DRAFT', -120, -36);
+        ctx.restore();
+    }
 }
 ```
 

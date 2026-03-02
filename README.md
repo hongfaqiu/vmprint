@@ -1,14 +1,14 @@
 # VMPrint
+
 :: Deterministic typesetting for the programmable web.
 
 ## A pure-JS, zero-dependency typesetting engine that yields bit-perfect PDF output across any runtime—from Cloudflare Workers to the browser. Stop using Headless Chrome to print text.
 
 If you generate PDFs with headless browsers or HTML-to-PDF tools, you've accepted a compromise: heavy dependencies, memory leaks, and "approximate" layout that shifts across environments. VMPrint offers a stable, high-performance alternative. It composes documents from a versioned JSON instruction stream and guarantees identical layout given identical input, down to the sub-point position of every glyph.
 
-*Open-source documentation deserves better than the "crude" look of standard Markdown-to-PDF exports. [Read the beautifully typeset PDF version of this README](docs/readme/readme.pdf) — generated from this source file using `draft2final` and the `opensource` flavor (a gift to help the community move past boring documents, and a gentle nod to a director's benevolent insistence on aesthetic standards).*
+_Open-source documentation deserves better than the "crude" look of standard Markdown-to-PDF exports. [Read the beautifully typeset PDF version of this README](docs/readme/readme.pdf) — generated from this source file using `draft2final` and the `opensource` flavor (a gift to help the community move past boring documents, and a gentle nod to a director's benevolent insistence on aesthetic standards)._
 
 ---
-
 
 ![VMPrint manifesto](docs/readme/manifesto-1.png)
 
@@ -29,7 +29,6 @@ If you generate PDFs with headless browsers or HTML-to-PDF tools, you've accepte
 ![VMPrint manifesto](docs/readme/manifesto-2.png)
 
 > **One engine. Every script. Baselines, shaping, and directionality remain stable across mixed-language content.** The above image -- including all annotations, measurement guides, legends, and script direction markers -- are rendered entirely by VMPrint. The source documents are available in the repository under /docs/readme/.
-
 
 ## Background
 
@@ -127,10 +126,10 @@ const pages = engine.paginate(documentInput.elements);
 
 const output = fs.createWriteStream('output.pdf');
 const context = new PdfContext(output, {
-  size: [612, 792],
-  margins: { top: 0, right: 0, bottom: 0, left: 0 },
-  autoFirstPage: false,
-  bufferPages: false
+    size: [612, 792],
+    margins: { top: 0, right: 0, bottom: 0, left: 0 },
+    autoFirstPage: false,
+    bufferPages: false,
 });
 
 const renderer = new Renderer(config, false, runtime);
@@ -140,6 +139,7 @@ await renderer.render(pages, context);
 ## What It Can Do
 
 **Pagination**
+
 - `keepWithNext`, `pageBreakBefore`, orphan and widow controls
 - Tables that span pages: `colspan`, `rowspan`, row splitting, repeated header rows
 - Drop caps
@@ -169,6 +169,7 @@ RTL/bidi support is partial today. Full UAX #9-grade bidirectional behavior is a
 > **Multilingual Rendering.** The images above — including all annotations, measurement guides, legends, and script direction markers — are rendered entirely by VMPrint. Source document can be found in the repository under `engine\tests\fixtures\regression`.
 
 **Architecture**
+
 - Core engine is pure TypeScript with zero runtime environment dependencies — no Node.js APIs, no DOM, no native modules
 - One codebase runs in-browser, Node.js, serverless, and edge runtimes with identical layout output
 - Swappable font managers and rendering contexts via clean interfaces
@@ -181,10 +182,10 @@ VMPrint is built for sustained throughput. The measurement cache, font cache, an
 
 On a 9-watt low-power i7, the engine's most complex regression fixture — 8 pages of mixed-script typography, floated images, and multi-page tables — completes in:
 
-| Scenario | font load | layout | total |
-|---|---|---|---|
-| **Warm** (shared runtime, batch pipeline) | ~10 ms | ~66 ms | ~87 ms |
-| **Cold** (fresh process, first invocation) | ~53 ms | ~239 ms | ~292 ms |
+| Scenario                                   | font load | layout  | total   |
+| ------------------------------------------ | --------- | ------- | ------- |
+| **Warm** (shared runtime, batch pipeline)  | ~10 ms    | ~66 ms  | ~87 ms  |
+| **Cold** (fresh process, first invocation) | ~53 ms    | ~239 ms | ~292 ms |
 
 The warm figure is what batch PDF generation looks like after the first document has been processed: fonts are already parsed, text measurements are cached, and `paginate()` spends its time on composition rather than measurement. The cold figure is what a fresh CLI invocation sees — fonts parsed from disk, measurement cache empty, JIT compilation running through the hot paths for the first time.
 
@@ -209,14 +210,14 @@ Because the pipeline is synchronous and the footprint is minimal, VMPrint can ru
 
 This is a monorepo:
 
-| Package | Purpose |
-|---|---|
-| `@vmprint/contracts` | Shared interfaces |
-| `@vmprint/engine` | Deterministic typesetting core |
-| `@vmprint/context-pdf` | PDF output context |
-| `@vmprint/local-fonts` | Filesystem font loading |
-| `@vmprint/cli` | `vmprint` JSON → bit-perfect PDF CLI |
-| `@draft2final/cli` | Markdown → bit-perfect PDF compiler |
+| Package                | Purpose                              |
+| ---------------------- | ------------------------------------ |
+| `@vmprint/contracts`   | Shared interfaces                    |
+| `@vmprint/engine`      | Deterministic typesetting core       |
+| `@vmprint/context-pdf` | PDF output context                   |
+| `@vmprint/local-fonts` | Filesystem font loading              |
+| `@vmprint/cli`         | `vmprint` JSON → bit-perfect PDF CLI |
+| `@draft2final/cli`     | Markdown → bit-perfect PDF compiler  |
 
 ## Contributing
 

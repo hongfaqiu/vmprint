@@ -43,7 +43,16 @@
  * them on the same baseline; _lineOffsets provides the per-slot X position.
  */
 
-import { Box, BoxImagePayload, Element, ElementStyle, RichLine, StoryFloatAlign, StoryLayoutDirective, StoryWrapMode } from '../../types';
+import {
+    Box,
+    BoxImagePayload,
+    Element,
+    ElementStyle,
+    RichLine,
+    StoryFloatAlign,
+    StoryLayoutDirective,
+    StoryWrapMode,
+} from '../../types';
 import { LayoutProcessor } from '../layout-core';
 import { LayoutUtils } from '../layout-utils';
 import { LayoutBox, PackagerContext, PackagerUnit } from './packager-types';
@@ -68,8 +77,8 @@ type PlacedTextElement = {
     kind: 'text';
     childIndex: number;
     box: Box;
-    topY: number;       // box.y (= cursorBefore + marginTop)
-    contentH: number;   // box.h
+    topY: number; // box.y (= cursorBefore + marginTop)
+    contentH: number; // box.h
     insetV: number;
     marginTop: number;
     marginBottom: number;
@@ -122,10 +131,18 @@ class FrozenStoryPackager implements PackagerUnit {
         return [null, this];
     }
 
-    getRequiredHeight(): number { return this.frozenHeight; }
-    isUnbreakable(_ah: number): boolean { return true; }
-    getMarginTop(): number { return 0; }
-    getMarginBottom(): number { return 0; }
+    getRequiredHeight(): number {
+        return this.frozenHeight;
+    }
+    isUnbreakable(_ah: number): boolean {
+        return true;
+    }
+    getMarginTop(): number {
+        return 0;
+    }
+    getMarginBottom(): number {
+        return 0;
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -157,7 +174,7 @@ export class StoryPackager implements PackagerUnit {
         processor: LayoutProcessor,
         storyIndex: number,
         initialObstacles?: CarryOverObstacle[],
-        storyYOffset?: number
+        storyYOffset?: number,
     ) {
         this.storyElement = storyElement;
         this.processor = processor;
@@ -186,13 +203,18 @@ export class StoryPackager implements PackagerUnit {
         return false;
     }
 
-    getMarginTop(): number { return 0; }
-    getMarginBottom(): number { return 0; }
+    getMarginTop(): number {
+        return 0;
+    }
+    getMarginBottom(): number {
+        return 0;
+    }
 
     split(availableHeight: number, context: PackagerContext): [PackagerUnit | null, PackagerUnit | null] {
-        const availableWidth = this.lastAvailableWidth > 0
-            ? this.lastAvailableWidth
-            : (context.pageWidth - context.margins.left - context.margins.right);
+        const availableWidth =
+            this.lastAvailableWidth > 0
+                ? this.lastAvailableWidth
+                : context.pageWidth - context.margins.left - context.margins.right;
 
         const result = this.lastResult ?? this.pourAll(availableWidth, context.margins);
         return this.splitResult(result, availableHeight, availableWidth, context.margins);
@@ -202,14 +224,17 @@ export class StoryPackager implements PackagerUnit {
 
     private pourAll(
         availableWidth: number,
-        margins: { left: number; right: number; top: number; bottom: number }
+        margins: { left: number; right: number; top: number; bottom: number },
     ): FullPourResult {
         const children = this.storyElement.children ?? [];
         const storyMap = new SpatialMap();
         const registeredObstacles: OccupiedRect[] = [];
         const imageMetricsCache = new Map<number, { img: BoxImagePayload; w: number; h: number } | null>();
 
-        const resolveImageMetrics = (child: Element, index: number): { img: BoxImagePayload; w: number; h: number } | null => {
+        const resolveImageMetrics = (
+            child: Element,
+            index: number,
+        ): { img: BoxImagePayload; w: number; h: number } | null => {
             if (!child.properties?.image) return null;
             if (imageMetricsCache.has(index)) return imageMetricsCache.get(index)!;
             const imgData = this.resolveImage(child);
@@ -227,8 +252,14 @@ export class StoryPackager implements PackagerUnit {
         // previous page and occupy the top of this continuation page).
         for (const co of this.initialObstacles) {
             const rect: OccupiedRect = {
-                x: co.x, y: 0, w: co.w, h: co.remainingH, wrap: co.wrap, gap: co.gap,
-                gapTop: co.gapTop, gapBottom: co.gapBottom
+                x: co.x,
+                y: 0,
+                w: co.w,
+                h: co.remainingH,
+                wrap: co.wrap,
+                gap: co.gap,
+                gapTop: co.gapTop,
+                gapBottom: co.gapBottom,
             };
             storyMap.register(rect);
             registeredObstacles.push(rect);
@@ -257,7 +288,7 @@ export class StoryPackager implements PackagerUnit {
                 w: imgW,
                 h: imgH,
                 wrap: layout.wrap ?? 'around',
-                gap: Math.max(0, Number(layout.gap ?? 0))
+                gap: Math.max(0, Number(layout.gap ?? 0)),
             };
             storyMap.register(rect);
             registeredObstacles.push(rect);
@@ -286,8 +317,13 @@ export class StoryPackager implements PackagerUnit {
                 const box = this.buildImageBox(child, margins.left + x, effectiveY, imgW, imgH, imgData, i);
                 allBoxes.push(box);
                 placedElements.push({
-                    kind: 'image', childIndex: i, box,
-                    topY: effectiveY, bottomY: effectiveY + imgH, isFloat: false, isAbsolute: true
+                    kind: 'image',
+                    childIndex: i,
+                    box,
+                    topY: effectiveY,
+                    bottomY: effectiveY + imgH,
+                    isFloat: false,
+                    isAbsolute: true,
                 });
                 continue;
             }
@@ -309,19 +345,27 @@ export class StoryPackager implements PackagerUnit {
 
                 if (wrap !== 'none') {
                     const rect: OccupiedRect = {
-                        x: floatX, y: cursorY, w: imgW, h: imgH, wrap, gap
+                        x: floatX,
+                        y: cursorY,
+                        w: imgW,
+                        h: imgH,
+                        wrap,
+                        gap,
                     };
                     storyMap.register(rect);
                     registeredObstacles.push(rect);
                 }
 
-                const box = this.buildImageBox(
-                    child, margins.left + floatX, cursorY, imgW, imgH, imgData, i
-                );
+                const box = this.buildImageBox(child, margins.left + floatX, cursorY, imgW, imgH, imgData, i);
                 allBoxes.push(box);
                 placedElements.push({
-                    kind: 'image', childIndex: i, box,
-                    topY: cursorY, bottomY: cursorY + imgH, isFloat: true, isAbsolute: false
+                    kind: 'image',
+                    childIndex: i,
+                    box,
+                    topY: cursorY,
+                    bottomY: cursorY + imgH,
+                    isFloat: true,
+                    isAbsolute: false,
                 });
                 // Floats do NOT advance cursorY — text flows alongside them.
                 continue;
@@ -334,29 +378,28 @@ export class StoryPackager implements PackagerUnit {
                 const { img: imgData, w: imgW, h: imgH } = metrics;
 
                 cursorY = storyMap.topBottomClearY(cursorY);
-                const flowBox = (this.processor as any).shapeElement(
-                    child, { path: [this.storyIndex, i] }
-                );
+                const flowBox = (this.processor as any).shapeElement(child, { path: [this.storyIndex, i] });
                 const marginTop = Math.max(0, flowBox.marginTop);
                 const marginBottom = Math.max(0, flowBox.marginBottom);
                 const boxY = cursorY + marginTop;
 
-                const box = this.buildImageBox(
-                    child, margins.left, boxY, imgW, imgH, imgData, i
-                );
+                const box = this.buildImageBox(child, margins.left, boxY, imgW, imgH, imgData, i);
                 allBoxes.push(box);
                 placedElements.push({
-                    kind: 'image', childIndex: i, box,
-                    topY: boxY, bottomY: boxY + imgH, isFloat: false, isAbsolute: false
+                    kind: 'image',
+                    childIndex: i,
+                    box,
+                    topY: boxY,
+                    bottomY: boxY + imgH,
+                    isFloat: false,
+                    isAbsolute: false,
                 });
                 cursorY = boxY + imgH + marginBottom;
                 continue;
             }
 
             // ---- text / block element --------------------------------------
-            const placed = this.pourTextChild(
-                child, i, availableWidth, margins, storyMap, cursorY
-            );
+            const placed = this.pourTextChild(child, i, availableWidth, margins, storyMap, cursorY);
             if (placed) {
                 allBoxes.push(placed.box);
                 placedElements.push(placed);
@@ -379,12 +422,10 @@ export class StoryPackager implements PackagerUnit {
         availableWidth: number,
         margins: { left: number },
         storyMap: SpatialMap,
-        cursorY: number
+        cursorY: number,
     ): PlacedTextElement | null {
         // Shape gives us style, meta, and margin values.
-        const flowBox = (this.processor as any).shapeElement(
-            element, { path: [this.storyIndex, childIndex] }
-        );
+        const flowBox = (this.processor as any).shapeElement(element, { path: [this.storyIndex, childIndex] });
         const style: ElementStyle = flowBox.style;
         const fontSize = Number(style.fontSize || (this.processor as any).config.layout.fontSize);
         const lineHeightRatio = Number(style.lineHeight || (this.processor as any).config.layout.lineHeight);
@@ -405,7 +446,7 @@ export class StoryPackager implements PackagerUnit {
         const insetH = LayoutUtils.getHorizontalInsets(style);
         const insetV = LayoutUtils.getVerticalInsets(style);
         const contentWidth = Math.max(0, availableWidth - insetH);
-        const opticalUnderhang = !!((this.processor as any).config?.layout?.storyWrapOpticalUnderhang);
+        const opticalUnderhang = !!(this.processor as any).config?.layout?.storyWrapOpticalUnderhang;
 
         // -------------------------------------------------------------------
         // Stateful line-layout resolver with dual-stream support
@@ -432,7 +473,9 @@ export class StoryPackager implements PackagerUnit {
         const pendingSlots: Array<{ width: number; xOffset: number; yOffset: number }> = [];
 
         const lineLayoutOut: { widths: number[]; offsets: number[]; yOffsets: number[] } = {
-            widths: [], offsets: [], yOffsets: []
+            widths: [],
+            offsets: [],
+            yOffsets: [],
         };
 
         const resolver = (lineIndex: number): { width: number; xOffset: number; yOffset: number } => {
@@ -460,7 +503,7 @@ export class StoryPackager implements PackagerUnit {
                 lineY,
                 uniformLH,
                 availableWidth,
-                opticalUnderhang ? { opticalUnderhang: true } : undefined
+                opticalUnderhang ? { opticalUnderhang: true } : undefined,
             );
 
             if (resolvedIntervals.length === 0) {
@@ -477,7 +520,7 @@ export class StoryPackager implements PackagerUnit {
                     pendingSlots.push({
                         width: Math.max(0, resolvedIntervals[j].w - insetH),
                         xOffset: resolvedIntervals[j].x,
-                        yOffset
+                        yOffset,
                     });
                 }
             }
@@ -485,7 +528,7 @@ export class StoryPackager implements PackagerUnit {
             return {
                 width: Math.max(0, resolvedIntervals[0].w - insetH),
                 xOffset: resolvedIntervals[0].x,
-                yOffset
+                yOffset,
             };
         };
 
@@ -497,16 +540,14 @@ export class StoryPackager implements PackagerUnit {
             letterSpacing,
             textIndent,
             resolver,
-            lineLayoutOut
+            lineLayoutOut,
         );
 
         if (!lines || lines.length === 0) return null;
 
         // Height of the content area (accounts for any Y-jumps from obstacle
         // skips via calculateLineBlockHeight's lineYOffsets branch).
-        const linesH: number = (this.processor as any).calculateLineBlockHeight(
-            lines, style, lineLayoutOut.yOffsets
-        );
+        const linesH: number = (this.processor as any).calculateLineBlockHeight(lines, style, lineLayoutOut.yOffsets);
         const contentH = linesH + insetV;
 
         const box: Box = {
@@ -525,7 +566,7 @@ export class StoryPackager implements PackagerUnit {
                 _isFirstLine: true,
                 _isLastLine: true,
             },
-            meta: { ...flowBox.meta, pageIndex: 0 }
+            meta: { ...flowBox.meta, pageIndex: 0 },
         };
 
         return {
@@ -553,7 +594,7 @@ export class StoryPackager implements PackagerUnit {
         result: FullPourResult,
         splitH: number,
         availableWidth: number,
-        margins: { left: number; right: number; top: number; bottom: number }
+        margins: { left: number; right: number; top: number; bottom: number },
     ): [PackagerUnit | null, PackagerUnit | null] {
         const children = this.storyElement.children ?? [];
 
@@ -593,7 +634,7 @@ export class StoryPackager implements PackagerUnit {
                     // Block image (top-bottom): include only if it fits.
                     if (bottom <= splitH) {
                         partABoxes.push({ ...elem.box });
-                        recordPartAHeight(bottom + (0 /* marginBottom tracked separately */));
+                        recordPartAHeight(bottom + 0 /* marginBottom tracked separately */);
                     } else if (elem.topY < splitH) {
                         // Straddles split: move to partB (no-clip).
                         partBStartChildIdx = Math.min(partBStartChildIdx, elem.childIndex);
@@ -613,9 +654,7 @@ export class StoryPackager implements PackagerUnit {
                 // Needs to be split within this element.
                 let k = -1;
                 for (let j = 0; j < elem.lines.length; j++) {
-                    const yOff = elem.lineYOffsets.length > j
-                        ? elem.lineYOffsets[j]
-                        : j * elem.uniformLH;
+                    const yOff = elem.lineYOffsets.length > j ? elem.lineYOffsets[j] : j * elem.uniformLH;
                     // The line's absolute bottom in story coords:
                     const lineAbsBottom = elem.topY + yOff + elem.uniformLH;
                     if (lineAbsBottom <= splitH) k = j;
@@ -623,9 +662,7 @@ export class StoryPackager implements PackagerUnit {
 
                 if (k >= 0) {
                     // Emit a partial box with lines 0..k.
-                    const partialYOff = elem.lineYOffsets.length > k
-                        ? elem.lineYOffsets[k]
-                        : k * elem.uniformLH;
+                    const partialYOff = elem.lineYOffsets.length > k ? elem.lineYOffsets[k] : k * elem.uniformLH;
                     const partialContentH = partialYOff + elem.uniformLH + elem.insetV;
 
                     partABoxes.push({
@@ -638,23 +675,18 @@ export class StoryPackager implements PackagerUnit {
                             _lineOffsets: elem.lineOffsets.slice(0, k + 1),
                             _lineWidths: elem.lineWidths.slice(0, k + 1),
                             _isLastLine: false,
-                        }
+                        },
                     });
                     recordPartAHeight(elem.topY + partialContentH);
 
                     // Build the continuation element for partB.
-                    partBContinuationElement = this.sliceSourceElement(
-                        elem.sourceElement,
-                        elem.lines,
-                        k + 1
-                    );
+                    partBContinuationElement = this.sliceSourceElement(elem.sourceElement, elem.lines, k + 1);
                     partBStartChildIdx = elem.childIndex + 1;
                 } else {
                     // Not even one line fits → push entire element to partB.
                     partBStartChildIdx = elem.childIndex;
                 }
                 break; // everything from here goes to partB
-
             } else {
                 // Element starts below splitH → entire element to partB.
                 partBStartChildIdx = elem.childIndex;
@@ -680,7 +712,7 @@ export class StoryPackager implements PackagerUnit {
                     wrap: obs.wrap,
                     gap: obs.gap,
                     gapTop: 0,
-                    gapBottom: obs.gap
+                    gapBottom: obs.gap,
                 });
             }
         }
@@ -711,7 +743,7 @@ export class StoryPackager implements PackagerUnit {
 
         const partBElement: Element = {
             ...this.storyElement,
-            children: partBChildren
+            children: partBChildren,
         };
 
         const partB = new StoryPackager(
@@ -719,7 +751,7 @@ export class StoryPackager implements PackagerUnit {
             this.processor,
             this.storyIndex,
             carryOvers,
-            this.storyYOffset + splitH
+            this.storyYOffset + splitH,
         );
 
         return [partA, partB];
@@ -734,9 +766,9 @@ export class StoryPackager implements PackagerUnit {
     private measureImageBox(
         element: Element,
         imgData: BoxImagePayload,
-        availableWidth: number
+        availableWidth: number,
     ): { w: number; h: number } {
-        const style = ((element.properties?.style || {}) as ElementStyle);
+        const style = (element.properties?.style || {}) as ElementStyle;
         const insetH = LayoutUtils.getHorizontalInsets(style);
         const insetV = LayoutUtils.getVerticalInsets(style);
 
@@ -770,11 +802,9 @@ export class StoryPackager implements PackagerUnit {
         w: number,
         h: number,
         imgData: BoxImagePayload,
-        childIndex: number
+        childIndex: number,
     ): Box {
-        const flowBox = (this.processor as any).shapeElement(
-            element, { path: [this.storyIndex, childIndex] }
-        );
+        const flowBox = (this.processor as any).shapeElement(element, { path: [this.storyIndex, childIndex] });
         return {
             type: element.type,
             x: absX,
@@ -790,7 +820,7 @@ export class StoryPackager implements PackagerUnit {
                 _isFirstFragmentInLine: true,
                 _isLastFragmentInLine: true,
             },
-            meta: { ...flowBox.meta, pageIndex: 0 }
+            meta: { ...flowBox.meta, pageIndex: 0 },
         };
     }
 
@@ -800,18 +830,10 @@ export class StoryPackager implements PackagerUnit {
      *
      * Uses the same character-slicing approach as splitFlowBoxWithCallbacks.
      */
-    private sliceSourceElement(
-        element: Element,
-        lines: RichLine[],
-        consumedLineCount: number
-    ): Element {
-        const renderedText: string = (this.processor as any).getJoinedLineText(
-            lines.slice(0, consumedLineCount)
-        );
+    private sliceSourceElement(element: Element, lines: RichLine[], consumedLineCount: number): Element {
+        const renderedText: string = (this.processor as any).getJoinedLineText(lines.slice(0, consumedLineCount));
         const sourceText: string = (this.processor as any).getElementText(element);
-        const consumedChars: number = (this.processor as any).resolveConsumedSourceChars(
-            sourceText, renderedText
-        );
+        const consumedChars: number = (this.processor as any).resolveConsumedSourceChars(sourceText, renderedText);
         const remaining = Math.max(0, sourceText.length - consumedChars);
 
         let continuation: Element;
@@ -820,13 +842,15 @@ export class StoryPackager implements PackagerUnit {
                 ...element,
                 content: '',
                 children: (this.processor as any).sliceElements(
-                    element.children, consumedChars, consumedChars + remaining
-                )
+                    element.children,
+                    consumedChars,
+                    consumedChars + remaining,
+                ),
             };
         } else {
             continuation = {
                 ...element,
-                content: sourceText.slice(consumedChars)
+                content: sourceText.slice(consumedChars),
             };
         }
 
@@ -838,11 +862,7 @@ export class StoryPackager implements PackagerUnit {
 // Module-level helpers
 // ---------------------------------------------------------------------------
 
-function resolveFloatX(
-    align: StoryFloatAlign,
-    imgW: number,
-    availableWidth: number
-): number {
+function resolveFloatX(align: StoryFloatAlign, imgW: number, availableWidth: number): number {
     if (align === 'right') return Math.max(0, availableWidth - imgW);
     if (align === 'center') return Math.max(0, (availableWidth - imgW) / 2);
     return 0; // 'left'

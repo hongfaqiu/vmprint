@@ -8,18 +8,18 @@ export type VmprintDocumentVersion = '1.0';
 export type VmprintIRVersion = '1.0';
 
 export type TextSegment = {
-    text: string,
-    fontFamily?: string,
-    linkTarget?: string,
-    style?: Record<string, any>,
-    inlineObject?: InlineObjectSegment,
-    inlineMetrics?: InlineObjectMetrics,
-    glyphs?: { char: string, x: number, y: number }[],
-    width?: number,
-    ascent?: number,
-    descent?: number,
-    justifyAfter?: number,
-    forcedBreakAfter?: boolean
+    text: string;
+    fontFamily?: string;
+    linkTarget?: string;
+    style?: Record<string, any>;
+    inlineObject?: InlineObjectSegment;
+    inlineMetrics?: InlineObjectMetrics;
+    glyphs?: { char: string; x: number; y: number }[];
+    width?: number;
+    ascent?: number;
+    descent?: number;
+    justifyAfter?: number;
+    forcedBreakAfter?: boolean;
 };
 
 export type RichLine = TextSegment[];
@@ -235,7 +235,7 @@ export interface ElementStyle {
 
 export interface LayoutConfig {
     layout: {
-        pageSize: 'A4' | 'LETTER' | { width: number, height: number };
+        pageSize: 'A4' | 'LETTER' | { width: number; height: number };
         orientation?: 'portrait' | 'landscape';
         margins: { top: number; right: number; bottom: number; left: number };
         fontFamily: string;
@@ -313,7 +313,7 @@ export interface Box {
     image?: BoxImagePayload;
     content?: string;
     lines?: RichLine[];
-    glyphs?: { char: string, x: number, y: number }[];
+    glyphs?: { char: string; x: number; y: number }[];
     ascent?: number;
     style: ElementStyle;
     decorationOffset?: number;

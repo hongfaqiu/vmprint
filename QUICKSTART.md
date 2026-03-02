@@ -148,11 +148,11 @@ pnpm test:update-snapshots
 
 ## Project structure
 
-| Path | Package | Purpose |
-|---|---|---|
-| `packages/contracts/` | `@vmprint/contracts` | Shared TypeScript interfaces |
-| `packages/engine/` | `@vmprint/engine` | Deterministic typesetting core |
-| `packages/context-pdf/` | `@vmprint/context-pdf` | PDF rendering context |
-| `packages/local-fonts/` | `@vmprint/local-fonts` | Local filesystem font manager |
-| `packages/cli/` | `@vmprint/cli` | `vmprint` CLI — JSON → bit-perfect PDF |
-| `packages/draft2final/` | `@draft2final/cli` | `draft2final` CLI — Markdown → bit-perfect PDF |
+| Path                    | Package                | Purpose                                        |
+| ----------------------- | ---------------------- | ---------------------------------------------- |
+| `packages/contracts/`   | `@vmprint/contracts`   | Shared TypeScript interfaces                   |
+| `packages/engine/`      | `@vmprint/engine`      | Deterministic typesetting core                 |
+| `packages/context-pdf/` | `@vmprint/context-pdf` | PDF rendering context                          |
+| `packages/local-fonts/` | `@vmprint/local-fonts` | Local filesystem font manager                  |
+| `packages/cli/`         | `@vmprint/cli`         | `vmprint` CLI — JSON → bit-perfect PDF         |
+| `packages/draft2final/` | `@draft2final/cli`     | `draft2final` CLI — Markdown → bit-perfect PDF |

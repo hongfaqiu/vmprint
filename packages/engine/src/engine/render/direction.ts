@@ -5,9 +5,9 @@ export const getStrongDirection = (text: string): 'ltr' | 'rtl' | 'neutral' => {
     for (const ch of text || '') {
         const cp = ch.codePointAt(0) || 0;
         const isRtl =
-            (cp >= 0x0590 && cp <= 0x08FF) || // Hebrew + Arabic + Syriac + Thaana etc.
-            (cp >= 0xFB1D && cp <= 0xFDFF) ||
-            (cp >= 0xFE70 && cp <= 0xFEFF);
+            (cp >= 0x0590 && cp <= 0x08ff) || // Hebrew + Arabic + Syriac + Thaana etc.
+            (cp >= 0xfb1d && cp <= 0xfdff) ||
+            (cp >= 0xfe70 && cp <= 0xfeff);
         if (isRtl) return 'rtl';
         if (/\p{L}|\p{N}/u.test(ch)) return 'ltr';
     }
@@ -18,16 +18,14 @@ export const resolveLineDirection = (
     line: RendererLine,
     containerStyle: ElementStyle,
     layoutDirection?: string,
-    defaultDirection?: string
+    defaultDirection?: string,
 ): 'ltr' | 'rtl' => {
     const configured = String(containerStyle.direction || layoutDirection || defaultDirection);
     if (configured === 'rtl') return 'rtl';
     if (configured === 'ltr') return 'ltr';
 
     // auto: first strong character decides base paragraph direction.
-    const lineText = Array.isArray(line)
-        ? line.map((seg) => seg?.text || '').join('')
-        : String(line || '');
+    const lineText = Array.isArray(line) ? line.map((seg) => seg?.text || '').join('') : String(line || '');
     const strong = getStrongDirection(lineText);
     return strong === 'rtl' ? 'rtl' : 'ltr';
 };

@@ -18,14 +18,14 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname  = path.dirname(__filename);
+const __dirname = path.dirname(__filename);
 
 // ── Paths ────────────────────────────────────────────────────────────────────
-const WORKSPACE_ROOT  = path.resolve(__dirname, '..', '..', '..', '..');
-const REGRESSION_DIR  = __dirname;
-const OUTPUT_DIR      = path.join(REGRESSION_DIR, 'output');
-const CONTEXT_PATH    = path.join(WORKSPACE_ROOT, 'contexts', 'pdf', 'src', 'index.ts');
-const FONT_MANAGER    = path.join(WORKSPACE_ROOT, 'font-managers', 'local', 'src', 'index.ts');
+const WORKSPACE_ROOT = path.resolve(__dirname, '..', '..', '..', '..');
+const REGRESSION_DIR = __dirname;
+const OUTPUT_DIR = path.join(REGRESSION_DIR, 'output');
+const CONTEXT_PATH = path.join(WORKSPACE_ROOT, 'contexts', 'pdf', 'src', 'index.ts');
+const FONT_MANAGER = path.join(WORKSPACE_ROOT, 'font-managers', 'local', 'src', 'index.ts');
 
 // ── Ensure output directory exists ───────────────────────────────────────────
 if (!fs.existsSync(OUTPUT_DIR)) {
@@ -34,8 +34,9 @@ if (!fs.existsSync(OUTPUT_DIR)) {
 }
 
 // ── Collect fixtures ──────────────────────────────────────────────────────────
-const fixtures = fs.readdirSync(REGRESSION_DIR)
-    .filter(f => f.endsWith('.json') && !f.endsWith('.snapshot.layout.json'))
+const fixtures = fs
+    .readdirSync(REGRESSION_DIR)
+    .filter((f) => f.endsWith('.json') && !f.endsWith('.snapshot.layout.json'))
     .sort((a, b) => a.localeCompare(b));
 
 console.log(`[generate-fixture-pdfs] Found ${fixtures.length} fixtures to render.\n`);
@@ -46,8 +47,8 @@ let failed = 0;
 const failures = [];
 
 for (const fixture of fixtures) {
-    const inputPath  = path.join(REGRESSION_DIR, fixture);
-    const baseName   = fixture.replace(/\.json$/i, '');
+    const inputPath = path.join(REGRESSION_DIR, fixture);
+    const baseName = fixture.replace(/\.json$/i, '');
     const outputPath = path.join(OUTPUT_DIR, `${baseName}.pdf`);
 
     // CLI auto-picks up <baseName>.overlay.mjs in the same directory — no extra flag needed.
@@ -77,7 +78,7 @@ for (const fixture of fixtures) {
 console.log(`\n[generate-fixture-pdfs] Done — ${passed} succeeded, ${failed} failed.`);
 if (failures.length > 0) {
     console.error('\nFailed fixtures:');
-    failures.forEach(f => console.error(`  • ${f.fixture}`));
+    failures.forEach((f) => console.error(`  • ${f.fixture}`));
     process.exit(1);
 }
 console.log(`\nPDFs written to: ${OUTPUT_DIR}`);

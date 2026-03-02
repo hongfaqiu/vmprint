@@ -1,6 +1,6 @@
 import { Box } from '../../types';
 
-export interface LayoutBox extends Box { }
+export interface LayoutBox extends Box {}
 
 export interface PackagerContext {
     processor: any; // We'll cast to LayoutProcessor
@@ -12,7 +12,7 @@ export interface PackagerContext {
 }
 
 export interface PackagerUnit {
-    /** 
+    /**
      * Emit boxes for the given available space.
      * Returns null if it absolutely cannot even start to fit.
      * Must be deterministic for the same availableWidth/context; avoid height-dependent layout.

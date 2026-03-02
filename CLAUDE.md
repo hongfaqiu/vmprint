@@ -25,6 +25,7 @@ vmprint/
 ## Common Commands
 
 ### Quick Run (single execution, cwd = repo root)
+
 ```bash
 pnpm cli -i packages/engine/tests/fixtures/regression/00-all-capabilities.json -o out.pdf
 pnpm cli -i doc.json -o out.pdf --debug --profile-layout
@@ -33,6 +34,7 @@ pnpm d2f build input.md -o output.pdf --format markdown --flavor academic
 ```
 
 ### Watch Mode (hot reload on source change)
+
 ```bash
 pnpm dev                                    # all packages: tsc --watch + tsx watch
 pnpm dev:cli -- -i doc.json -o out.pdf      # only cli watch
@@ -40,12 +42,14 @@ pnpm dev:d2f -- build input.md -o out.pdf   # only draft2final watch
 ```
 
 ### Build
+
 ```bash
 pnpm build           # all packages via Turborepo (cached, parallel)
 pnpm clean           # clean all dist/
 ```
 
 ### Test
+
 ```bash
 pnpm test            # all tests via Turborepo
 pnpm test:engine     # engine — all three suites
@@ -58,6 +62,7 @@ pnpm test:update-snapshots   # update all layout snapshots
 ```
 
 ### Quality
+
 ```bash
 pnpm lint            # ESLint all packages
 pnpm lint:fix        # ESLint with auto-fix
@@ -67,6 +72,7 @@ pnpm format:check    # Prettier check only
 ```
 
 ### Release
+
 ```bash
 pnpm changeset              # create a changeset
 pnpm version-packages       # bump versions from changesets
@@ -83,16 +89,20 @@ Markdown/JSON  →  DocumentInput (IR)  →  Page[] of Box[]  →  PDF
 ```
 
 ### Stage 1 — Source to IR
+
 `draft2final` converts Markdown → `SemanticDocument` (via remark) → `DocumentInput` (via format modules in `packages/draft2final/src/formats/`). The engine also accepts `DocumentInput` JSON directly.
 
 ### Stage 2 — Layout (engine core)
+
 `LayoutEngine` takes `DocumentInput` and produces `Page[]` — each page is a flat array of absolutely-positioned `Box` objects. Key internals:
+
 - **`layout-core.ts`** (`LayoutProcessor`): element shaping and materialization
 - **`text-processor.ts`**: line breaking, hyphenation, justification
 - **`packagers/`**: pagination units (`FlowBoxPackager`, `TablePackager`, `StoryPackager`, `DropCapPackager`) — each element type has its own packager implementing `PackagerUnit` interface
 - **`paginate-packagers.ts`**: pagination loop that drives all packagers
 
 ### Stage 3 — Rendering
+
 `Renderer` walks flat `Page[]` and paints boxes to a `Context` interface. Layout and rendering are fully decoupled.
 
 ## Key Design Principles

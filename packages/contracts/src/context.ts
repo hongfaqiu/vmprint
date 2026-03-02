@@ -23,14 +23,7 @@ export interface Context {
     // Shapes
     moveTo(x: number, y: number): this;
     lineTo(x: number, y: number): this;
-    bezierCurveTo(
-        cp1x: number,
-        cp1y: number,
-        cp2x: number,
-        cp2y: number,
-        x: number,
-        y: number
-    ): this;
+    bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): this;
     rect(x: number, y: number, w: number, h: number): this;
     roundedRect(x: number, y: number, w: number, h: number, r: number): this;
     fill(rule?: 'nonzero' | 'evenodd'): this;
@@ -61,11 +54,7 @@ export interface ContextImageOptions {
     mimeType?: string;
 }
 
-export type ContextPageSize =
-    | 'A4'
-    | 'LETTER'
-    | [number, number]
-    | { width: number; height: number };
+export type ContextPageSize = 'A4' | 'LETTER' | [number, number] | { width: number; height: number };
 
 export interface ContextFactoryOptions {
     size: ContextPageSize;

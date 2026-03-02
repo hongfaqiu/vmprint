@@ -1,21 +1,10 @@
-import {
-    Box,
-    LayoutConfig,
-    Page
-} from './types';
+import { Box, LayoutConfig, Page } from './types';
 import { Context, OverlayBox, OverlayContext, OverlayPage, OverlayProvider } from '@vmprint/contracts';
 import { LayoutUtils } from './layout/layout-utils';
 import { EngineRuntime, getDefaultEngineRuntime } from './runtime';
-import {
-    RendererBoxProperties,
-    RendererLine
-} from './render/types';
+import { RendererBoxProperties, RendererLine } from './render/types';
 import { drawDebugBoxOverlay, drawDebugPageMargins } from './render/debug-draw';
-import {
-    drawBoxBackground,
-    drawBoxBorders,
-    drawImageBox
-} from './render/box-paint';
+import { drawBoxBackground, drawBoxBorders, drawImageBox } from './render/box-paint';
 import { registerRendererFonts } from './render/font-registration';
 import { RendererImageBytesCache } from './render/image-bytes-cache';
 import { drawRichLines } from './render/rich-lines';
@@ -50,8 +39,8 @@ export class Renderer {
         protected config: LayoutConfig,
         protected debug: boolean = false,
         protected runtime: EngineRuntime = getDefaultEngineRuntime(),
-        protected overlay?: OverlayProvider
-    ) { }
+        protected overlay?: OverlayProvider,
+    ) {}
 
     async render(pages: Page[], context: Context): Promise<void> {
         await this.registerFonts(context);
@@ -60,8 +49,11 @@ export class Renderer {
             context.addPage();
             if (this.config.layout.pageBackground) {
                 context.save();
-                context.fillColor(this.config.layout.pageBackground).opacity(1)
-                       .rect(0, 0, page.width, page.height).fill();
+                context
+                    .fillColor(this.config.layout.pageBackground)
+                    .opacity(1)
+                    .rect(0, 0, page.width, page.height)
+                    .fill();
                 context.restore();
             }
             const hasOverlay = !!(this.overlay?.backdrop || this.overlay?.overlay);
@@ -88,13 +80,11 @@ export class Renderer {
                     page.width,
                     page.height,
                     this.config.layout.margins,
-                    this.getFontId(this.config.layout.fontFamily, 400, 'normal')
+                    this.getFontId(this.config.layout.fontFamily, 400, 'normal'),
                 );
-                drawOrder.forEach(({ box }) => drawDebugBoxOverlay(
-                    context,
-                    box,
-                    this.getFontId(this.config.layout.fontFamily, 400, 'normal')
-                ));
+                drawOrder.forEach(({ box }) =>
+                    drawDebugBoxOverlay(context, box, this.getFontId(this.config.layout.fontFamily, 400, 'normal')),
+                );
             }
 
             if (this.overlay?.overlay && overlayPage && overlayContext) {
@@ -109,7 +99,7 @@ export class Renderer {
         await registerRendererFonts({
             context,
             runtime: this.runtime,
-            getFontId: (family, weight, style) => this.getFontId(family, weight, style)
+            getFontId: (family, weight, style) => this.getFontId(family, weight, style),
         });
     }
 
@@ -153,18 +143,22 @@ export class Renderer {
                     layout: this.config.layout,
                     debug: this.debug,
                     getFontId: (family, weight, style) => this.getFontId(family, weight, style),
-                    getImageBytes: (base64Data) => this.imageBytesCache.get(base64Data)
+                    getImageBytes: (base64Data) => this.imageBytesCache.get(base64Data),
                 },
-                (box.properties || {}) as RendererBoxProperties
+                (box.properties || {}) as RendererBoxProperties,
             );
         } else if (box.content || box.glyphs) {
-            const lines = [[{
-                text: box.content || '',
-                glyphs: box.glyphs,
-                ascent: box.ascent,
-                style: { ...boxStyle, textIndent: 0 },
-                width: box.w
-            }]] as RendererLine[];
+            const lines = [
+                [
+                    {
+                        text: box.content || '',
+                        glyphs: box.glyphs,
+                        ascent: box.ascent,
+                        style: { ...boxStyle, textIndent: 0 },
+                        width: box.w,
+                    },
+                ],
+            ] as RendererLine[];
             drawRichLines(
                 context,
                 lines,
@@ -176,9 +170,9 @@ export class Renderer {
                     layout: this.config.layout,
                     debug: this.debug,
                     getFontId: (family, weight, style) => this.getFontId(family, weight, style),
-                    getImageBytes: (base64Data) => this.imageBytesCache.get(base64Data)
+                    getImageBytes: (base64Data) => this.imageBytesCache.get(base64Data),
                 },
-                (box.properties || {}) as RendererBoxProperties
+                (box.properties || {}) as RendererBoxProperties,
             );
         }
 
@@ -195,15 +189,15 @@ export class Renderer {
             w: box.w,
             h: box.h,
             style: box.style ? { ...box.style } : undefined,
-            lines: box.lines?.map(line => line.map(seg => ({ text: seg.text, width: seg.width }))),
+            lines: box.lines?.map((line) => line.map((seg) => ({ text: seg.text, width: seg.width }))),
             meta: box.meta ? { ...box.meta } : undefined,
-            properties: this.buildOverlayBoxProperties(box)
+            properties: this.buildOverlayBoxProperties(box),
         }));
         return {
             index: page.index,
             width: page.width,
             height: page.height,
-            boxes
+            boxes,
         };
     }
 
@@ -237,7 +231,11 @@ export class Renderer {
         const lineHeight = Number(boxStyle.lineHeight || this.config.layout.lineHeight);
         const rendererLines = box.lines as RendererLine[];
         const paragraphMetrics = buildParagraphMetrics(rendererLines, baseFontSize, lineHeight);
-        const lineFrame = createLineFrameAccessors((box.properties || {}) as RendererBoxProperties, contentY, contentWidth);
+        const lineFrame = createLineFrameAccessors(
+            (box.properties || {}) as RendererBoxProperties,
+            contentY,
+            contentWidth,
+        );
 
         const lines: OverlayComputedLineMetric[] = [];
         let currentY = contentY;
@@ -246,12 +244,12 @@ export class Renderer {
             const metric = paragraphMetrics.lineMetrics[lineIndex];
             const actualLineFontSize = metric?.lineFontSize ?? baseFontSize;
             const referenceAscentScale = metric?.referenceAscentScale ?? paragraphMetrics.paragraphReferenceAscentScale;
-            const effectiveLineHeight = metric?.effectiveLineHeight ?? (actualLineFontSize * lineHeight);
+            const effectiveLineHeight = metric?.effectiveLineHeight ?? actualLineFontSize * lineHeight;
             const nominalLineHeight = actualLineFontSize * lineHeight;
             const nominalLeading = nominalLineHeight - actualLineFontSize;
             const vOffset = nominalLeading / 2;
             const lineTop = lineFrame.getLineY(lineIndex) ?? currentY;
-            const baseline = lineTop + vOffset + (referenceAscentScale * actualLineFontSize);
+            const baseline = lineTop + vOffset + referenceAscentScale * actualLineFontSize;
             const bottom = lineTop + effectiveLineHeight;
 
             let ascent = 0;
@@ -277,7 +275,7 @@ export class Renderer {
                 fontSize: actualLineFontSize,
                 referenceAscentScale,
                 ascent,
-                descent
+                descent,
             });
 
             if (lineFrame.hasExplicitLineYOffsets) {
@@ -292,11 +290,11 @@ export class Renderer {
                 x: contentX,
                 y: contentY,
                 w: Math.max(0, contentWidth),
-                h: Math.max(0, contentHeight)
+                h: Math.max(0, contentHeight),
             },
             paragraphReferenceAscentScale: paragraphMetrics.paragraphReferenceAscentScale,
             uniformLineHeight: paragraphMetrics.uniformLineHeight,
-            lines
+            lines,
         };
     }
 
@@ -383,7 +381,7 @@ export class Renderer {
             },
             restore: () => {
                 context.restore();
-            }
+            },
         };
 
         return overlayContext;

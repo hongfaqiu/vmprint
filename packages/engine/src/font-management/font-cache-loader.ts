@@ -4,7 +4,11 @@ import { EngineRuntime } from '../engine/runtime';
 type LoadedFont = any;
 
 export class FontLoadError extends Error {
-    constructor(public readonly url: string, message: string, options?: { cause?: unknown }) {
+    constructor(
+        public readonly url: string,
+        message: string,
+        options?: { cause?: unknown },
+    ) {
         super(message);
         this.name = 'FontLoadError';
         if (options?.cause !== undefined) {

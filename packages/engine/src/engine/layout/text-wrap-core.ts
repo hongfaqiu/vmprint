@@ -51,7 +51,7 @@ export function buildRichWrapTokens(params: {
                 fontSize: resolved.fontSize,
                 locale: params.getSegmenterLocale((inlineSeg.style || params.primaryStyle) as ElementStyle),
                 allowMerge: false,
-                hyphenationStyle: (inlineSeg.style || params.primaryStyle) as ElementStyle
+                hyphenationStyle: (inlineSeg.style || params.primaryStyle) as ElementStyle,
             });
             continue;
         }
@@ -69,7 +69,7 @@ export function buildRichWrapTokens(params: {
                     const rawSubSeg = {
                         ...seg,
                         text: segment,
-                        fontFamily: scriptSeg.fontName || seg.fontFamily
+                        fontFamily: scriptSeg.fontName || seg.fontFamily,
                     };
 
                     const richSubSeg = params.transformSegment(rawSubSeg, rawSubSeg.fontFamily);
@@ -84,7 +84,7 @@ export function buildRichWrapTokens(params: {
                             if (scaledSize !== baseSize) {
                                 richSubSeg.style = {
                                     ...currentStyle,
-                                    fontSize: scaledSize
+                                    fontSize: scaledSize,
                                 };
                             }
                         }
@@ -93,7 +93,8 @@ export function buildRichWrapTokens(params: {
                         params.advancedJustify ||
                         params.preserveDirectionalBoundaries ||
                         (params.direction === 'auto' && params.hasRtlScript(richSubSeg.text || '')) ||
-                        ((richSubSeg.style as any)?.textAlign === 'justify' && params.isAdvancedJustifyEnabled(richSubSeg.style as any));
+                        ((richSubSeg.style as any)?.textAlign === 'justify' &&
+                            params.isAdvancedJustifyEnabled(richSubSeg.style as any));
 
                     const resolved = params.resolveRichFontInfo(richSubSeg, params.defaultFontSize);
                     tokens.push({
@@ -103,7 +104,7 @@ export function buildRichWrapTokens(params: {
                         fontSize: resolved.fontSize,
                         locale,
                         allowMerge: !preserveBoundaries,
-                        hyphenationStyle: (richSubSeg.style || seg.style || params.primaryStyle) as ElementStyle
+                        hyphenationStyle: (richSubSeg.style || seg.style || params.primaryStyle) as ElementStyle,
                     });
                 }
             }
@@ -121,8 +122,19 @@ export function wrapTokenStream(params: {
     fallbackFont: any;
     hyphenate: boolean;
     createEmptyMeasuredSegment: (font: any) => TextSegment;
-    measureText: (text: string, font: any, fontSize: number, letterSpacing: number, populateSegment: TextSegment) => number;
-    appendSegmentToLine: (line: TextSegment[], segment: TextSegment, segmentWidth: number, allowMerge: boolean) => TextSegment[];
+    measureText: (
+        text: string,
+        font: any,
+        fontSize: number,
+        letterSpacing: number,
+        populateSegment: TextSegment,
+    ) => number;
+    appendSegmentToLine: (
+        line: TextSegment[],
+        segment: TextSegment,
+        segmentWidth: number,
+        allowMerge: boolean,
+    ) => TextSegment[];
     getLineWidthLimit: (totalWidth: number, lineIndex: number, firstLineIndent: number) => number;
     tryHyphenateSegmentToFit: (
         seg: TextSegment,
@@ -130,14 +142,14 @@ export function wrapTokenStream(params: {
         fontSize: number,
         letterSpacing: number,
         availableWidth: number,
-        style?: ElementStyle | Record<string, any>
+        style?: ElementStyle | Record<string, any>,
     ) => { head: TextSegment; headWidth: number; tail: TextSegment; tailWidth: number } | null;
     splitToGraphemes: (text: string, locale?: string) => string[];
     transformSegment: (segment: TextSegment, fontFamily?: string) => TextSegment;
     resolveRichFontInfo: (seg: TextSegment, defaultFontSize: number) => { font: any; fontSize: number };
 }): RichLine[] {
     const fitsWidth = (lineWidth: number, segWidth: number, limit: number) =>
-        (lineWidth + segWidth) <= (limit + LAYOUT_DEFAULTS.wrapTolerance);
+        lineWidth + segWidth <= limit + LAYOUT_DEFAULTS.wrapTolerance;
 
     const finalLines: RichLine[] = [];
     let currentLine: TextSegment[] = [];
@@ -149,12 +161,14 @@ export function wrapTokenStream(params: {
         const lastIdx = currentLine.length - 1;
         currentLine[lastIdx] = {
             ...currentLine[lastIdx],
-            forcedBreakAfter: true
+            forcedBreakAfter: true,
         };
     };
     const getCurrentLineWidthLimit = (): number => cachedLineWidthLimit;
     const pushCurrentLine = () => {
-        finalLines.push(currentLine.length > 0 ? currentLine : [params.createEmptyMeasuredSegment(params.fallbackFont)]);
+        finalLines.push(
+            currentLine.length > 0 ? currentLine : [params.createEmptyMeasuredSegment(params.fallbackFont)],
+        );
         currentLine = [];
         currentLineWidth = 0;
         cachedLineWidthLimit = params.getLineWidthLimit(params.maxWidth, finalLines.length, params.textIndent);
@@ -171,7 +185,13 @@ export function wrapTokenStream(params: {
             continue;
         }
 
-        const segmentWidth = params.measureText(token.segment.text, token.font, token.fontSize, params.letterSpacing, token.segment);
+        const segmentWidth = params.measureText(
+            token.segment.text,
+            token.font,
+            token.fontSize,
+            params.letterSpacing,
+            token.segment,
+        );
         const lineWidthLimit = getCurrentLineWidthLimit();
 
         if (fitsWidth(currentLineWidth, segmentWidth, lineWidthLimit)) {
@@ -187,7 +207,7 @@ export function wrapTokenStream(params: {
                 token.fontSize,
                 params.letterSpacing,
                 remainingWidth,
-                token.hyphenationStyle
+                token.hyphenationStyle,
             );
 
             if (hyphenated) {
@@ -201,14 +221,17 @@ export function wrapTokenStream(params: {
                     currentLineWidth = hyphenated.tailWidth;
                 } else {
                     for (const grapheme of params.splitToGraphemes(hyphenated.tail.text, token.locale)) {
-                        const graphemeSegment = params.transformSegment({ ...hyphenated.tail, text: grapheme }, hyphenated.tail.fontFamily);
+                        const graphemeSegment = params.transformSegment(
+                            { ...hyphenated.tail, text: grapheme },
+                            hyphenated.tail.fontFamily,
+                        );
                         const graphemeFont = params.resolveRichFontInfo(graphemeSegment, token.fontSize);
                         const graphemeWidth = params.measureText(
                             graphemeSegment.text,
                             graphemeFont.font,
                             graphemeFont.fontSize,
                             params.letterSpacing,
-                            graphemeSegment
+                            graphemeSegment,
                         );
 
                         if (!fitsWidth(currentLineWidth, graphemeWidth, getCurrentLineWidthLimit())) {
@@ -233,14 +256,17 @@ export function wrapTokenStream(params: {
 
         if (segmentWidth > getCurrentLineWidthLimit()) {
             for (const grapheme of params.splitToGraphemes(token.segment.text, token.locale)) {
-                const graphemeSegment = params.transformSegment({ ...token.segment, text: grapheme }, token.segment.fontFamily);
+                const graphemeSegment = params.transformSegment(
+                    { ...token.segment, text: grapheme },
+                    token.segment.fontFamily,
+                );
                 const graphemeFont = params.resolveRichFontInfo(graphemeSegment, token.fontSize);
                 const graphemeWidth = params.measureText(
                     graphemeSegment.text,
                     graphemeFont.font,
                     graphemeFont.fontSize,
                     params.letterSpacing,
-                    graphemeSegment
+                    graphemeSegment,
                 );
 
                 if (!fitsWidth(currentLineWidth, graphemeWidth, getCurrentLineWidthLimit())) {
@@ -257,6 +283,3 @@ export function wrapTokenStream(params: {
     if (currentLine.length > 0) finalLines.push(currentLine);
     return finalLines.length > 0 ? finalLines : [[params.createEmptyMeasuredSegment(params.fallbackFont)]];
 }
-
-
-

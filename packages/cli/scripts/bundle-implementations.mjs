@@ -14,18 +14,18 @@ const destinations = [
     {
         src: path.join(repoRoot, 'packages', 'context-pdf', 'dist'),
         dest: path.join(cliRoot, 'dist', 'bundled', 'contexts', 'pdf'),
-        label: 'context-pdf'
+        label: 'context-pdf',
     },
     {
         src: path.join(repoRoot, 'packages', 'local-fonts', 'dist'),
         dest: path.join(cliRoot, 'dist', 'bundled', 'font-managers', 'local'),
-        label: 'local-fonts'
+        label: 'local-fonts',
     },
     {
         src: path.join(repoRoot, 'packages', 'local-fonts', 'assets'),
         dest: path.join(cliRoot, 'dist', 'bundled', 'font-managers', 'assets'),
-        label: 'local-fonts assets'
-    }
+        label: 'local-fonts assets',
+    },
 ];
 
 for (const { src, dest, label } of destinations) {

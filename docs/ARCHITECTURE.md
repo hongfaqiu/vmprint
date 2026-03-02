@@ -132,15 +132,15 @@ Every element in the document, regardless of nesting, is eventually reduced to a
 
 ```typescript
 interface Box {
-    type: string;       // inherited from source element type
-    x: number;          // absolute position in points from page top-left
+    type: string; // inherited from source element type
+    x: number; // absolute position in points from page top-left
     y: number;
     w: number;
     h: number;
     image?: BoxImagePayload;
-    lines?: RichLine[];     // pre-shaped text lines (glyphs measured)
+    lines?: RichLine[]; // pre-shaped text lines (glyphs measured)
     style: ElementStyle;
-    meta?: BoxMeta;         // source tracking: sourceId, engineKey, fragmentIndex
+    meta?: BoxMeta; // source tracking: sourceId, engineKey, fragmentIndex
 }
 
 interface Page {
@@ -185,6 +185,7 @@ type FlowBox = {
 ```
 
 A `FlowBox` is the shaped but not yet positioned form of an element. It carries:
+
 - Resolved text lines (words measured, wrapped, hyphenated, justified)
 - Height computed from those lines
 - Pagination hints (margins, keepWithNext, orphans/widows)
@@ -220,14 +221,15 @@ interface PackagerUnit {
 
 The four concrete implementations are:
 
-| Packager | Handles |
-|---|---|
-| `FlowBoxPackager` | Standard paragraphs, headings, standalone images |
-| `DropCapPackager` | Drop-cap paragraphs (cap glyph box + wrapped body) |
-| `StoryPackager` | DTP "story" zones with float/wrap image placement |
-| `TablePackager` | Multi-column tables with header repeat and row pagination |
+| Packager          | Handles                                                   |
+| ----------------- | --------------------------------------------------------- |
+| `FlowBoxPackager` | Standard paragraphs, headings, standalone images          |
+| `DropCapPackager` | Drop-cap paragraphs (cap glyph box + wrapped body)        |
+| `StoryPackager`   | DTP "story" zones with float/wrap image placement         |
+| `TablePackager`   | Multi-column tables with header repeat and row pagination |
 
 `paginatePackagers()` is then a compact loop that:
+
 1. Asks each packager for its required height
 2. If it fits on the current page, calls `emitBoxes()` and stamps absolute Y coordinates
 3. If it doesn't fit, tries `split()` to get a first part that does
@@ -344,15 +346,15 @@ The internal representation of a shaped line is `RichLine`, which is `TextSegmen
 type TextSegment = {
     text: string;
     fontFamily?: string;
-    style?: Record<string, any>;    // per-run style overrides
-    width?: number;                 // measured width in points
+    style?: Record<string, any>; // per-run style overrides
+    width?: number; // measured width in points
     ascent?: number;
     descent?: number;
-    justifyAfter?: number;          // inter-word space to add for justification
+    justifyAfter?: number; // inter-word space to add for justification
     forcedBreakAfter?: boolean;
-    inlineObject?: InlineObjectSegment;  // inline image or box
+    inlineObject?: InlineObjectSegment; // inline image or box
     inlineMetrics?: InlineObjectMetrics;
-    glyphs?: { char, x, y }[];     // optional glyph-level positioning
+    glyphs?: { char; x; y }[]; // optional glyph-level positioning
 };
 ```
 
@@ -405,14 +407,14 @@ The `SemanticDocument` type is a mid-level AST that normalizes away remark idios
 
 ## 14. Summary of Key Design Properties
 
-| Property | How it's achieved |
-|---|---|
-| Flat box output | All packagers reduce to `Box[]` before pagination; no nesting in the output |
+| Property                      | How it's achieved                                                             |
+| ----------------------------- | ----------------------------------------------------------------------------- |
+| Flat box output               | All packagers reduce to `Box[]` before pagination; no nesting in the output   |
 | No monolithic pagination loop | Packager interface encapsulates element-specific logic; loop is type-agnostic |
-| Deterministic layout | No side effects, immutable input, keyed measurement cache |
-| Context independence | Renderer only calls `Context` interface primitives; layout is pre-computed |
-| Extensible element types | New type = new `PackagerUnit` class + one branch in `createPackagers()` |
-| DTP float/wrap layout | `StoryPackager` + `SpatialMap`; no special renderer path needed |
-| Source traceability | Every `Box` carries `BoxMeta` with `sourceId`, `engineKey`, `fragmentIndex` |
-| Inline richness | `RichLine[]` / `TextSegment[]` carry per-run font, style, and glyph data |
-| Overlay/debug extensibility | `OverlayProvider` hook; overlays get same flat box representation as renderer |
+| Deterministic layout          | No side effects, immutable input, keyed measurement cache                     |
+| Context independence          | Renderer only calls `Context` interface primitives; layout is pre-computed    |
+| Extensible element types      | New type = new `PackagerUnit` class + one branch in `createPackagers()`       |
+| DTP float/wrap layout         | `StoryPackager` + `SpatialMap`; no special renderer path needed               |
+| Source traceability           | Every `Box` carries `BoxMeta` with `sourceId`, `engineKey`, `fragmentIndex`   |
+| Inline richness               | `RichLine[]` / `TextSegment[]` carry per-run font, style, and glyph data      |
+| Overlay/debug extensibility   | `OverlayProvider` hook; overlays get same flat box representation as renderer |

@@ -36,6 +36,7 @@ pnpm test:regression  # regression suite only
 **`flat-pipeline.spec.ts`** — Runs the full layout pipeline on each regression fixture and checks the universal invariants without any fixture-specific logic: finite geometry, box metadata completeness, line width fitting within bounds, and grapheme boundary safety across segments and wrapped lines.
 
 **`engine-regression.spec.ts`** — The main regression suite. For each fixture it:
+
 1. Loads the fixture twice and verifies the canonical IR is identical across loads.
 2. Runs `engine.paginate(elements)` twice and deep-compares the results. If pagination is not deterministic, the test fails immediately.
 3. Applies fixture-specific structural assertions (described below).
@@ -59,23 +60,23 @@ pnpm test:regression  # regression suite only
 
 Fixtures live in `packages/engine/tests/fixtures/regression/`. Each is a `DocumentInput` JSON file named by a zero-padded index and a description.
 
-| Fixture | What it exercises |
-|---|---|
-| `00-all-capabilities` | The god fixture. Full engine surface in one document: 8 pages, tables with colspan/rowspan, drop caps, story zones with floats, multilingual scripts, inline images, continuation markers. |
-| `01-text-flow-core` | Paragraph flow, headings, basic line wrapping |
-| `02-text-layout-advanced` | Justification (advanced mode), soft-hyphen rendering, RTL text, bidirectional runs |
-| `03-typography-type-specimen` | Font weight and style variants, font size scaling |
-| `04-multilingual-scripts` | Mixed-script runs: Latin, CJK, Arabic, Devanagari, Thai |
-| `05-page-size-letter-landscape` | Letter landscape orientation |
-| `06-page-size-custom-landscape` | Custom page dimensions |
-| `07-pagination-fragments` | Block splitting, keepWithNext, orphan/widow controls |
-| `08-dropcap-pagination` | Drop cap sizing, drop cap pagination, no-repeat on continuation |
-| `09-tables-spans-pagination` | colspan, rowspan, row splitting, repeated header rows, span boundary correctness |
-| `10-packager-split-scenarios` | keepWithNext, mid-page table, page-top overflow splits |
-| `11-story-image-floats` | Story zones, image floats, non-uniform line widths, optical underhang |
-| `12-inline-baseline-alignment` | All verticalAlign variants, baseline shift, optical inset metrics |
-| `13-inline-rich-objects` | Inline images on text baselines, multi-page continuation |
-| `14-flow-images-multipage` | Flow-positioned images, multi-page image pagination |
+| Fixture                         | What it exercises                                                                                                                                                                          |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `00-all-capabilities`           | The god fixture. Full engine surface in one document: 8 pages, tables with colspan/rowspan, drop caps, story zones with floats, multilingual scripts, inline images, continuation markers. |
+| `01-text-flow-core`             | Paragraph flow, headings, basic line wrapping                                                                                                                                              |
+| `02-text-layout-advanced`       | Justification (advanced mode), soft-hyphen rendering, RTL text, bidirectional runs                                                                                                         |
+| `03-typography-type-specimen`   | Font weight and style variants, font size scaling                                                                                                                                          |
+| `04-multilingual-scripts`       | Mixed-script runs: Latin, CJK, Arabic, Devanagari, Thai                                                                                                                                    |
+| `05-page-size-letter-landscape` | Letter landscape orientation                                                                                                                                                               |
+| `06-page-size-custom-landscape` | Custom page dimensions                                                                                                                                                                     |
+| `07-pagination-fragments`       | Block splitting, keepWithNext, orphan/widow controls                                                                                                                                       |
+| `08-dropcap-pagination`         | Drop cap sizing, drop cap pagination, no-repeat on continuation                                                                                                                            |
+| `09-tables-spans-pagination`    | colspan, rowspan, row splitting, repeated header rows, span boundary correctness                                                                                                           |
+| `10-packager-split-scenarios`   | keepWithNext, mid-page table, page-top overflow splits                                                                                                                                     |
+| `11-story-image-floats`         | Story zones, image floats, non-uniform line widths, optical underhang                                                                                                                      |
+| `12-inline-baseline-alignment`  | All verticalAlign variants, baseline shift, optical inset metrics                                                                                                                          |
+| `13-inline-rich-objects`        | Inline images on text baselines, multi-page continuation                                                                                                                                   |
+| `14-flow-images-multipage`      | Flow-positioned images, multi-page image pagination                                                                                                                                        |
 
 Many fixtures have a sidecar `.overlay.mjs` file that draws debug annotations — margin rules, box outlines, grid lines — when the fixture is rendered to a PDF using the `generate-fixture-pdfs.mjs` script. These are purely for visual inspection during development; they play no role in the tests.
 

@@ -71,19 +71,18 @@ function normalizeTrack(definition: TrackSizingDefinition): ResolvedTrackSizing 
             basis: value,
             size: value,
             growWeight: 0,
-            shrinkWeight: 0
+            shrinkWeight: 0,
         };
     }
 
     const min = Math.max(authoredMin, minContent);
-    const authoredMax = definition.max === undefined ? Number.POSITIVE_INFINITY : Math.max(0, toUnit(definition.max, min));
-    const max = mode === 'auto' && definition.max === undefined
-        ? Math.max(min, maxContent)
-        : Math.max(min, authoredMax);
+    const authoredMax =
+        definition.max === undefined ? Number.POSITIVE_INFINITY : Math.max(0, toUnit(definition.max, min));
+    const max =
+        mode === 'auto' && definition.max === undefined ? Math.max(min, maxContent) : Math.max(min, authoredMax);
 
-    const rawBasis = definition.basis !== undefined
-        ? toUnit(definition.basis, min)
-        : (mode === 'auto' ? maxContent : min);
+    const rawBasis =
+        definition.basis !== undefined ? toUnit(definition.basis, min) : mode === 'auto' ? maxContent : min;
     const basis = clamp(Math.max(0, rawBasis), min, max);
 
     if (mode === 'flex') {
@@ -95,7 +94,7 @@ function normalizeTrack(definition: TrackSizingDefinition): ResolvedTrackSizing 
             basis,
             size: basis,
             growWeight: fr,
-            shrinkWeight: Math.max(EPSILON, toUnit(definition.shrink, 1))
+            shrinkWeight: Math.max(EPSILON, toUnit(definition.shrink, 1)),
         };
     }
 
@@ -106,7 +105,7 @@ function normalizeTrack(definition: TrackSizingDefinition): ResolvedTrackSizing 
         basis,
         size: basis,
         growWeight: Math.max(EPSILON, toUnit(definition.grow, 1)),
-        shrinkWeight: Math.max(EPSILON, toUnit(definition.shrink, 1))
+        shrinkWeight: Math.max(EPSILON, toUnit(definition.shrink, 1)),
     };
 }
 
@@ -115,7 +114,7 @@ function distributeGrowth(
     maxima: number[],
     weights: number[],
     indices: number[],
-    amount: number
+    amount: number,
 ): number {
     let remaining = Math.max(0, amount);
     let guard = 0;
@@ -154,7 +153,7 @@ function distributeShrink(
     minima: number[],
     weights: number[],
     indices: number[],
-    amount: number
+    amount: number,
 ): number {
     let remaining = Math.max(0, amount);
     let guard = 0;
@@ -166,7 +165,7 @@ function distributeShrink(
 
         const totalCapacity = eligible.reduce((sum, idx) => {
             const capacity = Math.max(0, sizes[idx] - minima[idx]);
-            return sum + (capacity * Math.max(EPSILON, weights[idx]));
+            return sum + capacity * Math.max(EPSILON, weights[idx]);
         }, 0);
         if (totalCapacity <= EPSILON) break;
 
@@ -203,7 +202,7 @@ export function solveTrackSizing(input: SolveTrackSizingInput): SolveTrackSizing
             contentWidth: 0,
             usedWidth: 0,
             remainingContentSpace: containerWidth,
-            overflowContent: 0
+            overflowContent: 0,
         };
     }
 
@@ -226,7 +225,7 @@ export function solveTrackSizing(input: SolveTrackSizingInput): SolveTrackSizing
             tracks.map((track) => track.min),
             tracks.map((track) => track.shrinkWeight),
             shrinkIndices,
-            overflow
+            overflow,
         );
     } else if (initial < availableContentWidth - EPSILON) {
         let remaining = availableContentWidth - initial;
@@ -240,7 +239,7 @@ export function solveTrackSizing(input: SolveTrackSizingInput): SolveTrackSizing
             tracks.map((track) => track.max),
             tracks.map((track) => track.growWeight),
             autoIndices,
-            remaining
+            remaining,
         );
 
         if (remaining > EPSILON) {
@@ -253,7 +252,7 @@ export function solveTrackSizing(input: SolveTrackSizingInput): SolveTrackSizing
                 tracks.map((track) => track.max),
                 tracks.map((track) => track.growWeight),
                 flexIndices,
-                remaining
+                remaining,
             );
         }
     }
@@ -265,7 +264,7 @@ export function solveTrackSizing(input: SolveTrackSizingInput): SolveTrackSizing
 
     const resolvedTracks = tracks.map((track, idx) => ({
         ...track,
-        size: sizes[idx]
+        size: sizes[idx],
     }));
 
     return {
@@ -276,6 +275,6 @@ export function solveTrackSizing(input: SolveTrackSizingInput): SolveTrackSizing
         contentWidth,
         usedWidth,
         remainingContentSpace,
-        overflowContent
+        overflowContent,
     };
 }

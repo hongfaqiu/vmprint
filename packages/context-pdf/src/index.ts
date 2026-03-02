@@ -32,7 +32,7 @@ const ensureEncodeStreamNumericLengthCompatibility = (): void => {
             },
             configurable: true,
             enumerable: true,
-            writable: true
+            writable: true,
         });
     } catch {
         // Best-effort patch; PDF rendering still works for non-variable paths.
@@ -57,7 +57,14 @@ export interface PdfWritableStream {
 export class PdfContext implements Context {
     private doc: InstanceType<typeof PDFDocument>;
     private outputStream: PdfWritableStream | null = null;
-    private readonly variableAxisCache = new WeakMap<ArrayBufferLike, { wght?: { min: number; max: number }; ital?: { min: number; max: number }; slnt?: { min: number; max: number } } | null>();
+    private readonly variableAxisCache = new WeakMap<
+        ArrayBufferLike,
+        {
+            wght?: { min: number; max: number };
+            ital?: { min: number; max: number };
+            slnt?: { min: number; max: number };
+        } | null
+    >();
 
     constructor(outputStreamOrOptions: PdfWritableStream | ContextFactoryOptions, options?: ContextFactoryOptions) {
         ensureEncodeStreamNumericLengthCompatibility();
@@ -77,7 +84,7 @@ export class PdfContext implements Context {
             autoFirstPage: actualOptions.autoFirstPage,
             bufferPages: actualOptions.bufferPages,
             size: actualOptions.size as PdfDocumentInitOptions['size'],
-            margins: actualOptions.margins
+            margins: actualOptions.margins,
         });
 
         if (outputStream) {
@@ -151,13 +158,16 @@ export class PdfContext implements Context {
             return Number.isFinite(n) ? n : 0;
         };
 
-        const sanitizePath = (path: any): { commands: Array<{ command: string; args: number[] }>; bbox: { minX: number; minY: number; maxX: number; maxY: number } } => {
+        const sanitizePath = (
+            path: any,
+        ): {
+            commands: Array<{ command: string; args: number[] }>;
+            bbox: { minX: number; minY: number; maxX: number; maxY: number };
+        } => {
             const commandsSource = Array.isArray(path?.commands) ? path.commands : [];
             const commands = commandsSource.map((command: any) => ({
                 command: String(command?.command || ''),
-                args: Array.isArray(command?.args)
-                    ? command.args.map((arg: any) => toFiniteNumber(arg))
-                    : []
+                args: Array.isArray(command?.args) ? command.args.map((arg: any) => toFiniteNumber(arg)) : [],
             }));
 
             const hasPoints = commands.some((command: { command: string; args: number[] }) => command.args.length > 0);
@@ -170,7 +180,7 @@ export class PdfContext implements Context {
             if (!hasPoints) {
                 return {
                     commands,
-                    bbox: { minX: 0, minY: 0, maxX: 0, maxY: 0 }
+                    bbox: { minX: 0, minY: 0, maxX: 0, maxY: 0 },
                 };
             }
 
@@ -185,8 +195,8 @@ export class PdfContext implements Context {
                     minX: normalizedMinX,
                     minY: normalizedMinY,
                     maxX: normalizedMaxX,
-                    maxY: normalizedMaxY
-                }
+                    maxY: normalizedMaxY,
+                },
             };
         };
 
@@ -221,7 +231,11 @@ export class PdfContext implements Context {
         return Object.keys(settings).length > 0 ? settings : null;
     }
 
-    private getVariationAxes(buffer: Uint8Array): { wght?: { min: number; max: number }; ital?: { min: number; max: number }; slnt?: { min: number; max: number } } | null {
+    private getVariationAxes(buffer: Uint8Array): {
+        wght?: { min: number; max: number };
+        ital?: { min: number; max: number };
+        slnt?: { min: number; max: number };
+    } | null {
         const cacheKey = buffer.buffer;
         if (this.variableAxisCache.has(cacheKey)) {
             return this.variableAxisCache.get(cacheKey) || null;
@@ -242,14 +256,14 @@ export class PdfContext implements Context {
                 if (!Number.isFinite(min) || !Number.isFinite(max)) return undefined;
                 return {
                     min: Math.min(min, max),
-                    max: Math.max(min, max)
+                    max: Math.max(min, max),
                 };
             };
 
             const normalized = {
                 wght: toRange(variationAxes.wght),
                 ital: toRange(variationAxes.ital),
-                slnt: toRange(variationAxes.slnt)
+                slnt: toRange(variationAxes.slnt),
             };
 
             if (!normalized.wght && !normalized.ital && !normalized.slnt) {
@@ -364,14 +378,7 @@ export class PdfContext implements Context {
         return this;
     }
 
-    bezierCurveTo(
-        cp1x: number,
-        cp1y: number,
-        cp2x: number,
-        cp2y: number,
-        x: number,
-        y: number
-    ): this {
+    bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): this {
         this.doc.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
         return this;
     }
@@ -425,7 +432,7 @@ export class PdfContext implements Context {
         const imageSource = typeof source === 'string' ? source : Buffer.from(source);
         this.doc.image(imageSource as any, x, y, {
             width: options?.width,
-            height: options?.height
+            height: options?.height,
         });
         return this;
     }

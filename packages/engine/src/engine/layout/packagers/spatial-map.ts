@@ -64,7 +64,7 @@ export class SpatialMap {
         y: number,
         lineH: number,
         totalWidth: number,
-        options?: { opticalUnderhang?: boolean }
+        options?: { opticalUnderhang?: boolean },
     ): Interval[] {
         let available: Interval[] = [{ x: 0, w: totalWidth }];
         const lineBottom = y + lineH;
@@ -79,7 +79,7 @@ export class SpatialMap {
             const obsTop = rect.y - gapTop;
             const obsBottom = rect.y + rect.h + gapBottom;
             const useOpticalUnderhang = options?.opticalUnderhang && rect.wrap === 'around';
-            const overlapBottom = useOpticalUnderhang ? (rect.y + rect.h) : obsBottom;
+            const overlapBottom = useOpticalUnderhang ? rect.y + rect.h : obsBottom;
 
             if (lineBottom <= obsTop || lineTop >= overlapBottom) continue; // no Y overlap
 
@@ -133,10 +133,7 @@ export class SpatialMap {
 
     /** The Y of the lowest point among all registered obstacles. */
     maxObstacleBottom(): number {
-        return this.rects.reduce(
-            (max, r) => Math.max(max, r.y + r.h + (r.gapBottom ?? r.gap)),
-            0
-        );
+        return this.rects.reduce((max, r) => Math.max(max, r.y + r.h + (r.gapBottom ?? r.gap)), 0);
     }
 
     /** Read-only access to registered rects (used by split carry-over logic). */
@@ -153,11 +150,7 @@ export class SpatialMap {
  * Subtracts [removeLeft, removeRight] from a set of disjoint intervals,
  * returning the remaining fragments.
  */
-function carveInterval(
-    intervals: Interval[],
-    removeLeft: number,
-    removeRight: number
-): Interval[] {
+function carveInterval(intervals: Interval[], removeLeft: number, removeRight: number): Interval[] {
     const result: Interval[] = [];
     for (const iv of intervals) {
         const ivRight = iv.x + iv.w;

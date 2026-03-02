@@ -60,10 +60,16 @@ The module must export the class as the default export and implement the interfa
 import { MyBackend } from 'my-backend';
 
 export default class MyContext {
-  addPage() { /* ... */ }
-  end() { /* ... */ }
-  async registerFont(id, buffer) { /* ... */ }
-  // implement the full Context interface from @vmprint/contracts
+    addPage() {
+        /* ... */
+    }
+    end() {
+        /* ... */
+    }
+    async registerFont(id, buffer) {
+        /* ... */
+    }
+    // implement the full Context interface from @vmprint/contracts
 }
 ```
 
@@ -89,17 +95,17 @@ vmprint --input document.json --output out.pdf --profile-layout
 
 ## All options
 
-| Flag | Description |
-|---|---|
-| `-i, --input <path>` | Input document JSON |
-| `-o, --output <path>` | Output PDF path |
-| `--context <path>` | JS module exporting a custom `Context` class |
-| `--font-manager <path>` | JS module exporting a custom `FontManager` class |
-| `--dump-ir [path]` | Write canonical document IR JSON (default: `<output>.ir.json`) |
-| `--emit-layout [path]` | Write annotated layout stream JSON (default: `<output>.layout.json`) |
-| `--render-from-layout <path>` | Render from a saved layout stream, bypassing layout |
-| `--omit-glyphs` | Exclude glyph positioning data from the layout stream |
-| `--quantize` | Quantize layout stream coordinates to 3 decimal places |
-| `-d, --debug` | Embed layout debug boxes in the output |
-| `--overlay <path>` | JS module exporting a custom `OverlayProvider` object |
-| `--profile-layout` | Print layout pipeline duration |
+| Flag                          | Description                                                          |
+| ----------------------------- | -------------------------------------------------------------------- |
+| `-i, --input <path>`          | Input document JSON                                                  |
+| `-o, --output <path>`         | Output PDF path                                                      |
+| `--context <path>`            | JS module exporting a custom `Context` class                         |
+| `--font-manager <path>`       | JS module exporting a custom `FontManager` class                     |
+| `--dump-ir [path]`            | Write canonical document IR JSON (default: `<output>.ir.json`)       |
+| `--emit-layout [path]`        | Write annotated layout stream JSON (default: `<output>.layout.json`) |
+| `--render-from-layout <path>` | Render from a saved layout stream, bypassing layout                  |
+| `--omit-glyphs`               | Exclude glyph positioning data from the layout stream                |
+| `--quantize`                  | Quantize layout stream coordinates to 3 decimal places               |
+| `-d, --debug`                 | Embed layout debug boxes in the output                               |
+| `--overlay <path>`            | JS module exporting a custom `OverlayProvider` object                |
+| `--profile-layout`            | Print layout pipeline duration                                       |

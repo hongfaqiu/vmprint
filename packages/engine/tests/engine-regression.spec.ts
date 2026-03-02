@@ -10,9 +10,14 @@ import {
     assertFlatPipelineInvariants,
     loadJsonDocumentFixtures,
     snapshotPages,
-    loadLocalFontManager
+    loadLocalFontManager,
 } from './harness/engine-harness';
-import { CURRENT_DOCUMENT_VERSION, CURRENT_IR_VERSION, resolveDocumentPaths, toLayoutConfig } from '../src/engine/document';
+import {
+    CURRENT_DOCUMENT_VERSION,
+    CURRENT_IR_VERSION,
+    resolveDocumentPaths,
+    toLayoutConfig,
+} from '../src/engine/document';
 import { LayoutUtils } from '../src/engine/layout/layout-utils';
 import { createEngineRuntime, setDefaultEngineRuntime } from '../src/engine/runtime';
 
@@ -64,7 +69,7 @@ function assertTableMixedSpanFixtureSignals(pages: any[], fixtureName: string): 
         const rowsOnPage = new Set<number>(
             cellsOnPage
                 .map((cell: any) => Number(cell.properties?._tableRowIndex))
-                .filter((value: number) => Number.isFinite(value))
+                .filter((value: number) => Number.isFinite(value)),
         );
         cellsOnPage
             .filter((cell: any) => Number(cell.properties?._tableRowSpan || 1) > 1)
@@ -72,31 +77,38 @@ function assertTableMixedSpanFixtureSignals(pages: any[], fixtureName: string): 
                 const startRow = Number(cell.properties?._tableRowIndex || 0);
                 const rowSpan = Number(cell.properties?._tableRowSpan || 1);
                 const endRow = startRow + rowSpan - 1;
-                assert.ok(rowsOnPage.has(endRow), `${fixtureName}: rowSpan crosses page boundary at page=${pageIndex} row=${startRow}`);
+                assert.ok(
+                    rowsOnPage.has(endRow),
+                    `${fixtureName}: rowSpan crosses page boundary at page=${pageIndex} row=${startRow}`,
+                );
             });
     });
 
     const rowIndexesByPage = pageCells.map((cellsOnPage) =>
         cellsOnPage
             .map((cell: any) => Number(cell.properties?._tableRowIndex))
-            .filter((value: number) => Number.isFinite(value))
+            .filter((value: number) => Number.isFinite(value)),
     );
     const pagesWithTable = rowIndexesByPage
         .map((rows, pageIndex) => ({ pageIndex, rows }))
         .filter((entry) => entry.rows.length > 0);
     assert.ok(pagesWithTable.length >= 2, `${fixtureName}: expected table content to span at least two pages`);
     assert.ok(pagesWithTable[0].rows.includes(0), `${fixtureName}: expected header row on first table page`);
-    assert.ok(pagesWithTable[1].rows.includes(0), `${fixtureName}: expected repeated header row on continuation table page`);
+    assert.ok(
+        pagesWithTable[1].rows.includes(0),
+        `${fixtureName}: expected repeated header row on continuation table page`,
+    );
 
     // Fixture-anchored structural checks (rows 1-4 are deterministic in input).
-    const row2Col0 = allCells.find((cell: any) =>
-        Number(cell.properties?._tableRowIndex) === 2 && Number(cell.properties?._tableColStart) === 0
+    const row2Col0 = allCells.find(
+        (cell: any) => Number(cell.properties?._tableRowIndex) === 2 && Number(cell.properties?._tableColStart) === 0,
     );
     assert.equal(row2Col0, undefined, `${fixtureName}: row=2 col=0 should be covered by rowSpan from row=1`);
 
-    const row4Covered = allCells.find((cell: any) =>
-        Number(cell.properties?._tableRowIndex) === 4
-        && (Number(cell.properties?._tableColStart) === 1 || Number(cell.properties?._tableColStart) === 2)
+    const row4Covered = allCells.find(
+        (cell: any) =>
+            Number(cell.properties?._tableRowIndex) === 4 &&
+            (Number(cell.properties?._tableColStart) === 1 || Number(cell.properties?._tableColStart) === 2),
     );
     assert.equal(row4Covered, undefined, `${fixtureName}: row=4 cols=1..2 should be covered by rowSpan from row=3`);
 }
@@ -106,11 +118,13 @@ function assertPackagerShatterShowcaseSignals(pages: any[], fixtureName: string)
         const sourceId = String(box.meta?.sourceId || '');
         return sourceId === id || sourceId.endsWith(`:${id}`);
     };
-    const withPageIndex = (boxes: any[], pageIndex: number) =>
-        boxes.map((box) => ({ box, pageIndex }));
+    const withPageIndex = (boxes: any[], pageIndex: number) => boxes.map((box) => ({ box, pageIndex }));
 
     const keepBoxes = pages.flatMap((page: any, pageIndex: number) =>
-        withPageIndex((page.boxes || []).filter((box: any) => matchesSourceId(box, 'keep-split')), pageIndex)
+        withPageIndex(
+            (page.boxes || []).filter((box: any) => matchesSourceId(box, 'keep-split')),
+            pageIndex,
+        ),
     );
     assert.ok(keepBoxes.length > 0, `${fixtureName}: expected keep-split boxes`);
     const keepFirst = keepBoxes.find((entry) => Number(entry.box.meta?.fragmentIndex || 0) === 0);
@@ -119,40 +133,46 @@ function assertPackagerShatterShowcaseSignals(pages: any[], fixtureName: string)
     assert.ok(keepContinuation, `${fixtureName}: expected keep-split continuation fragment`);
     assert.ok(
         keepFirst && keepContinuation && keepFirst.pageIndex !== keepContinuation.pageIndex,
-        `${fixtureName}: keep-split should span multiple pages`
+        `${fixtureName}: keep-split should span multiple pages`,
     );
 
     const leadBoxes = pages.flatMap((page: any, pageIndex: number) =>
-        withPageIndex((page.boxes || []).filter((box: any) => matchesSourceId(box, 'keep-lead')), pageIndex)
+        withPageIndex(
+            (page.boxes || []).filter((box: any) => matchesSourceId(box, 'keep-lead')),
+            pageIndex,
+        ),
     );
     assert.ok(leadBoxes.length > 0, `${fixtureName}: expected keep-lead box`);
     const leadPage = leadBoxes[0]?.pageIndex;
     assert.equal(
         leadPage,
         keepFirst?.pageIndex,
-        `${fixtureName}: keep-lead should remain with keep-split fragmentIndex=0`
+        `${fixtureName}: keep-lead should remain with keep-split fragmentIndex=0`,
     );
     assert.ok(
         keepContinuation && leadBoxes.every((entry) => entry.pageIndex !== keepContinuation.pageIndex),
-        `${fixtureName}: keep-lead should not appear on continuation page`
+        `${fixtureName}: keep-lead should not appear on continuation page`,
     );
 
     const tablePages = pages
         .map((page: any, pageIndex: number) => ({
             pageIndex,
-            tableBoxes: (page.boxes || []).filter((box: any) => matchesSourceId(box, 'table-split'))
+            tableBoxes: (page.boxes || []).filter((box: any) => matchesSourceId(box, 'table-split')),
         }))
         .filter((entry) => entry.tableBoxes.length > 0);
     assert.ok(tablePages.length >= 2, `${fixtureName}: expected table to paginate across pages`);
     const firstTablePage = tablePages[0];
     const minTableY = Math.min(...firstTablePage.tableBoxes.map((box: any) => Number(box.y || 0)));
-    const hasContentBeforeTable = (pages[firstTablePage.pageIndex]?.boxes || []).some((box: any) =>
-        box.type !== 'table_cell' && Number(box.y || 0) < (minTableY - 0.1)
+    const hasContentBeforeTable = (pages[firstTablePage.pageIndex]?.boxes || []).some(
+        (box: any) => box.type !== 'table_cell' && Number(box.y || 0) < minTableY - 0.1,
     );
     assert.ok(hasContentBeforeTable, `${fixtureName}: expected table to start mid-page after other content`);
 
     const topBoxes = pages.flatMap((page: any, pageIndex: number) =>
-        withPageIndex((page.boxes || []).filter((box: any) => matchesSourceId(box, 'page-top-split')), pageIndex)
+        withPageIndex(
+            (page.boxes || []).filter((box: any) => matchesSourceId(box, 'page-top-split')),
+            pageIndex,
+        ),
     );
     assert.ok(topBoxes.length > 0, `${fixtureName}: expected page-top-split boxes`);
     const topFirst = topBoxes.find((entry) => Number(entry.box.meta?.fragmentIndex || 0) === 0);
@@ -163,7 +183,7 @@ function assertPackagerShatterShowcaseSignals(pages: any[], fixtureName: string)
     const minY = Math.min(...topPageBoxes.map((box: any) => Number(box.y || 0)));
     assert.ok(
         topFirst && Math.abs(Number(topFirst.box.y || 0) - minY) < 0.2,
-        `${fixtureName}: expected page-top-split to start at top of its page`
+        `${fixtureName}: expected page-top-split to start at top of its page`,
     );
 }
 
@@ -188,7 +208,7 @@ function assertStoryPackagerShowcaseSignals(pages: any[], fixtureName: string): 
     });
     assert.ok(
         wrappedTextBoxes.length > 0,
-        `${fixtureName}: expected text boxes with non-uniform _lineWidths (wrap-around resolver result)`
+        `${fixtureName}: expected text boxes with non-uniform _lineWidths (wrap-around resolver result)`,
     );
 
     // Images must appear on the first page (the story starts with a story-absolute image).
@@ -199,8 +219,8 @@ function assertStoryPackagerShowcaseSignals(pages: any[], fixtureName: string): 
     // once the line top clears the obstacle bottom (storyWrapOpticalUnderhang).
     const amberTextBox = allBoxes.find((box: any) =>
         (box.lines || []).some((line: any[]) =>
-            line.some((seg: any) => String(seg.text || '').includes('An amber square occupies the left margin here'))
-        )
+            line.some((seg: any) => String(seg.text || '').includes('An amber square occupies the left margin here')),
+        ),
     );
     assert.ok(amberTextBox, `${fixtureName}: expected amber float paragraph box`);
     if (amberTextBox) {
@@ -211,13 +231,14 @@ function assertStoryPackagerShowcaseSignals(pages: any[], fixtureName: string): 
             ? amberTextBox.properties._lineWidths.map((n: any) => Number(n))
             : [];
         const hasWrappedLine = offsets.some((val) => Number.isFinite(val) && val > 0.1);
-        const hasFullWidthLine = offsets.some((val, idx) =>
-            Number.isFinite(val) &&
-            Math.abs(val) <= 0.1 &&
-            Number(widths[idx] || 0) > 0
+        const hasFullWidthLine = offsets.some(
+            (val, idx) => Number.isFinite(val) && Math.abs(val) <= 0.1 && Number(widths[idx] || 0) > 0,
         );
         assert.ok(hasWrappedLine, `${fixtureName}: expected amber paragraph to include wrapped (offset) lines`);
-        assert.ok(hasFullWidthLine, `${fixtureName}: expected amber paragraph to include a full-width line after underhang`);
+        assert.ok(
+            hasFullWidthLine,
+            `${fixtureName}: expected amber paragraph to include a full-width line after underhang`,
+        );
     }
 }
 
@@ -230,20 +251,16 @@ function assertDropCapPaginationSignals(pages: any[], fixtureName: string): void
     };
 
     const dropcapBoxes = pages.flatMap((page: any, pageIndex: number) =>
-        (page.boxes || [])
-            .filter((box: any) => box.type === 'dropcap')
-            .map((box: any) => ({ box, pageIndex }))
+        (page.boxes || []).filter((box: any) => box.type === 'dropcap').map((box: any) => ({ box, pageIndex })),
     );
     assert.ok(dropcapBoxes.length >= 2, `${fixtureName}: expected dropcap boxes`);
 
     const basicParagraphBoxes = pages.flatMap((page: any, pageIndex: number) =>
         (page.boxes || [])
             .filter((box: any) => matchesSourceId(box, 'dropcap-basic'))
-            .map((box: any) => ({ box, pageIndex }))
+            .map((box: any) => ({ box, pageIndex })),
     );
-    const basicDropcap = dropcapBoxes.find((entry) =>
-        String(entry.box.meta?.sourceId || '').includes('dropcap-basic')
-    );
+    const basicDropcap = dropcapBoxes.find((entry) => String(entry.box.meta?.sourceId || '').includes('dropcap-basic'));
     assert.ok(basicDropcap, `${fixtureName}: expected dropcap-basic dropcap box`);
     const basicFragments = basicParagraphBoxes.filter((entry) => entry.box.type !== 'dropcap');
     const hasContinuation = basicFragments.some((entry) => Number(entry.box.meta?.fragmentIndex || 0) > 0);
@@ -252,12 +269,12 @@ function assertDropCapPaginationSignals(pages: any[], fixtureName: string): void
     const continuationPages = new Set(
         basicFragments
             .filter((entry) => Number(entry.box.meta?.fragmentIndex || 0) > 0)
-            .map((entry) => entry.pageIndex)
+            .map((entry) => entry.pageIndex),
     );
     const dropcapPages = new Set(
         dropcapBoxes
             .filter((entry) => String(entry.box.meta?.sourceId || '').includes('dropcap-basic'))
-            .map((entry) => entry.pageIndex)
+            .map((entry) => entry.pageIndex),
     );
     const firstDropcapPage = dropcapBoxes
         .filter((entry) => String(entry.box.meta?.sourceId || '').includes('dropcap-basic'))
@@ -265,11 +282,15 @@ function assertDropCapPaginationSignals(pages: any[], fixtureName: string): void
         .sort((a, b) => a - b)[0];
     continuationPages.forEach((pageIndex) => {
         if (pageIndex === firstDropcapPage) return;
-        assert.equal(dropcapPages.has(pageIndex), false, `${fixtureName}: dropcap should not repeat on continuation page`);
+        assert.equal(
+            dropcapPages.has(pageIndex),
+            false,
+            `${fixtureName}: dropcap should not repeat on continuation page`,
+        );
     });
 
     const moveWholeDropcap = dropcapBoxes.find((entry) =>
-        String(entry.box.meta?.sourceId || '').includes('dropcap-move-whole')
+        String(entry.box.meta?.sourceId || '').includes('dropcap-move-whole'),
     );
     assert.ok(moveWholeDropcap, `${fixtureName}: expected dropcap-move-whole dropcap box`);
 }
@@ -288,7 +309,7 @@ function assertGodSnapshot(fixtureName: string, fixturePath: string, pages: any[
     if (!fs.existsSync(snapshotPath)) {
         if (!UPDATE_LAYOUT_SNAPSHOTS) {
             throw new Error(
-                `${fixtureName}: snapshot missing at ${snapshotPath}. Re-run tests with --update-layout-snapshots or set VMPRINT_UPDATE_LAYOUT_SNAPSHOTS=1.`
+                `${fixtureName}: snapshot missing at ${snapshotPath}. Re-run tests with --update-layout-snapshots or set VMPRINT_UPDATE_LAYOUT_SNAPSHOTS=1.`,
             );
         }
         fs.writeFileSync(snapshotPath, JSON.stringify(actual, null, 2) + '\n', 'utf-8');
@@ -305,20 +326,15 @@ function assertGodSnapshot(fixtureName: string, fixturePath: string, pages: any[
     assert.deepEqual(actual, expected, `${fixtureName}: layout snapshot mismatch (${snapshotPath})`);
 }
 
-
 async function run() {
     const LocalFontManager = await loadLocalFontManager();
     setDefaultEngineRuntime(createEngineRuntime({ fontManager: new LocalFontManager() }));
 
     logStep('Scenario: fixture-driven deterministic pagination and renderer regression checks');
     const fixtures = loadJsonDocumentFixtures();
-    check(
-        'fixture discovery',
-        'at least one JSON fixture is present in src/tests/fixtures/regression',
-        () => {
-            assert.ok(fixtures.length > 0, 'no JSON fixtures found in src/tests/fixtures/regression');
-        }
-    );
+    check('fixture discovery', 'at least one JSON fixture is present in src/tests/fixtures/regression', () => {
+        assert.ok(fixtures.length > 0, 'no JSON fixtures found in src/tests/fixtures/regression');
+    });
 
     for (const fixture of fixtures) {
         logStep(`Fixture: ${fixture.name}`);
@@ -331,10 +347,14 @@ async function run() {
             `${fixture.name} canonical IR determinism`,
             're-loading the same fixture yields byte-equivalent canonical IR',
             () => {
-                assert.equal(irA.documentVersion, CURRENT_DOCUMENT_VERSION, `${fixture.name}: unexpected documentVersion`);
+                assert.equal(
+                    irA.documentVersion,
+                    CURRENT_DOCUMENT_VERSION,
+                    `${fixture.name}: unexpected documentVersion`,
+                );
                 assert.equal(irA.irVersion, CURRENT_IR_VERSION, `${fixture.name}: unexpected irVersion`);
                 assert.deepEqual(irA, irB, `${fixture.name}: canonical IR drift between repeated loads`);
-            }
+            },
         );
 
         const config = toLayoutConfig(fixture.document, false);
@@ -350,7 +370,7 @@ async function run() {
             'finite geometry, measured lines fit, and no nested children in boxes',
             () => {
                 assertFlatPipelineInvariants(pagesA, fixture.name);
-            }
+            },
         );
         check(
             `${fixture.name} deterministic pagination`,
@@ -359,9 +379,9 @@ async function run() {
                 assert.deepEqual(
                     snapshotPages(pagesA),
                     snapshotPages(pagesB),
-                    `${fixture.name}: layout is not deterministic between runs`
+                    `${fixture.name}: layout is not deterministic between runs`,
                 );
-            }
+            },
         );
         check(
             `${fixture.name} layout snapshot`,
@@ -370,7 +390,7 @@ async function run() {
                 : 'skipped for non-god fixtures',
             () => {
                 assertGodSnapshot(fixture.name, fixturePath, pagesA);
-            }
+            },
         );
         if (fixture.name.startsWith('05-page-size-') || fixture.name.startsWith('06-page-size-')) {
             check(
@@ -382,7 +402,7 @@ async function run() {
                         assert.equal(page.width, expected.width, `${fixture.name}: page=${idx} width mismatch`);
                         assert.equal(page.height, expected.height, `${fixture.name}: page=${idx} height mismatch`);
                     });
-                }
+                },
             );
         }
         if (fixture.name === '02-text-layout-advanced.json') {
@@ -391,7 +411,7 @@ async function run() {
                 'advanced fixtures emit expected justification and soft-hyphen layout markers',
                 () => {
                     assertAdvancedLayoutSignals(pagesA, fixture.name);
-                }
+                },
             );
         }
         if (fixture.name === '14-flow-images-multipage.json') {
@@ -402,10 +422,9 @@ async function run() {
                     assert.ok(pagesA.length >= 2, `${fixture.name}: expected at least two pages`);
                     const imageCount = pagesA
                         .flatMap((page) => page.boxes)
-                        .filter((box) => box.type === 'image')
-                        .length;
+                        .filter((box) => box.type === 'image').length;
                     assert.equal(imageCount, 3, `${fixture.name}: expected exactly three flow image boxes`);
-                }
+                },
             );
         }
         if (fixture.name === '13-inline-rich-objects.json') {
@@ -418,17 +437,20 @@ async function run() {
                         .map((page, pageIndex) => ({
                             pageIndex,
                             hasInline: page.boxes.some((box) =>
-                                (box.lines || []).some((line) => line.some((seg: any) => !!seg.inlineObject))
-                            )
+                                (box.lines || []).some((line) => line.some((seg: any) => !!seg.inlineObject)),
+                            ),
                         }))
                         .filter((entry) => entry.hasInline)
                         .map((entry) => entry.pageIndex);
-                    assert.ok(pagesWithInlineSegments.length > 0, `${fixture.name}: expected inline segments in output`);
+                    assert.ok(
+                        pagesWithInlineSegments.length > 0,
+                        `${fixture.name}: expected inline segments in output`,
+                    );
                     assert.ok(
                         pagesWithInlineSegments.some((idx) => idx > 0),
-                        `${fixture.name}: expected inline segments on at least one continuation page`
+                        `${fixture.name}: expected inline segments on at least one continuation page`,
                     );
-                }
+                },
             );
         }
         if (fixture.name === '12-inline-baseline-alignment.json') {
@@ -443,33 +465,41 @@ async function run() {
                         .filter((seg: any) => !!seg.inlineObject && !!seg.inlineMetrics);
                     assert.ok(inlineSegments.length > 0, `${fixture.name}: expected inline segments with metrics`);
 
-                    const aligns = new Set<string>(inlineSegments.map((seg: any) => String(seg.inlineMetrics.verticalAlign || '')));
+                    const aligns = new Set<string>(
+                        inlineSegments.map((seg: any) => String(seg.inlineMetrics.verticalAlign || '')),
+                    );
                     ['baseline', 'middle', 'text-top', 'text-bottom', 'bottom'].forEach((mode) => {
                         assert.ok(aligns.has(mode), `${fixture.name}: missing verticalAlign=${mode}`);
                     });
 
                     const hasBaselineShiftMetric = inlineSegments.every((seg: any) =>
-                        Number.isFinite(Number(seg.inlineMetrics.baselineShift ?? 0))
+                        Number.isFinite(Number(seg.inlineMetrics.baselineShift ?? 0)),
                     );
                     assert.ok(hasBaselineShiftMetric, `${fixture.name}: expected numeric baselineShift metrics`);
 
-                    const hasMargins = inlineSegments.some((seg: any) =>
-                        Number(seg.inlineMetrics.marginLeft || 0) > 0 || Number(seg.inlineMetrics.marginRight || 0) > 0
+                    const hasMargins = inlineSegments.some(
+                        (seg: any) =>
+                            Number(seg.inlineMetrics.marginLeft || 0) > 0 ||
+                            Number(seg.inlineMetrics.marginRight || 0) > 0,
                     );
                     assert.ok(hasMargins, `${fixture.name}: expected inline margin usage`);
 
-                    const widthIncludesMargin = inlineSegments.some((seg: any) =>
-                        Number(seg.width || 0) > Number(seg.inlineMetrics.contentWidth || 0)
+                    const widthIncludesMargin = inlineSegments.some(
+                        (seg: any) => Number(seg.width || 0) > Number(seg.inlineMetrics.contentWidth || 0),
                     );
                     assert.ok(widthIncludesMargin, `${fixture.name}: expected total width to include inline margins`);
 
-                    const hasOpticalInsetMetrics = inlineSegments.some((seg: any) =>
-                        seg.inlineObject?.kind === 'image' &&
-                        seg.inlineMetrics.opticalInsetTop !== undefined &&
-                        seg.inlineMetrics.opticalInsetBottom !== undefined
+                    const hasOpticalInsetMetrics = inlineSegments.some(
+                        (seg: any) =>
+                            seg.inlineObject?.kind === 'image' &&
+                            seg.inlineMetrics.opticalInsetTop !== undefined &&
+                            seg.inlineMetrics.opticalInsetBottom !== undefined,
                     );
-                    assert.ok(hasOpticalInsetMetrics, `${fixture.name}: expected inline image optical inset metrics to be populated`);
-                }
+                    assert.ok(
+                        hasOpticalInsetMetrics,
+                        `${fixture.name}: expected inline image optical inset metrics to be populated`,
+                    );
+                },
             );
         }
         if (fixture.name === '09-tables-spans-pagination.json') {
@@ -478,7 +508,7 @@ async function run() {
                 'colSpan + rowSpan cells paginate deterministically with repeated headers and no span boundary splits',
                 () => {
                     assertTableMixedSpanFixtureSignals(pagesA, fixture.name);
-                }
+                },
             );
         }
         if (fixture.name === '10-packager-split-scenarios.json') {
@@ -487,7 +517,7 @@ async function run() {
                 'keepWithNext, mid-page table, and page-top overflow splits are all exercised',
                 () => {
                     assertPackagerShatterShowcaseSignals(pagesA, fixture.name);
-                }
+                },
             );
         }
         if (fixture.name === '08-dropcap-pagination.json') {
@@ -496,7 +526,7 @@ async function run() {
                 'dropcap stays on first fragment and continuation splits correctly',
                 () => {
                     assertDropCapPaginationSignals(pagesA, fixture.name);
-                }
+                },
             );
         }
         if (fixture.name === '11-story-image-floats.json') {
@@ -505,58 +535,59 @@ async function run() {
                 'multi-page story with image floats, story-absolute, and non-uniform line widths',
                 () => {
                     assertStoryPackagerShowcaseSignals(pagesA, fixture.name);
-                }
+                },
             );
         }
-        check(
-            `${fixture.name} input immutability`,
-            'input elements are unchanged after pagination',
-            () => {
-                assertNoInputMutation(elements, fixture.name);
-            }
-        );
+        check(`${fixture.name} input immutability`, 'input elements are unchanged after pagination', () => {
+            assertNoInputMutation(elements, fixture.name);
+        });
 
         const { width: pageWidth, height: pageHeight } = LayoutUtils.getPageDimensions(config);
         const context = new MockContext(pageWidth, pageHeight);
         const renderer = new Renderer(config, false, engine.getRuntime());
         await renderer.render(pagesA, context);
-        check(
-            `${fixture.name} renderer integration`,
-            'renderer consumes all pages and emits text draw calls',
-            () => {
-                assert.equal(context.pagesAdded, pagesA.length, `${fixture.name}: renderer/page count mismatch`);
-                assert.ok(context.textCalls > 0, `${fixture.name}: renderer emitted no text draw calls`);
-                if (fixture.name === '13-inline-rich-objects.json') {
-                    assert.ok(context.imageCalls > 0, `${fixture.name}: expected renderer image draw calls for inline images`);
-                }
-                if (fixture.name === '11-story-image-floats.json') {
-                    assert.ok(context.imageCalls >= 6, `${fixture.name}: expected renderer image draw calls for all story images`);
-                }
-                if (fixture.name === '12-inline-baseline-alignment.json') {
-                    assert.ok(context.imageCalls > 0, `${fixture.name}: expected renderer image draw calls for inline images`);
-                    const hotBadgeDraws = context.imageTrace.filter((call) =>
-                        call.width >= 70 && call.width <= 82 && call.height >= 22 && call.height <= 30
-                    );
-                    assert.ok(hotBadgeDraws.length >= 2, `${fixture.name}: expected at least two HOT badge draws`);
-
-                    // Variant 1 (baseline) and Variant 2 (middle) are emitted in-order.
-                    // Their badge Y positions must differ when verticalAlign/baselineShift differ.
-                    const variant1HotY = hotBadgeDraws[0].y;
-                    const variant2HotY = hotBadgeDraws[1].y;
-                    assert.ok(
-                        Math.abs(variant1HotY - variant2HotY) > 0.1,
-                        `${fixture.name}: expected Variant 1/2 HOT badge Y positions to differ`
-                    );
-                }
+        check(`${fixture.name} renderer integration`, 'renderer consumes all pages and emits text draw calls', () => {
+            assert.equal(context.pagesAdded, pagesA.length, `${fixture.name}: renderer/page count mismatch`);
+            assert.ok(context.textCalls > 0, `${fixture.name}: renderer emitted no text draw calls`);
+            if (fixture.name === '13-inline-rich-objects.json') {
+                assert.ok(
+                    context.imageCalls > 0,
+                    `${fixture.name}: expected renderer image draw calls for inline images`,
+                );
             }
-        );
+            if (fixture.name === '11-story-image-floats.json') {
+                assert.ok(
+                    context.imageCalls >= 6,
+                    `${fixture.name}: expected renderer image draw calls for all story images`,
+                );
+            }
+            if (fixture.name === '12-inline-baseline-alignment.json') {
+                assert.ok(
+                    context.imageCalls > 0,
+                    `${fixture.name}: expected renderer image draw calls for inline images`,
+                );
+                const hotBadgeDraws = context.imageTrace.filter(
+                    (call) => call.width >= 70 && call.width <= 82 && call.height >= 22 && call.height <= 30,
+                );
+                assert.ok(hotBadgeDraws.length >= 2, `${fixture.name}: expected at least two HOT badge draws`);
+
+                // Variant 1 (baseline) and Variant 2 (middle) are emitted in-order.
+                // Their badge Y positions must differ when verticalAlign/baselineShift differ.
+                const variant1HotY = hotBadgeDraws[0].y;
+                const variant2HotY = hotBadgeDraws[1].y;
+                assert.ok(
+                    Math.abs(variant1HotY - variant2HotY) > 0.1,
+                    `${fixture.name}: expected Variant 1/2 HOT badge Y positions to differ`,
+                );
+            }
+        });
         if (fixture.name === '02-text-layout-advanced.json') {
             check(
                 `${fixture.name} advanced render signals`,
                 'advanced fixtures exhibit expected rtl drawing progression',
                 () => {
                     assertAdvancedRenderSignals(context.textTrace, fixture.name);
-                }
+                },
             );
         }
     }
@@ -568,4 +599,3 @@ run().catch((err) => {
     console.error('[engine-regression.spec] FAILED', err);
     process.exit(1);
 });
-

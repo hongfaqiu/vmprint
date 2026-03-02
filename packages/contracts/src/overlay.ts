@@ -37,14 +37,7 @@ export interface OverlayContext {
     undash(): this;
     moveTo(x: number, y: number): this;
     lineTo(x: number, y: number): this;
-    bezierCurveTo(
-        cp1x: number,
-        cp1y: number,
-        cp2x: number,
-        cp2y: number,
-        x: number,
-        y: number
-    ): this;
+    bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): this;
     rect(x: number, y: number, w: number, h: number): this;
     roundedRect(x: number, y: number, w: number, h: number, r: number): this;
     fill(rule?: 'nonzero' | 'evenodd'): this;

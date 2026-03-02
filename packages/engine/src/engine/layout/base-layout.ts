@@ -8,7 +8,10 @@ import { EngineRuntime, getDefaultEngineRuntime } from '../runtime';
 export class BaseLayout {
     protected runtime: EngineRuntime;
 
-    constructor(protected config: LayoutConfig, runtime?: EngineRuntime) {
+    constructor(
+        protected config: LayoutConfig,
+        runtime?: EngineRuntime,
+    ) {
         this.runtime = runtime || getDefaultEngineRuntime();
     }
 
@@ -34,11 +37,11 @@ export class BaseLayout {
         const rawStyle = this.config.styles[typeKey] || {};
         return {
             ...rawStyle,
-            ...(element.properties?.style || {})
+            ...(element.properties?.style || {}),
         } as ElementStyle;
     }
 
-    protected getPageDimensions(): { width: number, height: number } {
+    protected getPageDimensions(): { width: number; height: number } {
         return LayoutUtils.getPageDimensions(this.config);
     }
 
@@ -46,4 +49,3 @@ export class BaseLayout {
         return this.runtime;
     }
 }
-

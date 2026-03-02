@@ -97,7 +97,10 @@ async function run() {
         .option('-i, --input <path>', 'Input document JSON file')
         .option('-o, --output <path>', 'Output file (.pdf)')
         .option('--context <path>', 'Path to a JS module exporting a Context class (default: bundled PdfContext)')
-        .option('--font-manager <path>', 'Path to a JS module exporting a FontManager class (default: bundled LocalFontManager)')
+        .option(
+            '--font-manager <path>',
+            'Path to a JS module exporting a FontManager class (default: bundled LocalFontManager)',
+        )
         .option('--dump-ir [path]', 'Write canonical document IR JSON (default: <output>.ir.json)')
         .option('--emit-layout [path]', 'Output annotated layout stream JSON (default: <output>.layout.json)')
         .option('--render-from-layout <path>', 'Bypass layout engine and render directly from a layout JSON stream')
@@ -117,7 +120,10 @@ async function run() {
     const builtinFontManager = resolveBuiltin('font-managers/local/index.js', '@vmprint/local-fonts');
     const builtinContext = resolveBuiltin('contexts/pdf/index.js', '@vmprint/context-pdf');
 
-    const FontManagerClass = await loadImplementation<new (...args: any[]) => any>(options.fontManager, builtinFontManager);
+    const FontManagerClass = await loadImplementation<new (...args: any[]) => any>(
+        options.fontManager,
+        builtinFontManager,
+    );
     const ContextClass = await loadImplementation<new (...args: any[]) => any>(options.context, builtinContext);
 
     const runtime = createEngineRuntime({ fontManager: new FontManagerClass() });
@@ -158,7 +164,8 @@ async function run() {
             const coldLayoutMs = t2 - t1;
 
             const WARM_REPEATS = 2;
-            let warmFontSum = 0, warmLayoutSum = 0;
+            let warmFontSum = 0,
+                warmLayoutSum = 0;
             for (let i = 0; i < WARM_REPEATS; i++) {
                 const warmEngine = new LayoutEngine(config, runtime);
                 const wt0 = performance.now();
@@ -172,8 +179,12 @@ async function run() {
             const avgWarmFontMs = warmFontSum / WARM_REPEATS;
             const avgWarmLayoutMs = warmLayoutSum / WARM_REPEATS;
 
-            console.log(`[vmprint] cold  fontMs: ${coldFontMs.toFixed(2)} | layoutMs: ${coldLayoutMs.toFixed(2)} | total: ${(coldFontMs + coldLayoutMs).toFixed(2)} (${pages.length} pages)`);
-            console.log(`[vmprint] warm  fontMs: ${avgWarmFontMs.toFixed(2)} | layoutMs: ${avgWarmLayoutMs.toFixed(2)} | total: ${(avgWarmFontMs + avgWarmLayoutMs).toFixed(2)} (avg ×${WARM_REPEATS})`);
+            console.log(
+                `[vmprint] cold  fontMs: ${coldFontMs.toFixed(2)} | layoutMs: ${coldLayoutMs.toFixed(2)} | total: ${(coldFontMs + coldLayoutMs).toFixed(2)} (${pages.length} pages)`,
+            );
+            console.log(
+                `[vmprint] warm  fontMs: ${avgWarmFontMs.toFixed(2)} | layoutMs: ${avgWarmLayoutMs.toFixed(2)} | total: ${(avgWarmFontMs + avgWarmLayoutMs).toFixed(2)} (avg ×${WARM_REPEATS})`,
+            );
         }
     }
 
@@ -182,35 +193,36 @@ async function run() {
     }
 
     const overlay = overlayPath
-        ? ensureOverlayProvider(
-            await loadImplementation<OverlayProvider>(overlayPath, overlayPath),
-            overlayPath
-        )
+        ? ensureOverlayProvider(await loadImplementation<OverlayProvider>(overlayPath, overlayPath), overlayPath)
         : undefined;
 
     if (options.emitLayout !== undefined) {
-        const layoutPath = options.emitLayout === true
-            ? (outputPath ? outputPath.replace(/\.pdf$/i, '.layout.json') : 'output.layout.json')
-            : path.resolve(String(options.emitLayout));
+        const layoutPath =
+            options.emitLayout === true
+                ? outputPath
+                    ? outputPath.replace(/\.pdf$/i, '.layout.json')
+                    : 'output.layout.json'
+                : path.resolve(String(options.emitLayout));
 
         const { debug: _debug, ...exportedConfig } = config;
         const streamExport: AnnotatedLayoutStream = {
             streamVersion: '1.0',
             config: exportedConfig,
-            pages
+            pages,
         };
 
-        const stringifyObj = (options.omitGlyphs || options.quantize)
-            ? JSON.stringify(streamExport, (key, value) => {
-                if (key.startsWith('_')) return undefined;
-                if (options.omitGlyphs && key === 'glyphs') return undefined;
-                if (options.quantize && typeof value === 'number') {
-                    if (Number.isInteger(value)) return value;
-                    return Number(value.toFixed(3));
-                }
-                return value;
-            })
-            : JSON.stringify(streamExport, (key, value) => key.startsWith('_') ? undefined : value);
+        const stringifyObj =
+            options.omitGlyphs || options.quantize
+                ? JSON.stringify(streamExport, (key, value) => {
+                      if (key.startsWith('_')) return undefined;
+                      if (options.omitGlyphs && key === 'glyphs') return undefined;
+                      if (options.quantize && typeof value === 'number') {
+                          if (Number.isInteger(value)) return value;
+                          return Number(value.toFixed(3));
+                      }
+                      return value;
+                  })
+                : JSON.stringify(streamExport, (key, value) => (key.startsWith('_') ? undefined : value));
 
         fs.writeFileSync(layoutPath, stringifyObj, 'utf8');
     }
@@ -223,16 +235,15 @@ async function run() {
         size: [width, height],
         margins: { top: 0, left: 0, right: 0, bottom: 0 },
         autoFirstPage: false,
-        bufferPages: false
+        bufferPages: false,
     });
     await renderer.render(pages, context);
     if (typeof context.waitForFinish === 'function') {
         await context.waitForFinish();
     }
     if (options.dumpIr !== undefined && document) {
-        const irPath = options.dumpIr === true
-            ? outputPath.replace(/\.pdf$/i, '.ir.json')
-            : path.resolve(String(options.dumpIr));
+        const irPath =
+            options.dumpIr === true ? outputPath.replace(/\.pdf$/i, '.ir.json') : path.resolve(String(options.dumpIr));
         fs.writeFileSync(irPath, serializeDocumentIR(document), 'utf8');
     }
 }

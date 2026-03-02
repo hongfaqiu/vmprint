@@ -13,7 +13,10 @@ export function resolvePlainLayoutInfo(params: {
     getScriptClass: (text: string) => string;
     getOpticalScale: (scriptClass: string) => number;
 }): { font: any; fontSize: number; segment: TextSegment } {
-    const transformed = params.transformSegment({ text: params.segText, fontFamily: params.familyName }, params.familyName);
+    const transformed = params.transformSegment(
+        { text: params.segText, fontFamily: params.familyName },
+        params.familyName,
+    );
     const style = transformed.style || {};
     const resolvedWeight = LayoutUtils.normalizeFontWeight(style.fontWeight);
     const resolvedStyle = LayoutUtils.normalizeFontStyle(style.fontStyle);
@@ -44,7 +47,7 @@ export function resolveRichFontInfo(
     seg: TextSegment,
     defaultFontSize: number,
     baseFontFamily: string,
-    resolveLoadedFamilyFont: (familyName: string, weight: number | string, style?: string) => any
+    resolveLoadedFamilyFont: (familyName: string, weight: number | string, style?: string) => any,
 ): { font: any; fontSize: number } {
     const style = seg.style || {};
     const resolvedWeight = LayoutUtils.normalizeFontWeight(style.fontWeight);
@@ -54,6 +57,3 @@ export function resolveRichFontInfo(
     const font = resolveLoadedFamilyFont(familyName, resolvedWeight, resolvedStyle);
     return { font, fontSize };
 }
-
-
-

@@ -7,11 +7,13 @@ export const createEngineRuntime = (options: EngineRuntimeOptions): EngineRuntim
     const fontManager = options.fontManager;
     return {
         fontManager,
-        fontRegistry: options.fontRegistry ? cloneFontRegistry(options.fontRegistry) : fontManager.getFontRegistrySnapshot(),
+        fontRegistry: options.fontRegistry
+            ? cloneFontRegistry(options.fontRegistry)
+            : fontManager.getFontRegistrySnapshot(),
         measurementCache: new Map(),
         fontCache: {},
         bufferCache: {},
-        loadingPromises: {}
+        loadingPromises: {},
     };
 };
 
@@ -20,7 +22,7 @@ let defaultRuntime: EngineRuntime | null = null;
 export const getDefaultEngineRuntime = (): EngineRuntime => {
     if (defaultRuntime) return defaultRuntime;
     throw new Error(
-        'No default EngineRuntime is configured. Provide runtime explicitly or call setDefaultEngineRuntime(createEngineRuntime({ fontManager })).'
+        'No default EngineRuntime is configured. Provide runtime explicitly or call setDefaultEngineRuntime(createEngineRuntime({ fontManager })).',
     );
 };
 

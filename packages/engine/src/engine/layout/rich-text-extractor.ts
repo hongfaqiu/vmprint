@@ -73,7 +73,7 @@ export function getRichSegments(
         transformContent: (text: string, elementType: ElementType) => string;
         resolveStyleForType: (type: string) => Record<string, any>;
     },
-    inheritedLinkTarget?: string
+    inheritedLinkTarget?: string,
 ): TextSegment[] {
     const segments: TextSegment[] = [];
     const elementType = element.type as ElementType;
@@ -84,7 +84,8 @@ export function getRichSegments(
     // and emphasis typography back to body defaults.
     const explicitlyDefinedStyle = isInheritedTextLeaf ? {} : resolvedTypeStyle;
     const currentStyle = { ...inheritedStyle, ...explicitlyDefinedStyle, ...(element.properties?.style || {}) };
-    const ownLinkTarget = typeof element.properties?.linkTarget === 'string' ? element.properties.linkTarget : undefined;
+    const ownLinkTarget =
+        typeof element.properties?.linkTarget === 'string' ? element.properties.linkTarget : undefined;
     const currentLinkTarget = ownLinkTarget || inheritedLinkTarget;
 
     if (isInlineImageElement(element)) {
@@ -97,8 +98,8 @@ export function getRichSegments(
             ...(currentLinkTarget ? { linkTarget: currentLinkTarget } : {}),
             inlineObject: {
                 kind: 'image',
-                image: imagePayload
-            }
+                image: imagePayload,
+            },
         });
         return segments;
     }
@@ -111,18 +112,22 @@ export function getRichSegments(
             ...(currentLinkTarget ? { linkTarget: currentLinkTarget } : {}),
             inlineObject: {
                 kind: 'box',
-                text: element.content || ''
-            }
+                text: element.content || '',
+            },
         });
         return segments;
     }
 
-    if (element.type === 'text' && element.content !== undefined && (!element.children || element.children.length === 0)) {
+    if (
+        element.type === 'text' &&
+        element.content !== undefined &&
+        (!element.children || element.children.length === 0)
+    ) {
         segments.push({
             text: params.transformContent(element.content, elementType),
             style: currentStyle,
             fontFamily: currentStyle.fontFamily,
-            ...(currentLinkTarget ? { linkTarget: currentLinkTarget } : {})
+            ...(currentLinkTarget ? { linkTarget: currentLinkTarget } : {}),
         });
         return segments;
     }
@@ -136,10 +141,9 @@ export function getRichSegments(
             text: params.transformContent(element.content, elementType),
             style: currentStyle,
             fontFamily: currentStyle.fontFamily,
-            ...(currentLinkTarget ? { linkTarget: currentLinkTarget } : {})
+            ...(currentLinkTarget ? { linkTarget: currentLinkTarget } : {}),
         });
     }
 
     return segments;
 }
-

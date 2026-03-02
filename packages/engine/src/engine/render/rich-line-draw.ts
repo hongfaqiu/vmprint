@@ -25,11 +25,11 @@ export const drawRichLineSegments = (
     context: Context,
     line: RendererRichLine,
     lineItems: RendererLineItem[],
-    options: DrawRichLineSegmentsOptions
+    options: DrawRichLineSegmentsOptions,
 ): number => {
     let currentX = options.lineX;
     const hasInlineObjectInLine = line.some((seg) => !!seg?.inlineObject);
-    let lineBaselineFromTop = options.vOffset + (options.lineReferenceAscentScale * options.actualLineFontSize);
+    let lineBaselineFromTop = options.vOffset + options.lineReferenceAscentScale * options.actualLineFontSize;
 
     if (hasInlineObjectInLine) {
         const lineAscentDescent = line.reduce(
@@ -41,11 +41,11 @@ export const drawRichLineSegments = (
                 if (segDescentPx > acc.maxDescentPx) acc.maxDescentPx = segDescentPx;
                 return acc;
             },
-            { maxAscentPx: 0, maxDescentPx: 0 }
+            { maxAscentPx: 0, maxDescentPx: 0 },
         );
         const usedHeight = lineAscentDescent.maxAscentPx + lineAscentDescent.maxDescentPx;
         const extraLeading = Math.max(0, options.effectiveLineHeight - usedHeight);
-        lineBaselineFromTop = lineAscentDescent.maxAscentPx + (extraLeading / 2);
+        lineBaselineFromTop = lineAscentDescent.maxAscentPx + extraLeading / 2;
     }
     const lineBaselineY = options.lineTopY + lineBaselineFromTop;
 
@@ -105,10 +105,12 @@ export const drawRichLineSegments = (
             yAdjustment = 0;
         }
 
-        let finalY = (options.lineTopY + (hasInlineObjectInLine ? yAdjustment : (options.vOffset + yAdjustment))) || 0;
+        let finalY = options.lineTopY + (hasInlineObjectInLine ? yAdjustment : options.vOffset + yAdjustment) || 0;
         if (!seg.inlineObject) {
             if (seg.descent === undefined) {
-                throw new Error(`[Renderer] Missing precomputed descent for segment "${(seg.text || '').slice(0, 24)}".`);
+                throw new Error(
+                    `[Renderer] Missing precomputed descent for segment "${(seg.text || '').slice(0, 24)}".`,
+                );
             }
             const segAscentPx = (segAscender / 1000) * (Number(size) || options.fontSize);
             const segDescentPx = (seg.descent / 1000) * (Number(size) || options.fontSize);
@@ -139,7 +141,7 @@ export const drawRichLineSegments = (
                         lineBreak: false,
                         characterSpacing: 0,
                         ascent: segAscender,
-                        ...(seg.linkTarget ? { link: seg.linkTarget } : {})
+                        ...(seg.linkTarget ? { link: seg.linkTarget } : {}),
                     });
                 }
             });
@@ -154,7 +156,7 @@ export const drawRichLineSegments = (
                     height: dH,
                     characterSpacing: options.letterSpacing,
                     ascent: segAscender,
-                    ...(seg.linkTarget ? { link: seg.linkTarget } : {})
+                    ...(seg.linkTarget ? { link: seg.linkTarget } : {}),
                 });
             }
         }

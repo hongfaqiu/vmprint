@@ -17,7 +17,7 @@ export interface ResolvedFontMatch {
 export class LayoutUtils {
     private static applyOrientation(
         size: { width: number; height: number },
-        orientation: LayoutConfig['layout']['orientation']
+        orientation: LayoutConfig['layout']['orientation'],
     ): { width: number; height: number } {
         if (orientation !== 'landscape') {
             return { width: size.width, height: size.height };
@@ -28,7 +28,7 @@ export class LayoutUtils {
     /**
      * Returns standard PDF point dimensions for supported page sizes.
      */
-    static getPageDimensions(config: LayoutConfig): { width: number, height: number } {
+    static getPageDimensions(config: LayoutConfig): { width: number; height: number } {
         const pageSize = config.layout.pageSize;
         const orientation = config.layout.orientation;
 
@@ -66,7 +66,12 @@ export class LayoutUtils {
         if (typeof value !== 'string') return null;
         const trimmed = value.trim();
         if (!trimmed) return null;
-        if (trimmed.startsWith('author:') || trimmed.startsWith('auto:') || trimmed.startsWith('gen:') || trimmed.startsWith('system:')) {
+        if (
+            trimmed.startsWith('author:') ||
+            trimmed.startsWith('auto:') ||
+            trimmed.startsWith('gen:') ||
+            trimmed.startsWith('system:')
+        ) {
             return trimmed;
         }
         return `author:${trimmed}`;
@@ -93,7 +98,6 @@ export class LayoutUtils {
 
         return Math.max(0, nominalWidth - insets);
     }
-
 
     static getBoxWidth(config: LayoutConfig, style?: any): number {
         const { width: pageWidth } = this.getPageDimensions(config);
@@ -134,7 +138,7 @@ export class LayoutUtils {
         weight: number | string = 400,
         style: string = 'normal',
         registry?: FontConfig[],
-        manager?: FontManager
+        manager?: FontManager,
     ): ResolvedFontMatch {
         if (!manager) {
             throw new Error('FontManager is required to resolve font matches.');
@@ -165,7 +169,7 @@ export class LayoutUtils {
             resolvedWeight: best.resolvedWeight,
             resolvedStyle: this.normalizeFontStyle(best.font.style),
             usedStyleFallback,
-            usedVariableWeightRange: best.usedVariableWeightRange
+            usedVariableWeightRange: best.usedVariableWeightRange,
         };
     }
 
@@ -174,7 +178,7 @@ export class LayoutUtils {
         weight: number | string = 400,
         style: string = 'normal',
         registry?: FontConfig[],
-        manager?: FontManager
+        manager?: FontManager,
     ): FontConfig {
         return this.resolveFontMatch(family, weight, style, registry, manager).config;
     }
@@ -187,7 +191,7 @@ export class LayoutUtils {
         weight: number | string = 400,
         style: string = 'normal',
         registry?: FontConfig[],
-        manager?: FontManager
+        manager?: FontManager,
     ): string {
         const match = this.resolveFontMatch(family, weight, style, registry, manager);
         const variant = this.toFontVariantLabel(match.resolvedWeight, match.resolvedStyle);
@@ -220,7 +224,9 @@ export class LayoutUtils {
     }
 
     static normalizeFontStyle(style: string | undefined): NormalizedFontStyle {
-        const normalized = String(style || '').trim().toLowerCase();
+        const normalized = String(style || '')
+            .trim()
+            .toLowerCase();
         if (normalized === 'italic' || normalized === 'oblique') return 'italic';
         return 'normal';
     }
@@ -234,7 +240,7 @@ export class LayoutUtils {
         const max = this.normalizeFontWeight(maxRaw);
         return {
             min: Math.min(min, max),
-            max: Math.max(min, max)
+            max: Math.max(min, max),
         };
     }
 
@@ -251,13 +257,12 @@ export class LayoutUtils {
     }
 
     private static normalizeRequestedFamilyName(family: string): string {
-        return String(family || '')
-            .replace(/-(Regular|Bold|Italic|BoldItalic|W[1-9]00|ItalicW[1-9]00)$/i, '');
+        return String(family || '').replace(/-(Regular|Bold|Italic|BoldItalic|W[1-9]00|ItalicW[1-9]00)$/i, '');
     }
 
     private static pickBestWeightCandidate(
         candidates: FontConfig[],
-        requestedWeight: number
+        requestedWeight: number,
     ): { font: FontConfig; resolvedWeight: number; usedVariableWeightRange: boolean } {
         const scored = candidates.map((font) => {
             const weightRange = this.normalizeFontWeightRange(font.weightRange);
@@ -265,16 +270,21 @@ export class LayoutUtils {
                 ? Math.min(weightRange.max, Math.max(weightRange.min, requestedWeight))
                 : this.normalizeFontWeight(font.weight);
             const distance = Math.abs(resolvedWeight - requestedWeight);
-            const directionPenalty = requestedWeight >= 500
-                ? (resolvedWeight >= requestedWeight ? 0 : 1)
-                : (resolvedWeight <= requestedWeight ? 0 : 1);
+            const directionPenalty =
+                requestedWeight >= 500
+                    ? resolvedWeight >= requestedWeight
+                        ? 0
+                        : 1
+                    : resolvedWeight <= requestedWeight
+                      ? 0
+                      : 1;
 
             return {
                 font,
                 resolvedWeight,
                 usedVariableWeightRange: !!weightRange,
                 distance,
-                directionPenalty
+                directionPenalty,
             };
         });
 
@@ -293,9 +303,7 @@ export class LayoutUtils {
         return {
             font: best.font,
             resolvedWeight: best.resolvedWeight,
-            usedVariableWeightRange: best.usedVariableWeightRange
+            usedVariableWeightRange: best.usedVariableWeightRange,
         };
     }
 }
-
-

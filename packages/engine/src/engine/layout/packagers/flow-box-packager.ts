@@ -14,8 +14,12 @@ export class FlowBoxPackager implements PackagerUnit {
     private cachedBoxes: Box[] | null = null;
     private requiredHeight: number = 0;
 
-    get pageBreakBefore(): boolean | undefined { return this.flowBox.pageBreakBefore; }
-    get keepWithNext(): boolean | undefined { return this.flowBox.keepWithNext; }
+    get pageBreakBefore(): boolean | undefined {
+        return this.flowBox.pageBreakBefore;
+    }
+    get keepWithNext(): boolean | undefined {
+        return this.flowBox.keepWithNext;
+    }
 
     constructor(processor: LayoutProcessor, flowBox: FlowBox) {
         this.processor = processor;
@@ -51,7 +55,7 @@ export class FlowBoxPackager implements PackagerUnit {
             this.flowBox.marginTop, // layoutBefore
             context.margins,
             availableWidth,
-            0 // pageIndex
+            0, // pageIndex
         );
 
         const boxes = Array.isArray(positioned) ? positioned : [positioned];
@@ -101,7 +105,7 @@ export class FlowBoxPackager implements PackagerUnit {
         const splitResult = (this.processor as any).splitFlowBox(
             this.flowBox,
             availableHeight,
-            this.flowBox.marginTop // layoutBefore
+            this.flowBox.marginTop, // layoutBefore
         );
 
         if (!splitResult) {

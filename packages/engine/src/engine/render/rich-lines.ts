@@ -11,7 +11,7 @@ import {
     computeAlignedLineX,
     computeJustifyExtraAfter,
     computeLineWidth,
-    createLineFrameAccessors
+    createLineFrameAccessors,
 } from './rich-line-layout';
 import { RendererBoxProperties, RendererLine, RendererLineItem } from './types';
 
@@ -30,7 +30,7 @@ export const drawRichLines = (
     containerStyle: ElementStyle,
     width: number,
     runtime: DrawRichLinesRuntime,
-    boxProperties?: RendererBoxProperties
+    boxProperties?: RendererBoxProperties,
 ): void => {
     let currentY = startY;
     const fontSize = Number(containerStyle.fontSize || runtime.layout.fontSize);
@@ -41,7 +41,8 @@ export const drawRichLines = (
     const baseStyle = containerStyle.fontStyle || 'normal';
 
     const align = containerStyle.textAlign;
-    const justifyEngine = containerStyle.justifyEngine || runtime.layout.justifyEngine || LAYOUT_DEFAULTS.textLayout.justifyEngine;
+    const justifyEngine =
+        containerStyle.justifyEngine || runtime.layout.justifyEngine || LAYOUT_DEFAULTS.textLayout.justifyEngine;
     const letterSpacing = LayoutUtils.validateUnit(containerStyle.letterSpacing || 0);
     const textIndent = LayoutUtils.validateUnit(containerStyle.textIndent || 0);
 
@@ -51,7 +52,8 @@ export const drawRichLines = (
     lines.forEach((line, lineIndex) => {
         const actualLineFontSize = paragraphMetrics.lineMetrics[lineIndex]?.lineFontSize ?? fontSize;
         const lineReferenceAscentScale =
-            paragraphMetrics.lineMetrics[lineIndex]?.referenceAscentScale ?? paragraphMetrics.paragraphReferenceAscentScale;
+            paragraphMetrics.lineMetrics[lineIndex]?.referenceAscentScale ??
+            paragraphMetrics.paragraphReferenceAscentScale;
         const effectiveLineHeight = paragraphMetrics.paragraphHasInlineObjects
             ? (paragraphMetrics.lineMetrics[lineIndex]?.effectiveLineHeight ?? paragraphMetrics.uniformLineHeight)
             : paragraphMetrics.uniformLineHeight;
@@ -64,12 +66,12 @@ export const drawRichLines = (
         const lineWidthLimit = lineFrame.getLineWidth(lineIndex);
         const lineOriginX = x + lineOffset;
         const lineTopY = lineFrame.getLineY(lineIndex) ?? currentY;
-        let lineBaselineY = lineTopY + vOffset + (lineReferenceAscentScale * actualLineFontSize);
+        let lineBaselineY = lineTopY + vOffset + lineReferenceAscentScale * actualLineFontSize;
         const lineDirection = resolveLineDirection(
             line,
             containerStyle,
             runtime.layout.direction,
-            LAYOUT_DEFAULTS.textLayout.direction
+            LAYOUT_DEFAULTS.textLayout.direction,
         );
         const lineWidth = computeLineWidth(line);
         const adjustedLineWidth = lineWidth - (letterSpacing || 0);
@@ -80,7 +82,7 @@ export const drawRichLines = (
             lineWidthLimit,
             textIndent,
             align,
-            adjustedLineWidth
+            adjustedLineWidth,
         );
 
         const justifyExtraAfter = computeJustifyExtraAfter(
@@ -90,17 +92,18 @@ export const drawRichLines = (
             align,
             justifyEngine,
             lineWidthLimit,
-            lineWidth
+            lineWidth,
         );
 
         if (typeof line === 'string') {
-            context.font(runtime.getFontId(baseFontFamily, baseWeight, baseStyle))
+            context
+                .font(runtime.getFontId(baseFontFamily, baseWeight, baseStyle))
                 .fontSize(fontSize)
                 .fillColor(containerStyle.color || 'black')
                 .text(line, lineX, lineTopY + vOffset, {
                     width: lineWidthLimit,
                     lineBreak: false,
-                    characterSpacing: letterSpacing
+                    characterSpacing: letterSpacing,
                 });
         } else {
             const rawItems: RendererLineItem[] = line.map((seg, idx) => ({ seg, extra: justifyExtraAfter[idx] || 0 }));
@@ -122,18 +125,13 @@ export const drawRichLines = (
                 containerColor: containerStyle.color,
                 getFontId: (family, weight, style) => runtime.getFontId(family, weight, style),
                 drawInlineImageSegment: (seg, drawX, drawY, fallbackFontSize) => {
-                    drawInlineImageSegment(
-                        context,
-                        seg,
-                        drawX,
-                        drawY,
-                        fallbackFontSize,
-                        (base64Data) => runtime.getImageBytes(base64Data)
+                    drawInlineImageSegment(context, seg, drawX, drawY, fallbackFontSize, (base64Data) =>
+                        runtime.getImageBytes(base64Data),
                     );
                 },
                 drawInlineBoxSegment: (seg, drawX, drawY, fallbackFontSize) => {
                     drawInlineBoxSegment(context, seg, drawX, drawY, fallbackFontSize);
-                }
+                },
             });
         }
         if (runtime.debug && Number.isFinite(lineBaselineY)) {

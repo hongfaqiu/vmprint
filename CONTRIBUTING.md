@@ -7,12 +7,12 @@ Thank you for your interest in VMPrint! We welcome contributions to improve the 
 1.  **Report Bugs:** Use the GitHub issue tracker to report bugs. Please include a reproduction case if possible (e.g., a `.json` or `.md` file that causes the issue).
 2.  **Suggest Features:** We're open to ideas! Open an issue to discuss new features.
 3.  **Submit Pull Requests:**
-    *   Fork the repository.
-    *   Create a new branch for your changes.
-    *   Ensure your code follows the existing style.
-    *   Add tests for any new functionality or bug fixes.
-    *   Run the existing tests to ensure no regressions: `pnpm test`.
-    *   Submit a PR with a clear description of your changes.
+    - Fork the repository.
+    - Create a new branch for your changes.
+    - Ensure your code follows the existing style.
+    - Add tests for any new functionality or bug fixes.
+    - Run the existing tests to ensure no regressions: `pnpm test`.
+    - Submit a PR with a clear description of your changes.
 
 ## Development Setup
 

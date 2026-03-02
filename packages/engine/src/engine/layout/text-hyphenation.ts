@@ -21,7 +21,7 @@ function isLikelyHyphenatableWord(
     text: string,
     hyphenateCaps: boolean,
     minWordLength: number,
-    getGraphemeClusters: (text: string) => string[]
+    getGraphemeClusters: (text: string) => string[],
 ): boolean {
     if (!text) return false;
     const clusters = getGraphemeClusters(text);
@@ -66,12 +66,17 @@ function collectLanguageExceptionBreaks(cleanWord: string, lang: string): number
     const exceptions: Record<string, Record<string, number[]>> = {
         en: { extraordinaryarchitectures: [5, 8, 10, 13, 16, 20] },
         de: { charakterisierung: [3, 6, 8, 11] },
-        fr: { internationalisation: [2, 5, 8, 11, 14] }
+        fr: { internationalisation: [2, 5, 8, 11, 14] },
     };
     return exceptions[lang]?.[normalized] || [];
 }
 
-function collectAutoHyphenBreaksByLang(clusters: string[], minPrefix: number, minSuffix: number, lang: string): number[] {
+function collectAutoHyphenBreaksByLang(
+    clusters: string[],
+    minPrefix: number,
+    minSuffix: number,
+    lang: string,
+): number[] {
     const breaks: number[] = [];
     const vowels = getLanguageVowels(lang);
     const digraphs = getLanguageDigraphs(lang);
@@ -114,7 +119,7 @@ function collectSoftHyphenBreaks(
     cleanClusters: string[],
     minPrefix: number,
     minSuffix: number,
-    getGraphemeClusters: (text: string) => string[]
+    getGraphemeClusters: (text: string) => string[],
 ): number[] {
     if (!rawText.includes('\u00AD')) return [];
     const rawClusters = getGraphemeClusters(rawText);
@@ -122,7 +127,7 @@ function collectSoftHyphenBreaks(
     let cleanIndex = 0;
     for (const cluster of rawClusters) {
         if (cluster === '\u00AD') {
-            if (cleanIndex >= minPrefix && (cleanClusters.length - cleanIndex) >= minSuffix) {
+            if (cleanIndex >= minPrefix && cleanClusters.length - cleanIndex >= minSuffix) {
                 breaks.push(cleanIndex);
             }
         } else {
@@ -141,7 +146,13 @@ export function tryHyphenateSegmentToFit(params: {
     style?: ElementStyle | Record<string, any>;
     resolveHyphenationSettings: (style?: ElementStyle | Record<string, any>) => HyphenationSettings;
     getGraphemeClusters: (text: string) => string[];
-    cloneMeasuredSegment: (base: TextSegment, text: string, font: any, fontSize: number, letterSpacing: number) => { seg: TextSegment; width: number };
+    cloneMeasuredSegment: (
+        base: TextSegment,
+        text: string,
+        font: any,
+        fontSize: number,
+        letterSpacing: number,
+    ) => { seg: TextSegment; width: number };
 }): { head: TextSegment; headWidth: number; tail: TextSegment; tailWidth: number } | null {
     if (!Number.isFinite(params.availableWidth) || params.availableWidth <= 0) return null;
 
@@ -157,17 +168,30 @@ export function tryHyphenateSegmentToFit(params: {
     const cleanClusters = params.getGraphemeClusters(clean);
     if (cleanClusters.length < settings.minWordLength) return null;
 
-    const softBreaks = collectSoftHyphenBreaks(raw, cleanClusters, settings.minPrefix, settings.minSuffix, params.getGraphemeClusters);
-    const exceptionBreaks = collectLanguageExceptionBreaks(clean, settings.lang)
-        .filter((idx) => idx >= settings.minPrefix && (cleanClusters.length - idx) >= settings.minSuffix);
-    const autoBreaks = settings.mode === 'auto'
-        ? collectAutoHyphenBreaksByLang(cleanClusters, settings.minPrefix, settings.minSuffix, settings.lang)
-        : [];
+    const softBreaks = collectSoftHyphenBreaks(
+        raw,
+        cleanClusters,
+        settings.minPrefix,
+        settings.minSuffix,
+        params.getGraphemeClusters,
+    );
+    const exceptionBreaks = collectLanguageExceptionBreaks(clean, settings.lang).filter(
+        (idx) => idx >= settings.minPrefix && cleanClusters.length - idx >= settings.minSuffix,
+    );
+    const autoBreaks =
+        settings.mode === 'auto'
+            ? collectAutoHyphenBreaksByLang(cleanClusters, settings.minPrefix, settings.minSuffix, settings.lang)
+            : [];
 
     // Merge, deduplicate, and sort descending without triple-spread + Set allocations.
     const seen = new Uint8Array(cleanClusters.length + 1);
     const candidateBreaks: number[] = [];
-    const addBreak = (idx: number) => { if (!seen[idx]) { seen[idx] = 1; candidateBreaks.push(idx); } };
+    const addBreak = (idx: number) => {
+        if (!seen[idx]) {
+            seen[idx] = 1;
+            candidateBreaks.push(idx);
+        }
+    };
     for (const b of softBreaks) addBreak(b);
     for (const b of exceptionBreaks) addBreak(b);
     for (const b of autoBreaks) addBreak(b);
@@ -179,19 +203,29 @@ export function tryHyphenateSegmentToFit(params: {
         const tailText = cleanClusters.slice(idx).join('');
         if (!tailText) continue;
 
-        const measuredHead = params.cloneMeasuredSegment(params.seg, headText, params.font, params.fontSize, params.letterSpacing);
+        const measuredHead = params.cloneMeasuredSegment(
+            params.seg,
+            headText,
+            params.font,
+            params.fontSize,
+            params.letterSpacing,
+        );
         if (measuredHead.width > params.availableWidth + LAYOUT_DEFAULTS.wrapTolerance) continue;
 
-        const measuredTail = params.cloneMeasuredSegment(params.seg, tailText, params.font, params.fontSize, params.letterSpacing);
+        const measuredTail = params.cloneMeasuredSegment(
+            params.seg,
+            tailText,
+            params.font,
+            params.fontSize,
+            params.letterSpacing,
+        );
         return {
             head: measuredHead.seg,
             headWidth: measuredHead.width,
             tail: measuredTail.seg,
-            tailWidth: measuredTail.width
+            tailWidth: measuredTail.width,
         };
     }
 
     return null;
 }
-
-

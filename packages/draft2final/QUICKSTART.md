@@ -43,24 +43,24 @@ draft2final build input.md -o output.pdf --theme ?    # list themes for active f
 
 ## Options
 
-| Flag | Description |
-|---|---|
-| `<input.md>` | Path to the input Markdown file |
-| `-o, --output <path>` | Output PDF path (must end in `.pdf`) |
-| `--format <name>` | Document format (default: `markdown`) |
-| `--theme <name>` | Format theme / style variant |
-| `--debug` | Embed layout debug boxes in the output PDF |
+| Flag                  | Description                                |
+| --------------------- | ------------------------------------------ |
+| `<input.md>`          | Path to the input Markdown file            |
+| `-o, --output <path>` | Output PDF path (must end in `.pdf`)       |
+| `--format <name>`     | Document format (default: `markdown`)      |
+| `--theme <name>`      | Format theme / style variant               |
+| `--debug`             | Embed layout debug boxes in the output PDF |
 
 ## Exit codes
 
-| Code | Meaning |
-|---|---|
-| `0` | Success |
-| `1` | Unexpected internal error |
-| `2` | Bad arguments or usage error |
-| `3` | Input file could not be read |
-| `4` | Render failed (vmprint engine error) |
-| `5` | Output file could not be written |
+| Code | Meaning                              |
+| ---- | ------------------------------------ |
+| `0`  | Success                              |
+| `1`  | Unexpected internal error            |
+| `2`  | Bad arguments or usage error         |
+| `3`  | Input file could not be read         |
+| `4`  | Render failed (vmprint engine error) |
+| `5`  | Output file could not be written     |
 
 ## Input format
 

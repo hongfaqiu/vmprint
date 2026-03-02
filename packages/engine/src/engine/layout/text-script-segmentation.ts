@@ -1,38 +1,44 @@
 export type ScriptFontSegment = { text: string; fontName?: string; fontObject?: any };
 
 export function isCJKChar(code: number): boolean {
-    return (code >= 0x4E00 && code <= 0x9FFF) ||
-        (code >= 0x3400 && code <= 0x4DBF) ||
-        (code >= 0x20000 && code <= 0x2A6DF) ||
-        (code >= 0x3040 && code <= 0x30FF) ||
-        (code >= 0x3000 && code <= 0x303F) ||
-        (code >= 0xFF00 && code <= 0xFFEF);
+    return (
+        (code >= 0x4e00 && code <= 0x9fff) ||
+        (code >= 0x3400 && code <= 0x4dbf) ||
+        (code >= 0x20000 && code <= 0x2a6df) ||
+        (code >= 0x3040 && code <= 0x30ff) ||
+        (code >= 0x3000 && code <= 0x303f) ||
+        (code >= 0xff00 && code <= 0xffef)
+    );
 }
 
 export function isThaiChar(code: number): boolean {
-    return code >= 0x0E00 && code <= 0x0E7F;
+    return code >= 0x0e00 && code <= 0x0e7f;
 }
 
 function isHiraganaOrKatakanaChar(code: number): boolean {
-    return (code >= 0x3040 && code <= 0x309F) || (code >= 0x30A0 && code <= 0x30FF);
+    return (code >= 0x3040 && code <= 0x309f) || (code >= 0x30a0 && code <= 0x30ff);
 }
 
 function isHangulChar(code: number): boolean {
-    return (code >= 0xAC00 && code <= 0xD7AF) ||
-        (code >= 0x1100 && code <= 0x11FF) ||
-        (code >= 0x3130 && code <= 0x318F) ||
-        (code >= 0xA960 && code <= 0xA97F) ||
-        (code >= 0xD7B0 && code <= 0xD7FF);
+    return (
+        (code >= 0xac00 && code <= 0xd7af) ||
+        (code >= 0x1100 && code <= 0x11ff) ||
+        (code >= 0x3130 && code <= 0x318f) ||
+        (code >= 0xa960 && code <= 0xa97f) ||
+        (code >= 0xd7b0 && code <= 0xd7ff)
+    );
 }
 
 function isCjkIdeograph(code: number): boolean {
-    return (code >= 0x4E00 && code <= 0x9FFF) ||
-        (code >= 0x3400 && code <= 0x4DBF) ||
-        (code >= 0x20000 && code <= 0x2A6DF);
+    return (
+        (code >= 0x4e00 && code <= 0x9fff) || (code >= 0x3400 && code <= 0x4dbf) || (code >= 0x20000 && code <= 0x2a6df)
+    );
 }
 
 function normalizeLocale(locale?: string): string {
-    return String(locale || '').trim().toLowerCase();
+    return String(locale || '')
+        .trim()
+        .toLowerCase();
 }
 
 function reorderFamiliesByPreference(families: string[], preferredFamilies: string[]): string[] {
@@ -72,9 +78,7 @@ export function hasRtlScript(text: string): boolean {
     for (const ch of text || '') {
         const cp = ch.codePointAt(0) || 0;
         const isRtl =
-            (cp >= 0x0590 && cp <= 0x08FF) ||
-            (cp >= 0xFB1D && cp <= 0xFDFF) ||
-            (cp >= 0xFE70 && cp <= 0xFEFF);
+            (cp >= 0x0590 && cp <= 0x08ff) || (cp >= 0xfb1d && cp <= 0xfdff) || (cp >= 0xfe70 && cp <= 0xfeff);
         if (isRtl) return true;
     }
     return false;
@@ -83,7 +87,7 @@ export function hasRtlScript(text: string): boolean {
 export function splitByScriptType(
     text: string,
     getGraphemeClusters: (value: string) => string[],
-    isCJK: (code: number) => boolean
+    isCJK: (code: number) => boolean,
 ): { text: string; isCJK: boolean }[] {
     if (!text) return [];
 
@@ -121,37 +125,37 @@ export function splitByScriptType(
     return result;
 }
 
-export function getScriptClass(
-    text: string,
-    isCJK: (code: number) => boolean,
-    defaultScriptClass: string
-): string {
+export function getScriptClass(text: string, isCJK: (code: number) => boolean, defaultScriptClass: string): string {
     for (let i = 0; i < text.length; i++) {
         const code = text.codePointAt(i) || 0;
         if (code <= 0x20) continue;
 
-        if ((code >= 0xAC00 && code <= 0xD7AF) ||
-            (code >= 0x1100 && code <= 0x11FF) ||
-            (code >= 0x3130 && code <= 0x318F) ||
-            (code >= 0xA960 && code <= 0xA97F) ||
-            (code >= 0xD7B0 && code <= 0xD7FF)) {
+        if (
+            (code >= 0xac00 && code <= 0xd7af) ||
+            (code >= 0x1100 && code <= 0x11ff) ||
+            (code >= 0x3130 && code <= 0x318f) ||
+            (code >= 0xa960 && code <= 0xa97f) ||
+            (code >= 0xd7b0 && code <= 0xd7ff)
+        ) {
             return 'korean';
         }
 
         if (isCJK(code)) return 'cjk';
-        if (code >= 0x0E00 && code <= 0x0E7F) return 'thai';
-        if (code >= 0x0900 && code <= 0x097F) return 'devanagari';
+        if (code >= 0x0e00 && code <= 0x0e7f) return 'thai';
+        if (code >= 0x0900 && code <= 0x097f) return 'devanagari';
 
-        if ((code >= 0x0600 && code <= 0x06FF) ||
-            (code >= 0x0750 && code <= 0x077F) ||
-            (code >= 0xFB50 && code <= 0xFDFF) ||
-            (code >= 0xFE70 && code <= 0xFEFF)) {
+        if (
+            (code >= 0x0600 && code <= 0x06ff) ||
+            (code >= 0x0750 && code <= 0x077f) ||
+            (code >= 0xfb50 && code <= 0xfdff) ||
+            (code >= 0xfe70 && code <= 0xfeff)
+        ) {
             return 'arabic';
         }
 
-        if (code >= 0x0400 && code <= 0x04FF) return 'cyrillic';
-        if (code <= 0x024F) return 'latin';
-        if (code > 0xFFFF) i++;
+        if (code >= 0x0400 && code <= 0x04ff) return 'cyrillic';
+        if (code <= 0x024f) return 'latin';
+        if (code > 0xffff) i++;
     }
     return defaultScriptClass;
 }
@@ -250,6 +254,3 @@ export function segmentTextByFont(params: {
     pushCurrent();
     return segments;
 }
-
-
-

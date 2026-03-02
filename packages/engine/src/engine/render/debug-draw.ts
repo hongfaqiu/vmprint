@@ -11,7 +11,7 @@ type DebugStyle = {
 };
 
 const getDebugStyle = (type: string): DebugStyle => {
-    const seed = Array.from(type || 'box').reduce((acc, ch) => ((acc * 31) + ch.charCodeAt(0)) >>> 0, 7);
+    const seed = Array.from(type || 'box').reduce((acc, ch) => (acc * 31 + ch.charCodeAt(0)) >>> 0, 7);
     const hue = seed % 360;
     const stroke = `hsl(${hue}, 55%, 45%)`;
     const label = `hsl(${hue}, 45%, 25%)`;
@@ -24,19 +24,16 @@ const getDebugStyle = (type: string): DebugStyle => {
         lineWidth: 0.7,
         fillOpacity: 0.04,
         strokeOpacity: 0.55,
-        dash: [dashA, dashB]
+        dash: [dashA, dashB],
     };
 };
 
-export const drawDebugBoxOverlay = (
-    context: Context,
-    box: Box,
-    labelFontId: string
-): void => {
+export const drawDebugBoxOverlay = (context: Context, box: Box, labelFontId: string): void => {
     const debugStyle = getDebugStyle(box.type);
 
     context.save();
-    context.opacity(debugStyle.strokeOpacity)
+    context
+        .opacity(debugStyle.strokeOpacity)
         .lineWidth(debugStyle.lineWidth)
         .strokeColor(debugStyle.color)
         .dash(debugStyle.dash[0], { space: debugStyle.dash[1] })
@@ -58,7 +55,8 @@ export const drawDebugBoxOverlay = (
 
 export const drawDebugBaseline = (context: Context, x1: number, x2: number, y: number): void => {
     context.save();
-    context.opacity(0.3)
+    context
+        .opacity(0.3)
         .strokeColor('#38bdf8')
         .lineWidth(0.35)
         .dash(2, { space: 2 })
@@ -74,7 +72,7 @@ export const drawDebugPageMargins = (
     pageWidth: number,
     pageHeight: number,
     margins: { top: number; right: number; bottom: number; left: number },
-    labelFontId: string
+    labelFontId: string,
 ): void => {
     const stroke = '#94a3b8';
     const label = '#334155';
@@ -82,17 +80,17 @@ export const drawDebugPageMargins = (
     const dashB = 3;
 
     context.save();
-    context.opacity(0.35)
-        .strokeColor(stroke)
-        .lineWidth(0.6)
-        .dash(dashA, { space: dashB });
+    context.opacity(0.35).strokeColor(stroke).lineWidth(0.6).dash(dashA, { space: dashB });
 
     const left = margins.left;
     const right = Math.max(0, pageWidth - margins.right);
     const top = margins.top;
     const bottom = Math.max(0, pageHeight - margins.bottom);
 
-    context.rect(left, top, Math.max(0, right - left), Math.max(0, bottom - top)).stroke().undash();
+    context
+        .rect(left, top, Math.max(0, right - left), Math.max(0, bottom - top))
+        .stroke()
+        .undash();
 
     context.font(labelFontId).fontSize(6.5);
     context.opacity(0.7).fillColor(label);

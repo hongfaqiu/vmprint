@@ -4,17 +4,28 @@ import { getFallbackFamilies, getFontsByFamily } from '../../font-management/ops
 import { getCachedFont } from '../../font-management/font-cache-loader';
 import { LayoutUtils } from './layout-utils';
 import { LAYOUT_DEFAULTS } from './defaults';
-import { StyleSignatureCache, appendSegmentToLine, flattenSegmentsByHardBreak, getLineWidthLimit, splitToGraphemes } from './text-wrap-utils';
+import {
+    StyleSignatureCache,
+    appendSegmentToLine,
+    flattenSegmentsByHardBreak,
+    getLineWidthLimit,
+    splitToGraphemes,
+} from './text-wrap-utils';
 import { buildRichWrapTokens, wrapTokenStream } from './text-wrap-core';
 import { resolveRichFontInfo } from './text-tokenizer';
-import { getElementText as extractElementText, getNodeText as extractNodeText, getRichSegments as extractRichSegments, sliceElements as extractSlicedElements } from './rich-text-extractor';
+import {
+    getElementText as extractElementText,
+    getNodeText as extractNodeText,
+    getRichSegments as extractRichSegments,
+    sliceElements as extractSlicedElements,
+} from './rich-text-extractor';
 import {
     getScriptClass as classifyScript,
     hasRtlScript as detectRtlScript,
     isCJKChar as isCjkCodePoint,
     isThaiChar as isThaiCodePoint,
     segmentTextByFont as segmentTextByFontBySupport,
-    splitByScriptType as splitTextByScriptType
+    splitByScriptType as splitTextByScriptType,
 } from './text-script-segmentation';
 import { tryHyphenateSegmentToFit as hyphenateSegmentToFit } from './text-hyphenation';
 import { applyAdvancedJustification as applyJustification } from './text-justification';
@@ -24,7 +35,6 @@ import { parseEmbeddedImagePayloadCached } from '../image-data';
 const fontVerticalMetricsCache = new WeakMap<object, { ascent: number; descent: number }>();
 
 export class TextProcessor extends FontProcessor {
-
     private static graphemeSegmenter = new (Intl as any).Segmenter(undefined, { granularity: 'grapheme' });
     private variationFontCache = new Map<string, any>();
     private wordSegmenterCache = new Map<string, any>();
@@ -32,7 +42,9 @@ export class TextProcessor extends FontProcessor {
 
     private styleSignatureCache = new StyleSignatureCache();
 
-    private cloneGlyphs(glyphs: Array<{ char: string; x: number; y: number }>): Array<{ char: string; x: number; y: number }> {
+    private cloneGlyphs(
+        glyphs: Array<{ char: string; x: number; y: number }>,
+    ): Array<{ char: string; x: number; y: number }> {
         const out = new Array(glyphs.length);
         for (let i = 0; i < glyphs.length; i++) {
             const glyph = glyphs[i];
@@ -48,18 +60,43 @@ export class TextProcessor extends FontProcessor {
     }
 
     private resolveHyphenationSettings(style?: ElementStyle | Record<string, any>) {
-        const mode = (style?.hyphenation || this.config.layout.hyphenation || LAYOUT_DEFAULTS.textLayout.hyphenation);
-        const hyphenateCaps = style?.hyphenateCaps ?? this.config.layout.hyphenateCaps ?? LAYOUT_DEFAULTS.textLayout.hyphenateCaps;
-        const minWordLength = Math.max(2, Number(style?.hyphenMinWordLength ?? this.config.layout.hyphenMinWordLength ?? LAYOUT_DEFAULTS.textLayout.hyphenMinWordLength));
-        const minPrefix = Math.max(1, Number(style?.hyphenMinPrefix ?? this.config.layout.hyphenMinPrefix ?? LAYOUT_DEFAULTS.textLayout.hyphenMinPrefix));
-        const minSuffix = Math.max(1, Number(style?.hyphenMinSuffix ?? this.config.layout.hyphenMinSuffix ?? LAYOUT_DEFAULTS.textLayout.hyphenMinSuffix));
-        const rawLang = String(style?.lang || this.config.layout.lang || LAYOUT_DEFAULTS.textLayout.lang || 'und').trim().toLowerCase();
-        const lang = (rawLang.split('-')[0] || 'und');
+        const mode = style?.hyphenation || this.config.layout.hyphenation || LAYOUT_DEFAULTS.textLayout.hyphenation;
+        const hyphenateCaps =
+            style?.hyphenateCaps ?? this.config.layout.hyphenateCaps ?? LAYOUT_DEFAULTS.textLayout.hyphenateCaps;
+        const minWordLength = Math.max(
+            2,
+            Number(
+                style?.hyphenMinWordLength ??
+                    this.config.layout.hyphenMinWordLength ??
+                    LAYOUT_DEFAULTS.textLayout.hyphenMinWordLength,
+            ),
+        );
+        const minPrefix = Math.max(
+            1,
+            Number(
+                style?.hyphenMinPrefix ??
+                    this.config.layout.hyphenMinPrefix ??
+                    LAYOUT_DEFAULTS.textLayout.hyphenMinPrefix,
+            ),
+        );
+        const minSuffix = Math.max(
+            1,
+            Number(
+                style?.hyphenMinSuffix ??
+                    this.config.layout.hyphenMinSuffix ??
+                    LAYOUT_DEFAULTS.textLayout.hyphenMinSuffix,
+            ),
+        );
+        const rawLang = String(style?.lang || this.config.layout.lang || LAYOUT_DEFAULTS.textLayout.lang || 'und')
+            .trim()
+            .toLowerCase();
+        const lang = rawLang.split('-')[0] || 'und';
         return { mode, hyphenateCaps, minWordLength, minPrefix, minSuffix, lang };
     }
 
     private isAdvancedJustifyEnabled(style?: ElementStyle | Record<string, any>): boolean {
-        const mode = style?.justifyEngine || this.config.layout.justifyEngine || LAYOUT_DEFAULTS.textLayout.justifyEngine;
+        const mode =
+            style?.justifyEngine || this.config.layout.justifyEngine || LAYOUT_DEFAULTS.textLayout.justifyEngine;
         return mode === 'advanced';
     }
 
@@ -102,10 +139,12 @@ export class TextProcessor extends FontProcessor {
     }
 
     protected isIgnorableCodePoint(codePoint: number): boolean {
-        return codePoint === 0x200C || // ZWNJ
-            codePoint === 0x200D || // ZWJ
-            (codePoint >= 0xFE00 && codePoint <= 0xFE0F) || // Variation Selectors
-            (codePoint >= 0xE0100 && codePoint <= 0xE01EF); // Variation Selectors Supplement
+        return (
+            codePoint === 0x200c || // ZWNJ
+            codePoint === 0x200d || // ZWJ
+            (codePoint >= 0xfe00 && codePoint <= 0xfe0f) || // Variation Selectors
+            (codePoint >= 0xe0100 && codePoint <= 0xe01ef)
+        ); // Variation Selectors Supplement
     }
 
     protected fontSupportsCluster(font: any, cluster: string): boolean {
@@ -135,7 +174,7 @@ export class TextProcessor extends FontProcessor {
 
         const metrics = {
             ascent: (rawAscent / upm) * 1000,
-            descent: (Math.abs(rawDescent) / upm) * 1000
+            descent: (Math.abs(rawDescent) / upm) * 1000,
         };
         fontVerticalMetricsCache.set(font, metrics);
         return metrics;
@@ -150,21 +189,26 @@ export class TextProcessor extends FontProcessor {
             width: 0,
             glyphs: [],
             ascent: metrics.ascent,
-            descent: metrics.descent
+            descent: metrics.descent,
         };
     }
 
-    private measureInlineObject(populateSegment: TextSegment, measurementFont: any, measurementFontSize: number): number {
+    private measureInlineObject(
+        populateSegment: TextSegment,
+        measurementFont: any,
+        measurementFontSize: number,
+    ): number {
         const inline = populateSegment.inlineObject;
         if (!inline) return 0;
         const style = (populateSegment.style || {}) as Record<string, any>;
         const verticalAlignRaw = String(style.verticalAlign || 'baseline').trim();
-        const verticalAlign = (
+        const verticalAlign =
             verticalAlignRaw === 'text-top' ||
             verticalAlignRaw === 'middle' ||
             verticalAlignRaw === 'text-bottom' ||
             verticalAlignRaw === 'bottom'
-        ) ? verticalAlignRaw : 'baseline';
+                ? verticalAlignRaw
+                : 'baseline';
         const baselineShift = LayoutUtils.validateUnit(style.baselineShift ?? 0);
         const marginLeft = LayoutUtils.validateUnit(style.inlineMarginLeft ?? 0);
         const marginRight = LayoutUtils.validateUnit(style.inlineMarginRight ?? 0);
@@ -177,7 +221,7 @@ export class TextProcessor extends FontProcessor {
                 case 'text-top':
                     return Math.max(0, contentHeight - textAscent - baselineShift);
                 case 'middle':
-                    return Math.max(0, (contentHeight / 2) - (em * 0.3) - baselineShift);
+                    return Math.max(0, contentHeight / 2 - em * 0.3 - baselineShift);
                 case 'text-bottom':
                 case 'bottom':
                     return Math.max(0, textDescent - baselineShift);
@@ -191,9 +235,10 @@ export class TextProcessor extends FontProcessor {
             const parsed = parseEmbeddedImagePayloadCached(inline.image);
             let contentWidth = style.width !== undefined ? LayoutUtils.validateUnit(style.width) : measurementFontSize;
             if (contentWidth <= 0) contentWidth = measurementFontSize;
-            let contentHeight = style.height !== undefined
-                ? LayoutUtils.validateUnit(style.height)
-                : contentWidth * (parsed.intrinsicHeight / Math.max(1, parsed.intrinsicWidth));
+            let contentHeight =
+                style.height !== undefined
+                    ? LayoutUtils.validateUnit(style.height)
+                    : contentWidth * (parsed.intrinsicHeight / Math.max(1, parsed.intrinsicWidth));
             if (contentHeight <= 0) contentHeight = measurementFontSize;
 
             const rawOpticalInsetTop = LayoutUtils.validateUnit(style.inlineOpticalInsetTop ?? 0);
@@ -232,7 +277,7 @@ export class TextProcessor extends FontProcessor {
                 marginLeft,
                 marginRight,
                 baselineShift,
-                verticalAlign
+                verticalAlign,
             };
             return totalWidth;
         }
@@ -242,18 +287,20 @@ export class TextProcessor extends FontProcessor {
         const paddingTop = LayoutUtils.validateUnit(style.paddingTop ?? style.padding ?? 1);
         const paddingBottom = LayoutUtils.validateUnit(style.paddingBottom ?? style.padding ?? 1);
         const borderWidth = LayoutUtils.validateUnit(style.borderWidth ?? 0);
-        const horizontalInsets = paddingLeft + paddingRight + (borderWidth * 2);
-        const verticalInsets = paddingTop + paddingBottom + (borderWidth * 2);
+        const horizontalInsets = paddingLeft + paddingRight + borderWidth * 2;
+        const verticalInsets = paddingTop + paddingBottom + borderWidth * 2;
         const label = String(inline.text || '');
         const innerWidth = label
             ? this.measureText(label, measurementFont, measurementFontSize, 0)
             : Math.max(0, measurementFontSize * 0.75);
 
-        let contentWidth = style.width !== undefined ? LayoutUtils.validateUnit(style.width) : (innerWidth + horizontalInsets);
+        let contentWidth =
+            style.width !== undefined ? LayoutUtils.validateUnit(style.width) : innerWidth + horizontalInsets;
         if (contentWidth <= 0) contentWidth = Math.max(1, innerWidth + horizontalInsets);
-        let contentHeight = style.height !== undefined
-            ? LayoutUtils.validateUnit(style.height)
-            : (Math.max(measurementFontSize * 1.2, measurementFontSize + verticalInsets));
+        let contentHeight =
+            style.height !== undefined
+                ? LayoutUtils.validateUnit(style.height)
+                : Math.max(measurementFontSize * 1.2, measurementFontSize + verticalInsets);
         if (contentHeight <= 0) contentHeight = Math.max(1, measurementFontSize);
 
         const descentPx = resolveDescentPx(contentHeight);
@@ -273,7 +320,7 @@ export class TextProcessor extends FontProcessor {
             marginLeft,
             marginRight,
             baselineShift,
-            verticalAlign
+            verticalAlign,
         };
         return totalWidth;
     }
@@ -282,7 +329,13 @@ export class TextProcessor extends FontProcessor {
      * Returns the width in points of a given string using fontkit's layout.
      * Optionally populates the glyph positions if a segment object is provided.
      */
-    protected measureText(text: string, font?: any, fontSize?: number, letterSpacing: number = 0, populateSegment?: TextSegment): number {
+    protected measureText(
+        text: string,
+        font?: any,
+        fontSize?: number,
+        letterSpacing: number = 0,
+        populateSegment?: TextSegment,
+    ): number {
         const measurementFont = font || this.font;
         const measurementFontSize = fontSize || this.config.layout.fontSize;
 
@@ -293,14 +346,15 @@ export class TextProcessor extends FontProcessor {
         if (!text) return 0;
 
         if (!measurementFont) {
-            throw new Error(`[TextProcessor] Missing measurement font for text "${text.slice(0, 24)}". Ensure fonts are loaded before layout.`);
+            throw new Error(
+                `[TextProcessor] Missing measurement font for text "${text.slice(0, 24)}". Ensure fonts are loaded before layout.`,
+            );
         }
 
         // Cache Key: Unique string representing the font, size, letterSpacing and text
         const fontKey = measurementFont.postscriptName || measurementFont.familyName || 'unknown';
-        const variationKey = typeof measurementFont?.__vmprintVariationKey === 'string'
-            ? measurementFont.__vmprintVariationKey
-            : '';
+        const variationKey =
+            typeof measurementFont?.__vmprintVariationKey === 'string' ? measurementFont.__vmprintVariationKey : '';
         const cacheKey = `${fontKey}${variationKey ? `:${variationKey}` : ''}-${measurementFontSize}-${letterSpacing}-${text}`;
 
         const cached = this.runtime.measurementCache.get(cacheKey);
@@ -323,7 +377,7 @@ export class TextProcessor extends FontProcessor {
         try {
             const run = measurementFont.layout(text);
             let width = 0;
-            const glyphs: { char: string, x: number, y: number }[] = [];
+            const glyphs: { char: string; x: number; y: number }[] = [];
 
             for (let i = 0; i < run.glyphs.length; i++) {
                 const glyph = run.glyphs[i];
@@ -338,7 +392,7 @@ export class TextProcessor extends FontProcessor {
                 if (xAdvance === undefined || !Number.isFinite(xAdvance)) {
                     throw new Error(`[TextProcessor] Missing xAdvance for glyph in "${fontKey}".`);
                 }
-                width += (xAdvance * scale) + letterSpacing;
+                width += xAdvance * scale + letterSpacing;
             }
 
             const { ascent, descent } = this.getFontVerticalMetrics(measurementFont);
@@ -359,19 +413,34 @@ export class TextProcessor extends FontProcessor {
 
             return width;
         } catch (e: any) {
-            throw new Error(`[TextProcessor] Failed strict matrix measurement for "${text.slice(0, 24)}" using "${fontKey}": ${e?.message || e}`);
+            throw new Error(
+                `[TextProcessor] Failed strict matrix measurement for "${text.slice(0, 24)}" using "${fontKey}": ${e?.message || e}`,
+            );
         }
     }
 
     protected resolveLoadedFamilyFont(familyName: string, weight: number | string, style: string = 'normal'): any {
         this.hydrateFamilyWeightRanges(familyName);
-        const match = LayoutUtils.resolveFontMatch(familyName, weight, style, this.runtime.fontRegistry, this.runtime.fontManager);
+        const match = LayoutUtils.resolveFontMatch(
+            familyName,
+            weight,
+            style,
+            this.runtime.fontRegistry,
+            this.runtime.fontManager,
+        );
         const cached = getCachedFont(match.config.src, this.runtime);
         if (!cached) {
-            throw new Error(`[TextProcessor] Font "${match.config.name}" is not loaded. Call waitForFonts() before layout.`);
+            throw new Error(
+                `[TextProcessor] Font "${match.config.name}" is not loaded. Call waitForFonts() before layout.`,
+            );
         }
 
-        return this.resolveWeightVariationFont(cached, match.config.src, match.resolvedWeight, match.usedVariableWeightRange);
+        return this.resolveWeightVariationFont(
+            cached,
+            match.config.src,
+            match.resolvedWeight,
+            match.usedVariableWeightRange,
+        );
     }
 
     private hydrateFamilyWeightRanges(familyName: string): void {
@@ -398,11 +467,16 @@ export class TextProcessor extends FontProcessor {
 
         return {
             min: Math.min(LayoutUtils.normalizeFontWeight(min), LayoutUtils.normalizeFontWeight(max)),
-            max: Math.max(LayoutUtils.normalizeFontWeight(min), LayoutUtils.normalizeFontWeight(max))
+            max: Math.max(LayoutUtils.normalizeFontWeight(min), LayoutUtils.normalizeFontWeight(max)),
         };
     }
 
-    private resolveWeightVariationFont(baseFont: any, src: string, resolvedWeight: number, shouldUseVariationRange: boolean): any {
+    private resolveWeightVariationFont(
+        baseFont: any,
+        src: string,
+        resolvedWeight: number,
+        shouldUseVariationRange: boolean,
+    ): any {
         if (!baseFont || !shouldUseVariationRange) return baseFont;
         if (typeof baseFont.getVariation !== 'function') return baseFont;
 
@@ -465,7 +539,10 @@ export class TextProcessor extends FontProcessor {
      * for baseline alignment spread in mixed-script lines.
      */
     protected calculateEffectiveLineHeight(line: RichLine, baseFontSize: number, lineHeight: number): number {
-        const maxLineFontSize = line.reduce((max, seg) => Math.max(max, Number(seg.style?.fontSize || baseFontSize)), baseFontSize);
+        const maxLineFontSize = line.reduce(
+            (max, seg) => Math.max(max, Number(seg.style?.fontSize || baseFontSize)),
+            baseFontSize,
+        );
         const nominalHeight = maxLineFontSize * lineHeight;
 
         let maxAscent = 0;
@@ -474,10 +551,14 @@ export class TextProcessor extends FontProcessor {
         for (const seg of line) {
             const segFontSize = Number(seg.style?.fontSize || baseFontSize);
             if (seg.ascent === undefined) {
-                throw new Error(`[TextProcessor] Missing ascent metric for segment "${(seg.text || '').slice(0, 24)}".`);
+                throw new Error(
+                    `[TextProcessor] Missing ascent metric for segment "${(seg.text || '').slice(0, 24)}".`,
+                );
             }
             if (seg.descent === undefined) {
-                throw new Error(`[TextProcessor] Missing descent metric for segment "${(seg.text || '').slice(0, 24)}".`);
+                throw new Error(
+                    `[TextProcessor] Missing descent metric for segment "${(seg.text || '').slice(0, 24)}".`,
+                );
             }
             const segAscent = seg.ascent;
             if (segAscent > maxAscent) maxAscent = segAscent;
@@ -514,11 +595,11 @@ export class TextProcessor extends FontProcessor {
         return lines.length * uniformHeight;
     }
 
-    protected splitByScriptType(text: string): { text: string, isCJK: boolean }[] {
+    protected splitByScriptType(text: string): { text: string; isCJK: boolean }[] {
         return splitTextByScriptType(
             text,
             (value) => this.getGraphemeClusters(value),
-            (codePoint) => this.isCJKChar(codePoint)
+            (codePoint) => this.isCJKChar(codePoint),
         );
     }
 
@@ -534,15 +615,13 @@ export class TextProcessor extends FontProcessor {
         return detectRtlScript(text);
     }
 
-
-
-
-
-
-
-
-
-    private cloneMeasuredSegment(base: TextSegment, text: string, font: any, fontSize: number, letterSpacing: number): { seg: TextSegment, width: number } {
+    private cloneMeasuredSegment(
+        base: TextSegment,
+        text: string,
+        font: any,
+        fontSize: number,
+        letterSpacing: number,
+    ): { seg: TextSegment; width: number } {
         const seg: TextSegment = {
             ...base,
             text,
@@ -550,7 +629,7 @@ export class TextProcessor extends FontProcessor {
             width: undefined,
             ascent: undefined,
             descent: undefined,
-            justifyAfter: 0
+            justifyAfter: 0,
         };
         const width = this.measureText(text, font, fontSize, letterSpacing, seg);
         return { seg, width };
@@ -562,7 +641,7 @@ export class TextProcessor extends FontProcessor {
         fontSize: number,
         letterSpacing: number,
         availableWidth: number,
-        style?: ElementStyle | Record<string, any>
+        style?: ElementStyle | Record<string, any>,
     ): { head: TextSegment; headWidth: number; tail: TextSegment; tailWidth: number } | null {
         return hyphenateSegmentToFit({
             seg,
@@ -574,11 +653,9 @@ export class TextProcessor extends FontProcessor {
             resolveHyphenationSettings: (resolvedStyle) => this.resolveHyphenationSettings(resolvedStyle),
             getGraphemeClusters: (text) => this.getGraphemeClusters(text),
             cloneMeasuredSegment: (base, value, cloneFont, cloneFontSize, cloneTracking) =>
-                this.cloneMeasuredSegment(base, value, cloneFont, cloneFontSize, cloneTracking)
+                this.cloneMeasuredSegment(base, value, cloneFont, cloneFontSize, cloneTracking),
         });
     }
-
-
 
     private isCjkOrThaiCluster(text: string): boolean {
         const clusters = this.getGraphemeClusters(text);
@@ -587,13 +664,12 @@ export class TextProcessor extends FontProcessor {
         return this.isCJKChar(cp) || this.isThaiChar(cp);
     }
 
-
     private applyAdvancedJustification(
         lines: RichLine[],
         maxWidth: number,
         textIndent: number,
         baseStyle?: ElementStyle | Record<string, any>,
-        resolveLineWidth?: (lineIndex: number, fallbackWidth: number) => number
+        resolveLineWidth?: (lineIndex: number, fallbackWidth: number) => number,
     ): RichLine[] {
         return applyJustification({
             lines,
@@ -602,7 +678,7 @@ export class TextProcessor extends FontProcessor {
             baseStyle,
             layoutJustifyStrategy: this.config.layout.justifyStrategy,
             resolveLineWidth,
-            isCjkOrThaiCluster: (text) => this.isCjkOrThaiCluster(text)
+            isCjkOrThaiCluster: (text) => this.isCjkOrThaiCluster(text),
         });
     }
 
@@ -614,7 +690,7 @@ export class TextProcessor extends FontProcessor {
         return classifyScript(
             text,
             (codePoint) => this.isCJKChar(codePoint),
-            LAYOUT_DEFAULTS.opticalScaling.defaultScriptClass
+            LAYOUT_DEFAULTS.opticalScaling.defaultScriptClass,
         );
     }
 
@@ -630,9 +706,11 @@ export class TextProcessor extends FontProcessor {
         // Check config override, then defaults, then fallback
         const configVal = os ? (os as any)[scriptClass] : undefined;
         if (configVal !== undefined && configVal !== null) return configVal;
-        return LAYOUT_DEFAULTS.opticalScaling.factors[scriptClass] ??
+        return (
+            LAYOUT_DEFAULTS.opticalScaling.factors[scriptClass] ??
             LAYOUT_DEFAULTS.opticalScaling.factors.default ??
-            LAYOUT_DEFAULTS.opticalScaling.neutral;
+            LAYOUT_DEFAULTS.opticalScaling.neutral
+        );
     }
 
     /**
@@ -641,8 +719,8 @@ export class TextProcessor extends FontProcessor {
     protected segmentTextByFont(
         text: string,
         preferredFamily?: string,
-        preferredLocale?: string
-    ): { text: string, fontName?: string, fontObject?: any }[] {
+        preferredLocale?: string,
+    ): { text: string; fontName?: string; fontObject?: any }[] {
         return segmentTextByFontBySupport({
             text,
             preferredFamily,
@@ -651,7 +729,7 @@ export class TextProcessor extends FontProcessor {
             fallbackFamilies: getFallbackFamilies(this.runtime.fontRegistry, this.runtime.fontManager),
             getGraphemeClusters: (value) => this.getGraphemeClusters(value),
             resolveLoadedFamilyFont: (familyName, weight) => this.resolveLoadedFamilyFont(familyName, weight),
-            fontSupportsCluster: (font, cluster) => this.fontSupportsCluster(font, cluster)
+            fontSupportsCluster: (font, cluster) => this.fontSupportsCluster(font, cluster),
         });
     }
 
@@ -676,7 +754,7 @@ export class TextProcessor extends FontProcessor {
     protected getRichSegments(element: Element, inheritedStyle: any = {}): TextSegment[] {
         return extractRichSegments(element, inheritedStyle, {
             transformContent: (text) => text,
-            resolveStyleForType: (type) => this.config.styles[type] || {}
+            resolveStyleForType: (type) => this.config.styles[type] || {},
         });
     }
 
@@ -691,23 +769,27 @@ export class TextProcessor extends FontProcessor {
         letterSpacing: number = 0,
         textIndent: number = 0,
         lineLayoutResolver?: (lineIndex: number) => { width: number; xOffset: number; yOffset?: number },
-        lineLayoutOut?: { widths: number[]; offsets: number[]; yOffsets: number[] }
+        lineLayoutOut?: { widths: number[]; offsets: number[]; yOffsets: number[] },
     ): RichLine[] {
         if (segments.length === 0) return [[this.createEmptyMeasuredSegment(font)]];
         const primaryStyle = (segments.find((seg) => !!seg.style)?.style || {}) as ElementStyle;
         const advancedJustify = this.isAdvancedJustifyEnabled(primaryStyle) && primaryStyle.textAlign === 'justify';
-        const direction = String(primaryStyle.direction || this.config.layout.direction || LAYOUT_DEFAULTS.textLayout.direction);
+        const direction = String(
+            primaryStyle.direction || this.config.layout.direction || LAYOUT_DEFAULTS.textLayout.direction,
+        );
         const preserveDirectionalBoundaries = direction === 'rtl';
         const resolvedLineLayout = new Map<number, { width: number; xOffset: number; yOffset: number }>();
         const resolveLineLayout = (lineIndex: number): { width: number; xOffset: number; yOffset: number } => {
             const cached = resolvedLineLayout.get(lineIndex);
             if (cached) return cached;
 
-            const resolved = lineLayoutResolver ? lineLayoutResolver(lineIndex) : { width: maxWidth, xOffset: 0, yOffset: 0 };
+            const resolved = lineLayoutResolver
+                ? lineLayoutResolver(lineIndex)
+                : { width: maxWidth, xOffset: 0, yOffset: 0 };
             const normalized = {
                 width: Math.max(0, Number(resolved?.width ?? maxWidth)),
                 xOffset: Number(resolved?.xOffset ?? 0),
-                yOffset: Math.max(0, Number(resolved?.yOffset ?? 0))
+                yOffset: Math.max(0, Number(resolved?.yOffset ?? 0)),
             };
             resolvedLineLayout.set(lineIndex, normalized);
             return normalized;
@@ -732,8 +814,8 @@ export class TextProcessor extends FontProcessor {
             isAdvancedJustifyEnabled: (style) => this.isAdvancedJustifyEnabled(style),
             resolveRichFontInfo: (seg, defaultSize) =>
                 resolveRichFontInfo(seg, defaultSize, this.config.layout.fontFamily, (familyName, weight) =>
-                    this.resolveLoadedFamilyFont(familyName, weight)
-                )
+                    this.resolveLoadedFamilyFont(familyName, weight),
+                ),
         });
         const wrapped = wrapTokenStream({
             tokens,
@@ -746,12 +828,8 @@ export class TextProcessor extends FontProcessor {
             measureText: (segmentText, segmentFont, segmentFontSize, segmentTracking, populateSegment) =>
                 this.measureText(segmentText, segmentFont, segmentFontSize, segmentTracking, populateSegment),
             appendSegmentToLine: (line, segment, segmentWidth, allowMerge) =>
-                appendSegmentToLine(
-                    line,
-                    segment,
-                    segmentWidth,
-                    allowMerge,
-                    (left, right) => this.styleSignatureCache.areStylesEquivalent(left, right)
+                appendSegmentToLine(line, segment, segmentWidth, allowMerge, (left, right) =>
+                    this.styleSignatureCache.areStylesEquivalent(left, right),
                 ),
             getLineWidthLimit: (totalWidth, lineIndex, firstLineIndent) => {
                 const lineLayout = resolveLineLayout(lineIndex);
@@ -759,12 +837,13 @@ export class TextProcessor extends FontProcessor {
             },
             tryHyphenateSegmentToFit: (seg, segFont, segFontSize, segTracking, availableWidth, style) =>
                 this.tryHyphenateSegmentToFit(seg, segFont, segFontSize, segTracking, availableWidth, style),
-            splitToGraphemes: (value, locale) => splitToGraphemes(value, locale, (fallback) => this.getGraphemeClusters(fallback)),
+            splitToGraphemes: (value, locale) =>
+                splitToGraphemes(value, locale, (fallback) => this.getGraphemeClusters(fallback)),
             transformSegment: (segment) => segment,
             resolveRichFontInfo: (seg, defaultSize) =>
                 resolveRichFontInfo(seg, defaultSize, this.config.layout.fontFamily, (familyName, weight) =>
-                    this.resolveLoadedFamilyFont(familyName, weight)
-                )
+                    this.resolveLoadedFamilyFont(familyName, weight),
+                ),
         });
 
         if (lineLayoutOut) {
@@ -785,13 +864,9 @@ export class TextProcessor extends FontProcessor {
                 maxWidth,
                 textIndent,
                 primaryStyle,
-                (lineIndex, fallbackWidth) => resolveLineLayout(lineIndex).width || fallbackWidth
+                (lineIndex, fallbackWidth) => resolveLineLayout(lineIndex).width || fallbackWidth,
             );
         }
         return wrapped;
     }
 }
-
-
-
-

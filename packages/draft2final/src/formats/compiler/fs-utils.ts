@@ -5,11 +5,11 @@ import path from 'node:path';
  * Read a file synchronously, returning its content or null if it cannot be read.
  */
 export function tryReadFile(filePath: string): string | null {
-  try {
-    return fs.readFileSync(filePath, 'utf-8');
-  } catch {
-    return null;
-  }
+    try {
+        return fs.readFileSync(filePath, 'utf-8');
+    } catch {
+        return null;
+    }
 }
 
 /**
@@ -21,13 +21,13 @@ export function tryReadFile(filePath: string): string | null {
  * Returns the first existing path, or null if none exist. Works for both files and directories.
  */
 export function resolveFormatAsset(formatName: string, ...segments: string[]): string | null {
-  const candidates = [
-    path.resolve(__dirname, formatName, ...segments),
-    path.resolve(__dirname, '..', formatName, ...segments),
-    path.resolve(process.cwd(), 'src', 'formats', formatName, ...segments)
-  ];
-  for (const candidate of candidates) {
-    if (fs.existsSync(candidate)) return candidate;
-  }
-  return null;
+    const candidates = [
+        path.resolve(__dirname, formatName, ...segments),
+        path.resolve(__dirname, '..', formatName, ...segments),
+        path.resolve(process.cwd(), 'src', 'formats', formatName, ...segments),
+    ];
+    for (const candidate of candidates) {
+        if (fs.existsSync(candidate)) return candidate;
+    }
+    return null;
 }

@@ -85,18 +85,18 @@ import { LocalFontManager, LOCAL_FONT_REGISTRY, LOCAL_FONT_ALIASES } from '@vmpr
 import type { FontConfig } from '@vmprint/contracts';
 
 const extraFont: FontConfig = {
-  name: 'MyFont Regular',
-  family: 'MyFont',
-  weight: 400,
-  style: 'normal',
-  src: '/absolute/path/to/MyFont-Regular.ttf',
-  enabled: true,
-  fallback: false
+    name: 'MyFont Regular',
+    family: 'MyFont',
+    weight: 400,
+    style: 'normal',
+    src: '/absolute/path/to/MyFont-Regular.ttf',
+    enabled: true,
+    fallback: false,
 };
 
 const manager = new LocalFontManager({
-  fonts: [...LOCAL_FONT_REGISTRY, extraFont],
-  aliases: { ...LOCAL_FONT_ALIASES, 'my font': 'MyFont' }
+    fonts: [...LOCAL_FONT_REGISTRY, extraFont],
+    aliases: { ...LOCAL_FONT_ALIASES, 'my font': 'MyFont' },
 });
 ```
 

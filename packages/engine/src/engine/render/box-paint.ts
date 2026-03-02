@@ -18,7 +18,7 @@ const drawLine = (
     y1: number,
     x2: number,
     y2: number,
-    options?: DrawLineOptions
+    options?: DrawLineOptions,
 ): void => {
     context.save();
     context.strokeColor(options?.color || 'black');
@@ -73,15 +73,15 @@ export const drawImageBox = (context: Context, box: Box, getImageBytes: ImageByt
         const scale = Math.min(contentWidth / intrinsicWidth, contentHeight / intrinsicHeight);
         drawWidth = intrinsicWidth * scale;
         drawHeight = intrinsicHeight * scale;
-        drawX = contentX + ((contentWidth - drawWidth) / 2);
-        drawY = contentY + ((contentHeight - drawHeight) / 2);
+        drawX = contentX + (contentWidth - drawWidth) / 2;
+        drawY = contentY + (contentHeight - drawHeight) / 2;
     }
 
     const bytes = getImageBytes(image.base64Data);
     context.image(bytes, drawX, drawY, {
         width: drawWidth,
         height: drawHeight,
-        mimeType: image.mimeType
+        mimeType: image.mimeType,
     });
 };
 
@@ -91,7 +91,7 @@ export const drawInlineImageSegment = (
     drawX: number,
     drawY: number,
     fallbackFontSize: number,
-    getImageBytes: ImageBytesResolver
+    getImageBytes: ImageBytesResolver,
 ): void => {
     const inline = seg?.inlineObject;
     if (!inline || inline.kind !== 'image') return;
@@ -105,15 +105,16 @@ export const drawInlineImageSegment = (
     }
     let contentHeight = Number(seg?.inlineMetrics?.contentHeight || 0);
     if (!Number.isFinite(contentHeight) || contentHeight <= 0) {
-        contentHeight = style.height !== undefined
-            ? LayoutUtils.validateUnit(style.height)
-            : contentWidth * (parsed.intrinsicHeight / Math.max(1, parsed.intrinsicWidth));
+        contentHeight =
+            style.height !== undefined
+                ? LayoutUtils.validateUnit(style.height)
+                : contentWidth * (parsed.intrinsicHeight / Math.max(1, parsed.intrinsicWidth));
     }
     const bytes = getImageBytes(parsed.base64Data);
     context.image(bytes, drawX + marginLeft, drawY, {
         width: contentWidth,
         height: contentHeight,
-        mimeType: parsed.mimeType
+        mimeType: parsed.mimeType,
     });
 };
 
@@ -122,7 +123,7 @@ export const drawInlineBoxSegment = (
     seg: RendererLineSegment,
     drawX: number,
     drawY: number,
-    fallbackFontSize: number
+    fallbackFontSize: number,
 ): void => {
     const inline = seg?.inlineObject;
     if (!inline || inline.kind !== 'box') return;
@@ -130,7 +131,7 @@ export const drawInlineBoxSegment = (
     const style = seg?.style || {};
     const marginLeft = Number(seg?.inlineMetrics?.marginLeft || 0);
     const boxWidth = Number(seg?.inlineMetrics?.contentWidth || style.width || fallbackFontSize);
-    const boxHeight = Number(seg?.inlineMetrics?.contentHeight || style.height || (fallbackFontSize * 1.2));
+    const boxHeight = Number(seg?.inlineMetrics?.contentHeight || style.height || fallbackFontSize * 1.2);
     const paddingLeft = LayoutUtils.validateUnit(style.paddingLeft ?? style.padding ?? 2);
     const paddingRight = LayoutUtils.validateUnit(style.paddingRight ?? style.padding ?? 2);
     const paddingTop = LayoutUtils.validateUnit(style.paddingTop ?? style.padding ?? 1);
@@ -152,7 +153,7 @@ export const drawInlineBoxSegment = (
     context.text(text, contentX + borderWidth + paddingLeft, drawY + borderWidth + paddingTop, {
         lineBreak: false,
         width: Math.max(0, boxWidth - borderWidth * 2 - paddingLeft - paddingRight),
-        characterSpacing: 0
+        characterSpacing: 0,
     });
     context.restore();
 };
@@ -165,7 +166,7 @@ export const drawBoxBorders = (context: Context, box: Box, boxStyle: ElementStyl
     if (bTop > 0 && box.properties?._isFirstLine) {
         drawLine(context, box.x, box.y, box.x + box.w, box.y, {
             color: boxStyle.borderTopColor || borderColor,
-            lineWidth: bTop
+            lineWidth: bTop,
         });
     }
 
@@ -173,7 +174,7 @@ export const drawBoxBorders = (context: Context, box: Box, boxStyle: ElementStyl
     if (bBottom > 0 && box.properties?._isLastLine) {
         drawLine(context, box.x, box.y + box.h, box.x + box.w, box.y + box.h, {
             color: boxStyle.borderBottomColor || borderColor,
-            lineWidth: bBottom
+            lineWidth: bBottom,
         });
     }
 
@@ -182,7 +183,7 @@ export const drawBoxBorders = (context: Context, box: Box, boxStyle: ElementStyl
         const decX = box.x - (box.decorationOffset || 0);
         drawLine(context, decX, box.y, decX, box.y + box.h, {
             color: boxStyle.borderLeftColor || borderColor,
-            lineWidth: bLeft
+            lineWidth: bLeft,
         });
     }
 
@@ -190,7 +191,7 @@ export const drawBoxBorders = (context: Context, box: Box, boxStyle: ElementStyl
     if (bRight > 0 && box.properties?._isLastFragmentInLine) {
         drawLine(context, box.x + box.w, box.y, box.x + box.w, box.y + box.h, {
             color: boxStyle.borderRightColor || borderColor,
-            lineWidth: bRight
+            lineWidth: bRight,
         });
     }
 };

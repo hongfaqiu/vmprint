@@ -25,7 +25,8 @@ export class FontProcessor extends BaseLayout {
         const enabledFallbacks = getEnabledFallbackFonts(this.runtime.fontRegistry, this.runtime.fontManager);
         const primaryFamily = this.config.fonts?.regular || this.config.layout.fontFamily;
         const primaryFamilyFonts = getFontsByFamily(primaryFamily, this.runtime.fontRegistry, this.runtime.fontManager);
-        const primaryUrl = primaryFamilyFonts.find(f => f.style === 'normal' && f.weight === 400)?.src || primaryFamilyFonts[0]?.src;
+        const primaryUrl =
+            primaryFamilyFonts.find((f) => f.style === 'normal' && f.weight === 400)?.src || primaryFamilyFonts[0]?.src;
 
         if (primaryUrl) {
             const cached = getCachedFont(primaryUrl, this.runtime);
@@ -34,9 +35,7 @@ export class FontProcessor extends BaseLayout {
             }
         }
 
-        this.fallbackFonts = enabledFallbacks
-            .map(f => getCachedFont(f.src, this.runtime))
-            .filter(Boolean);
+        this.fallbackFonts = enabledFallbacks.map((f) => getCachedFont(f.src, this.runtime)).filter(Boolean);
 
         this.fontPromise = (async () => {
             const familiesToLoad = new Set<string>();
@@ -59,7 +58,7 @@ export class FontProcessor extends BaseLayout {
                     console.warn(`[FontProcessor] Requested font family not registered: ${family}`);
                     continue;
                 }
-                familyFonts.forEach(f => loadPromises.push(loadFont(f.src, this.runtime)));
+                familyFonts.forEach((f) => loadPromises.push(loadFont(f.src, this.runtime)));
             }
 
             await Promise.allSettled(loadPromises);
@@ -70,23 +69,24 @@ export class FontProcessor extends BaseLayout {
                 try {
                     this.font = await loadFont(primaryUrl, this.runtime);
                 } catch (e) {
-                    const details = e instanceof FontLoadError
-                        ? `${e.message}${(e as Error & { cause?: unknown }).cause ? ` | cause: ${String((e as Error & { cause?: unknown }).cause)}` : ''}`
-                        : String(e);
+                    const details =
+                        e instanceof FontLoadError
+                            ? `${e.message}${(e as Error & { cause?: unknown }).cause ? ` | cause: ${String((e as Error & { cause?: unknown }).cause)}` : ''}`
+                            : String(e);
                     throw new Error(`[FontProcessor] Failed to load primary font "${primaryUrl}": ${details}`);
                 }
             }
 
             // Load fallbacks that weren't in cache
-            const missingFallbacks = enabledFallbacks.filter(f => !getCachedFont(f.src, this.runtime));
+            const missingFallbacks = enabledFallbacks.filter((f) => !getCachedFont(f.src, this.runtime));
             if (missingFallbacks.length > 0) {
-                const results = await Promise.allSettled(missingFallbacks.map(f => loadFont(f.src, this.runtime)));
+                const results = await Promise.allSettled(missingFallbacks.map((f) => loadFont(f.src, this.runtime)));
                 const newFallbacks = results
-                    .filter(r => r.status === 'fulfilled' && r.value)
-                    .map(r => (r as PromiseFulfilledResult<any>).value);
+                    .filter((r) => r.status === 'fulfilled' && r.value)
+                    .map((r) => (r as PromiseFulfilledResult<any>).value);
 
-                const currentSources = new Set(this.fallbackFonts.map(f => f.postscriptName));
-                newFallbacks.forEach(f => {
+                const currentSources = new Set(this.fallbackFonts.map((f) => f.postscriptName));
+                newFallbacks.forEach((f) => {
                     if (!currentSources.has(f.postscriptName)) {
                         this.fallbackFonts.push(f);
                     }
@@ -97,5 +97,3 @@ export class FontProcessor extends BaseLayout {
         return this.fontPromise;
     }
 }
-
-

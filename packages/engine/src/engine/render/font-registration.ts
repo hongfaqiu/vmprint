@@ -33,7 +33,7 @@ const getRegistrationWeights = (weight: number, weightRange?: { min: number; max
 
 const hydrateWeightRangeFromLoadedFont = (
     fontConfig: { weightRange?: { min: number; max: number } },
-    loadedFont: unknown
+    loadedFont: unknown,
 ): void => {
     if (fontConfig.weightRange) return;
     const axis = (loadedFont as LoadedFontLike | undefined)?.variationAxes?.wght;
@@ -45,14 +45,14 @@ const hydrateWeightRangeFromLoadedFont = (
 
     fontConfig.weightRange = {
         min: Math.min(LayoutUtils.normalizeFontWeight(min), LayoutUtils.normalizeFontWeight(max)),
-        max: Math.max(LayoutUtils.normalizeFontWeight(min), LayoutUtils.normalizeFontWeight(max))
+        max: Math.max(LayoutUtils.normalizeFontWeight(min), LayoutUtils.normalizeFontWeight(max)),
     };
 };
 
 export const registerRendererFonts = async ({
     context,
     runtime,
-    getFontId
+    getFontId,
 }: RegisterRendererFontsOptions): Promise<void> => {
     const allFonts = getAllFonts(runtime.fontRegistry, runtime.fontManager);
     const registeredIds = new Set<string>();
@@ -82,7 +82,9 @@ export const registerRendererFonts = async ({
                 }
             }
         } else {
-            console.warn(`[Renderer] Skipping font ${fontConfig.family} - missing or empty buffer for ${fontConfig.src}`);
+            console.warn(
+                `[Renderer] Skipping font ${fontConfig.family} - missing or empty buffer for ${fontConfig.src}`,
+            );
         }
     }
 };

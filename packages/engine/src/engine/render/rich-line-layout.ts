@@ -31,11 +31,11 @@ const computeEffectiveLineHeight = (
     line: RendererRichLine,
     baseFontSize: number,
     lineHeight: number,
-    referenceAscentScale: number
+    referenceAscentScale: number,
 ): number => {
     const lineFontSize = line.reduce(
         (max, seg) => Math.max(max, Number(seg.style?.fontSize || baseFontSize)),
-        Number(baseFontSize)
+        Number(baseFontSize),
     );
     const nominal = lineFontSize * lineHeight;
     if (line.length === 0) return nominal;
@@ -64,7 +64,11 @@ const computeEffectiveLineHeight = (
     return Math.max(nominal, neededHeight);
 };
 
-export const buildParagraphMetrics = (lines: RendererLine[], fontSize: number, lineHeight: number): RendererParagraphMetrics => {
+export const buildParagraphMetrics = (
+    lines: RendererLine[],
+    fontSize: number,
+    lineHeight: number,
+): RendererParagraphMetrics => {
     const lineHasInlineObject = (line: RendererRichLine): boolean => line.some((seg) => !!seg?.inlineObject);
     const paragraphHasInlineObjects = lines.some((line) => Array.isArray(line) && lineHasInlineObject(line));
 
@@ -82,13 +86,13 @@ export const buildParagraphMetrics = (lines: RendererLine[], fontSize: number, l
             return {
                 lineFontSize: Number(fontSize),
                 referenceAscentScale: paragraphReferenceAscentScale,
-                effectiveLineHeight: Number(fontSize) * lineHeight
+                effectiveLineHeight: Number(fontSize) * lineHeight,
             };
         }
 
         const lineFontSize = line.reduce(
             (max, seg) => Math.max(max, Number(seg.style?.fontSize || fontSize)),
-            Number(fontSize)
+            Number(fontSize),
         );
         const referenceAscentScale = paragraphHasInlineObjects
             ? getReferenceAscentScale(line)
@@ -97,7 +101,7 @@ export const buildParagraphMetrics = (lines: RendererLine[], fontSize: number, l
         return {
             lineFontSize,
             referenceAscentScale,
-            effectiveLineHeight: computeEffectiveLineHeight(line, fontSize, lineHeight, referenceAscentScale)
+            effectiveLineHeight: computeEffectiveLineHeight(line, fontSize, lineHeight, referenceAscentScale),
         };
     });
 
@@ -110,7 +114,7 @@ export const buildParagraphMetrics = (lines: RendererLine[], fontSize: number, l
         paragraphHasInlineObjects,
         paragraphReferenceAscentScale,
         lineMetrics,
-        uniformLineHeight
+        uniformLineHeight,
     };
 };
 
@@ -131,7 +135,7 @@ export const computeAlignedLineX = (
     lineWidthLimit: number,
     textIndent: number,
     align: ElementStyle['textAlign'] | undefined,
-    adjustedLineWidth: number
+    adjustedLineWidth: number,
 ): number => {
     let lineX = lineIndex === 0 ? lineOriginX + textIndent : lineOriginX;
     if (lineDirection === 'rtl') {
@@ -139,7 +143,7 @@ export const computeAlignedLineX = (
         if (align === 'right') {
             lineX = lineOriginX + adjustedLineWidth;
         } else if (align === 'center') {
-            lineX = lineOriginX + ((lineWidthLimit + adjustedLineWidth) / 2);
+            lineX = lineOriginX + (lineWidthLimit + adjustedLineWidth) / 2;
         }
         return lineX;
     }
@@ -148,7 +152,7 @@ export const computeAlignedLineX = (
         if (align === 'right') {
             lineX = lineOriginX + (lineWidthLimit - adjustedLineWidth);
         } else if (align === 'center') {
-            lineX = lineOriginX + ((lineWidthLimit - adjustedLineWidth) / 2);
+            lineX = lineOriginX + (lineWidthLimit - adjustedLineWidth) / 2;
         }
     }
 
@@ -162,7 +166,7 @@ export const computeJustifyExtraAfter = (
     align: ElementStyle['textAlign'] | undefined,
     justifyEngine: string,
     lineWidthLimit: number,
-    lineWidth: number
+    lineWidth: number,
 ): number[] => {
     if (align !== 'justify') return [];
     if (lineIndex === lineCount - 1) return [];
@@ -179,7 +183,9 @@ export const computeJustifyExtraAfter = (
     const hasWhitespace = line.some((seg) => /\s/.test(seg.text || ''));
     const isCjkLike = (text: string) => /[\u3040-\u30ff\u3400-\u9fff\uf900-\ufaff\uac00-\ud7af]/.test(text);
     const isPunct = (text: string) =>
-        /^[\s.,;:!?\uFF0C\u3002\uFF1B\uFF1A\uFF01\uFF1F\u3001\uFF08\uFF09()\u300A\u300B\u3010\u3011'"\u201C\u201D\u2018\u2019\u2026-]*$/.test(text);
+        /^[\s.,;:!?\uFF0C\u3002\uFF1B\uFF1A\uFF01\uFF1F\u3001\uFF08\uFF09()\u300A\u300B\u3010\u3011'"\u201C\u201D\u2018\u2019\u2026-]*$/.test(
+            text,
+        );
     const shouldStretchBoundary = (left: string, right: string): boolean => {
         if (!left || !right) return false;
         if (/\s$/.test(left) || /^\s/.test(right)) return true;
@@ -207,7 +213,7 @@ export const computeJustifyExtraAfter = (
 export const createLineFrameAccessors = (
     boxProperties: RendererBoxProperties | undefined,
     startY: number,
-    width: number
+    width: number,
 ): RendererLineFrameAccessors => {
     const lineOffsets: number[] = Array.isArray(boxProperties?._lineOffsets) ? boxProperties._lineOffsets : [];
     const lineWidths: number[] = Array.isArray(boxProperties?._lineWidths) ? boxProperties._lineWidths : [];
@@ -230,6 +236,6 @@ export const createLineFrameAccessors = (
             const candidate = lineYOffsets[lineIndex];
             if (!Number.isFinite(candidate)) return null;
             return startY + Math.max(0, Number(candidate));
-        }
+        },
     };
 };

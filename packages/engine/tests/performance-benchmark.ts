@@ -27,7 +27,8 @@ type Summary = {
 
 const engine = (engineModule as any).default ?? (engineModule as any)['module.exports'] ?? engineModule;
 const harness = (harnessModule as any).default ?? (harnessModule as any)['module.exports'] ?? harnessModule;
-const { LayoutEngine, Renderer, createEngineRuntime, toLayoutConfig, resolveDocumentPaths, LayoutUtils } = engine as any;
+const { LayoutEngine, Renderer, createEngineRuntime, toLayoutConfig, resolveDocumentPaths, LayoutUtils } =
+    engine as any;
 const { MockContext, loadLocalFontManager } = harness as any;
 
 function average(metrics: FixtureMetric[]): FixtureMetric[] {
@@ -41,7 +42,8 @@ function average(metrics: FixtureMetric[]): FixtureMetric[] {
     return Array.from(byFile.entries())
         .map(([file, bucket]) => {
             const n = bucket.length || 1;
-            const sum = (selector: (item: FixtureMetric) => number) => bucket.reduce((acc, item) => acc + selector(item), 0);
+            const sum = (selector: (item: FixtureMetric) => number) =>
+                bucket.reduce((acc, item) => acc + selector(item), 0);
             const sample = bucket[0];
             return {
                 file,
@@ -52,7 +54,7 @@ function average(metrics: FixtureMetric[]): FixtureMetric[] {
                 fontMs: Number((sum((item) => item.fontMs) / n).toFixed(2)),
                 layoutMs: Number((sum((item) => item.layoutMs) / n).toFixed(2)),
                 renderMs: Number((sum((item) => item.renderMs) / n).toFixed(2)),
-                totalMs: Number((sum((item) => item.totalMs) / n).toFixed(2))
+                totalMs: Number((sum((item) => item.totalMs) / n).toFixed(2)),
             };
         })
         .sort((left, right) => right.totalMs - left.totalMs);
@@ -60,10 +62,11 @@ function average(metrics: FixtureMetric[]): FixtureMetric[] {
 
 async function run(): Promise<void> {
     const repeatArg = process.argv.find((arg) => arg.startsWith('--repeat='));
-    const repeatCount = Math.max(1, Number.parseInt((repeatArg?.split('=')[1] || '3'), 10) || 3);
+    const repeatCount = Math.max(1, Number.parseInt(repeatArg?.split('=')[1] || '3', 10) || 3);
 
     const fixturesDir = path.resolve(__dirname, 'fixtures', 'regression');
-    const files = fs.readdirSync(fixturesDir)
+    const files = fs
+        .readdirSync(fixturesDir)
         .filter((file) => file.endsWith('.json') && !file.endsWith('.snapshot.layout.json'))
         .sort((a, b) => a.localeCompare(b));
 
@@ -100,7 +103,7 @@ async function run(): Promise<void> {
                 fontMs: Number((t1 - t0).toFixed(2)),
                 layoutMs: Number((t2 - t1).toFixed(2)),
                 renderMs: Number((t3 - t2).toFixed(2)),
-                totalMs: Number((t3 - t0).toFixed(2))
+                totalMs: Number((t3 - t0).toFixed(2)),
             });
         }
     }
@@ -112,7 +115,7 @@ async function run(): Promise<void> {
         totalLayoutMs: Number(averaged.reduce((acc, item) => acc + item.layoutMs, 0).toFixed(2)),
         totalRenderMs: Number(averaged.reduce((acc, item) => acc + item.renderMs, 0).toFixed(2)),
         totalMs: Number(averaged.reduce((acc, item) => acc + item.totalMs, 0).toFixed(2)),
-        topByTotalMs: averaged.slice(0, 5)
+        topByTotalMs: averaged.slice(0, 5),
     };
 
     console.log('=== VMPrint Engine Performance Benchmark ===');

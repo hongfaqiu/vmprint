@@ -1,6 +1,6 @@
 # vmprint CLI
 
-*The JSON → PDF command-line interface for vmprint.*
+_The JSON → PDF command-line interface for vmprint._
 
 The CLI is more than a convenience wrapper. It serves four distinct roles, and understanding them clarifies what the tool is actually for.
 
@@ -84,16 +84,16 @@ The overlay module exports an object with a `backdrop()` method, an `overlay()` 
 ```js
 // document.overlay.mjs — loaded automatically alongside document.json
 export default {
-  overlay(page, ctx) {
-    ctx.save();
-    ctx.opacity(0.07);
-    ctx.fillColor('#000000');
-    ctx.font('Helvetica', 64);
-    ctx.translate(page.width / 2, page.height / 2);
-    ctx.rotate(-45);
-    ctx.text('DRAFT', -100, -32);
-    ctx.restore();
-  }
+    overlay(page, ctx) {
+        ctx.save();
+        ctx.opacity(0.07);
+        ctx.fillColor('#000000');
+        ctx.font('Helvetica', 64);
+        ctx.translate(page.width / 2, page.height / 2);
+        ctx.rotate(-45);
+        ctx.text('DRAFT', -100, -32);
+        ctx.restore();
+    },
 };
 ```
 
