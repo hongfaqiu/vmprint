@@ -11,7 +11,7 @@ Thank you for your interest in VMPrint! We welcome contributions to improve the 
     *   Create a new branch for your changes.
     *   Ensure your code follows the existing style.
     *   Add tests for any new functionality or bug fixes.
-    *   Run the existing tests to ensure no regressions: `npm test --workspaces`.
+    *   Run the existing tests to ensure no regressions: `pnpm test`.
     *   Submit a PR with a clear description of your changes.
 
 ## Development Setup
@@ -20,7 +20,7 @@ See the [Quickstart](QUICKSTART.md) guide for instructions on setting up the mon
 
 ## Architecture
 
-Before making significant changes to the engine, please review the [Architecture Documentation](documents/ARCHITECTURE.md).
+Before making significant changes to the engine, please review the [Architecture Documentation](docs/ARCHITECTURE.md).
 
 ## License
 

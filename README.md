@@ -5,14 +5,14 @@
 
 If you generate PDFs with headless browsers or HTML-to-PDF tools, you've accepted a compromise: heavy dependencies, memory leaks, and "approximate" layout that shifts across environments. VMPrint offers a stable, high-performance alternative. It composes documents from a versioned JSON instruction stream and guarantees identical layout given identical input, down to the sub-point position of every glyph.
 
-*Open-source documentation deserves better than the "crude" look of standard Markdown-to-PDF exports. [Read the beautifully typeset PDF version of this README](documents/readme/readme.pdf) — generated from this source file using `draft2final` and the `opensource` flavor (a gift to help the community move past boring documents, and a gentle nod to a director's benevolent insistence on aesthetic standards).*
+*Open-source documentation deserves better than the "crude" look of standard Markdown-to-PDF exports. [Read the beautifully typeset PDF version of this README](docs/readme/readme.pdf) — generated from this source file using `draft2final` and the `opensource` flavor (a gift to help the community move past boring documents, and a gentle nod to a director's benevolent insistence on aesthetic standards).*
 
 ---
 
 
-![VMPrint manifesto](documents/readme/manifesto-1.png)
+![VMPrint manifesto](docs/readme/manifesto-1.png)
 
-> **Publication-grade layout rendered directly by the VMPrint engine.** The above image -- including all annotations, measurement guides, legends, and script direction markers -- are rendered entirely by VMPrint. The source documents are available in the repository under /documents/readme/.
+> **Publication-grade layout rendered directly by the VMPrint engine.** The above image -- including all annotations, measurement guides, legends, and script direction markers -- are rendered entirely by VMPrint. The source documents are available in the repository under /docs/readme/.
 
 ## Features at a Glance
 
@@ -26,9 +26,9 @@ If you generate PDFs with headless browsers or HTML-to-PDF tools, you've accepte
 
 ---
 
-![VMPrint manifesto](documents/readme/manifesto-2.png)
+![VMPrint manifesto](docs/readme/manifesto-2.png)
 
-> **One engine. Every script. Baselines, shaping, and directionality remain stable across mixed-language content.** The above image -- including all annotations, measurement guides, legends, and script direction markers -- are rendered entirely by VMPrint. The source documents are available in the repository under /documents/readme/.
+> **One engine. Every script. Baselines, shaping, and directionality remain stable across mixed-language content.** The above image -- including all annotations, measurement guides, legends, and script direction markers -- are rendered entirely by VMPrint. The source documents are available in the repository under /docs/readme/.
 
 
 ## Background
@@ -90,24 +90,24 @@ VMPrint handles the pagination. You describe your document. It figures out where
 
 ## Getting Started
 
-Prerequisites: Node.js 18+, npm 9+
+Prerequisites: Node.js 18+, pnpm 9+
 
 ```bash
 git clone https://github.com/cosmiciron/vmprint.git
 cd vmprint
-npm install
+pnpm install
 ```
 
 Render a JSON document to PDF:
 
 ```bash
-npm run dev --prefix cli -- --input engine/tests/fixtures/regression/00-all-capabilities.json --output out.pdf
+pnpm cli -i packages/engine/tests/fixtures/regression/00-all-capabilities.json -o out.pdf
 ```
 
 Markdown to PDF (screenplay format):
 
 ```bash
-npm run dev --prefix draft2final -- build draft2final/tests/fixtures/screenplay-sample.md -o screenplay.pdf --format screenplay
+pnpm d2f build packages/draft2final/tests/fixtures/screenplay-sample.md -o screenplay.pdf --format screenplay
 ```
 
 ## Full API Example
@@ -160,11 +160,11 @@ Most libraries treat international text as an optional concern — get ASCII lay
 
 RTL/bidi support is partial today. Full UAX #9-grade bidirectional behavior is a v1.x item.
 
-![VMPrint manifesto](documents/readme/languages-1.png)
+![VMPrint manifesto](docs/readme/languages-1.png)
 
-![VMPrint manifesto](documents/readme/languages-2.png)
+![VMPrint manifesto](docs/readme/languages-2.png)
 
-![VMPrint manifesto](documents/readme/languages-3.png)
+![VMPrint manifesto](docs/readme/languages-3.png)
 
 > **Multilingual Rendering.** The images above — including all annotations, measurement guides, legends, and script direction markers — are rendered entirely by VMPrint. Source document can be found in the repository under `engine\tests\fixtures\regression`.
 
@@ -191,7 +191,7 @@ The warm figure is what batch PDF generation looks like after the first document
 Run the full benchmark suite yourself:
 
 ```bash
-cd engine && npm run test:perf -- --repeat=5
+pnpm test:perf -- --repeat=5
 ```
 
 Or profile a specific document with the CLI's `--profile-layout` flag, which runs the document cold then twice more warm and reports both:
@@ -222,19 +222,18 @@ This is a monorepo:
 
 The monorepo is layered so that getting involved at any depth is straightforward.
 
-**Engine** (`engine/`): Layout algorithms, pagination, text shaping, the packager system. This is where the hard problems live — and where a well-placed contribution has the most leverage. Regression snapshot tests make it possible to verify that changes haven't broken existing behavior.
+**Engine** (`packages/engine/`): Layout algorithms, pagination, text shaping, the packager system. This is where the hard problems live — and where a well-placed contribution has the most leverage. Regression snapshot tests make it possible to verify that changes haven't broken existing behavior.
 
-**Contexts and Font Managers** (`contexts/`, `font-managers/`): Concrete implementations of well-defined interfaces. A new context for canvas or SVG output. A font manager that loads from a CDN or a bundled asset. The contracts are clear, the surface area is contained, and a working implementation is immediately useful to anyone on that platform.
+**Contexts and Font Managers** (`packages/context-pdf/`, `packages/local-fonts/`): Concrete implementations of well-defined interfaces. A new context for canvas or SVG output. A font manager that loads from a CDN or a bundled asset. The contracts are clear, the surface area is contained, and a working implementation is immediately useful to anyone on that platform.
 
 **Draft2Final format flavors**: New document formats are purely declarative — a flavor module specifies fonts, margins, heading styles, and how Markdown constructs map to VMPrint elements. No pagination code. No layout code. If you know what a correctly formatted academic paper, legal brief, or technical report should look like, you can write a flavor.
 
 **Draft2Final format scripts**: A single TypeScript file that maps a normalized Markdown AST to `DocumentInput`. The system hands you a structured, source-annotated document; you decide what it becomes. Screenplay, novel, contract, invoice — each is its own file.
 
 ```bash
-npm run test --prefix engine
-npm run test:update-layout-snapshots --prefix engine
-npm run test --prefix draft2final
-npm run test:packaged-integration
+pnpm test:engine
+pnpm test:update-snapshots
+pnpm test:d2f
 ```
 
 ## Status
@@ -243,7 +242,7 @@ Version `0.1.0`. The core layout pipeline is working and covered by regression f
 
 This is pre-1.0 software. The API may change.
 
-[Architecture](documents/ARCHITECTURE.md) · [Quickstart](QUICKSTART.md) · [Contributing](CONTRIBUTING.md) · [Testing](documents/TESTING.md) · [Roadmap](documents/ROADMAP.md)
+[Architecture](docs/ARCHITECTURE.md) · [Quickstart](QUICKSTART.md) · [Contributing](CONTRIBUTING.md) · [Testing](docs/TESTING.md) · [Roadmap](docs/ROADMAP.md)
 
 ## License
 
